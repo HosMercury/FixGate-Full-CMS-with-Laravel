@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
     protected $fillable = [
-      'order_id','location_id'
+      'order_id','location_id','address','name','latitude','longitude','city'
     ];
 
     public function orders()

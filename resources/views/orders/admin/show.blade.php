@@ -1,23 +1,28 @@
 @extends('theme.source')
 @section('orders_active')
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="box box-danger">
+
+        <!-- Order Details -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-danger">
+            @if(auth()->user()->isAllowed($order))
                 @include('orders.admin.partials.details')
-            </div>
-        </div>
-
-
-        <div class="box box-danger">
-            @include('orders.admin.partials.assignments')
-        </div>
-        {{--Materials and Cost--}}
-        <div class="box box-danger">
-            @include('orders.admin.partials.materials-costs')
+            @endif
         </div>
     </div>
-    <!--<div class="row">-->
+
+    <!-- Order Assignments -->
+    <div class="box box-danger">
+        @include('orders.admin.partials.assignments')
+    </div>
+
+    <!-- Materials and Costs -->
+    <div class="box box-danger">
+        @include('orders.admin.partials.materials-costs')
+    </div>
+</div>
+<!--<div class="row">-->
 
 @stop
 @section('scripts')

@@ -69,6 +69,9 @@ $factory->define(App\Location::class, function (Faker\Generator $faker) {
         'location_id' => $faker->numberBetween(2000,2100),
         'name'=>$faker->name,
         'city'=>$faker->randomElement(['RYD','JED','MEC','ABHA','DAM']),
+        'address'=>$faker->address,
+        'latitude'=>$faker->latitude,
+        'longitude'=>$faker->longitude,
         'manager_id' => $faker->numberBetween(1000,1100),
         'created_at' => $faker->dateTime,
         'updated_at' => $faker->dateTime

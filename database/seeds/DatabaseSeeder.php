@@ -23,20 +23,20 @@ class DatabaseSeeder extends Seeder
             \DB::table($table)->truncate();
         }
 
-        factory('App\User',50)->create();
-        factory('App\Material',50)->create();
-        factory('App\Location',50)->create();
-        factory('App\Order',50)->create();
-        factory('App\Worker',50)->create();
-        factory('App\Role',10)->create();
+        factory('App\User',150)->create();
+        factory('App\Material',150)->create();
+        factory('App\Location',150)->create();
+        factory('App\Order',150)->create();
+        factory('App\Worker',150)->create();
+        factory('App\Role',150)->create();
 
-        factory(App\Order::class, 50)->create()->each(function($o) {
+        factory(App\Order::class, 150)->create()->each(function($o) {
             $o->workers()->save(factory(App\Worker::class)->make());
             $o->assignments()->save(factory(App\Assignment::class)->make());
             $o->materials()->save(factory(App\Material::class)->make());
         });
 
-        factory(App\User::class, 50)->create()->each(function($o) {
+        factory(App\User::class, 150)->create()->each(function($o) {
             $o->role()->save(factory(App\Role::class)->make());
             $o->orders()->save(factory(App\Order::class)->make());
         });

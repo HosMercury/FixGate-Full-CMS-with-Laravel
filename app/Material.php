@@ -8,7 +8,7 @@ class Material extends Model
 {
     protected $fillable =[
         'type','title','SOH','description','size','price',
-        'store','substore','manufacturere','barcode'
+        'store','substore','manufacturer','barcode'
     ];
     /**
      * The attributes that are mass assignable.

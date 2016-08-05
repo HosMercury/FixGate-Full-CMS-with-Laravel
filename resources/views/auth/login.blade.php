@@ -46,7 +46,7 @@
                                 <label class="col-md-4 control-label">Location Id</label>
 
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="location_id">
+                                    <input type="text" class="form-control" name="location_id" value="{{ old('location_id') }}">
 
                                     @if ($errors->has('location_id'))
                                         <span class="help-block">

@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','selected_location'
     ];
 
     /**
@@ -32,5 +32,10 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany('App\Order');
+    }
+
+    public function isAllowed(Order $order)
+    {
+        return $order->user->id === $this->id;
     }
 }

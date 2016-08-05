@@ -23,7 +23,7 @@ class CreateMaterialsTable extends Migration
             $table->string('manufacturer')->nullable();
             $table->string('store');
             $table->string('substore')->nullable();
-            $table->integer('price');
+            $table->float('price');
             $table->integer('SOH');
             $table->softDeletes();
             $table->timestamps();

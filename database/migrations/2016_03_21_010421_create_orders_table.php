@@ -18,8 +18,10 @@ class CreateOrdersTable extends Migration
             $table->text('description');
             $table->string('trade');
             $table->string('contact');
-            $table->enum('priority',['Regular-72hr','Important-48hr','Urgent-24hr','Crisis-Now']);
+            $table->enum('priority',['Regular-72h','Important-48h','Urgent-24h','Crisis-psh']);
             $table->text('notes')->nullable();
+            $table->integer('location_id')->unsigned();
+            $table->integer('user_id')->unsigned()->index();
             $table->timestamp('entry');
             $table->timestamp('exit');
             $table->integer('close_key')->unsigned();

@@ -1,44 +1,44 @@
 @if(count($materials))
     <div class="box">
         <div class="box-header">
-            <h3 class="box-title">Used Materials</h3>
+            <h2 class="box-title">Used Materials</h2>
         </div>
         <!-- /.box-header -->
         <div class="box-body no-padding">
             <table class="table table-responsive table-hover">
                 <tbody>
                 <tr>
-                    <th style="width: 10px">#</th>
+                    <td>#</td>
                     <th>Material</th>
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>SubTotal</th>
                 </tr>
-                @for($i=0; $i < count($materials) ; $i++)
+                @foreach($materials as $material)
                     <tr class="mats-show">
-                        <th style="width: 10px">{{$i+1}}</th>
-                        <td>{{$materials[$i]['title']}}</td>
-                        <td>{{$materials[$i]['pivot']['quantity']}}</td>
-                        <td>{{$materials[$i]['price']}}</td>
-                        <td>{{$materials[$i]['pivot']['quantity'] * $materials[$i]['price']}}</td>
+                        <td>{{$material->id}}</td>
+                        <td>{{$material->title}}</td>
+                        <td>{{$material->pivot->quantity}}</td>
+                        <td>{{$material->price}}</td>
+                        <td>{{$material->pivot->quantity * $material->price}}</td>
                     </tr>
-                @endfor
-                <form action="/order/{{$id}}/materials/delete" method="post"
+                @endforeach
+                <form action="/orders/{{$order->id}}/materials/delete" method="post"
                       onsubmit="return confirm('Do you really want to delete your this material(s)?');">
                     {{csrf_field()}}
                     {{ method_field('DELETE') }}
-                    @for($i=0; $i < count($materials) ; $i++)
+                    @foreach($materials as $material)
                         <tr class="del-mat" style="display: none;">
                             <td>
                                 <input type="checkbox" name="material_select[]" class="checkbox"
-                                       value="{{$materials[$i]['id']}}"/>
+                                       value="{{$material->id}}"/>
                             </td>
-                            <td>{{$materials[$i]['title']}}</td>
-                            <td>{{$materials[$i]['pivot']['quantity']}}</td>
-                            <td>{{$materials[$i]['price']}}</td>
-                            <td>{{$materials[$i]['pivot']['quantity'] * $materials[$i]['price']}}</td>
+                            <td>{{$material->title}}</td>
+                            <td>{{$material->quantity}}</td>
+                            <td>{{$material->price}}</td>
+                            <td>{{$material->quantity * $material->price}}</td>
                         </tr>
-                    @endfor
+                    @endforeach
                     <tr>
                         <td>
                             <button type="submit" class="delete-submit btn btn-sm btn-danger" style="display: none;">
@@ -59,7 +59,7 @@
                     <th></th>
                     <th></th>
                     <th><p class="pull-right">Total Materials & costs</p></th>
-                    <th><p>{{$cost_total+$materials_total}}</p></th>
+                    <th><p>{{$costs->sum('price') + $materials_total}}</p></th>
                 </tr>
                 </tbody>
             </table>
@@ -91,7 +91,7 @@
 </div>
 
 <form name="mts" class="form-horizontal" method="POST"
-      action="/order/{{$id}}/materials/" >
+      action="/orders/{{$order->id}}/materials/">
     {{csrf_field()}}
     <div class="container" id="mts"></div>
 

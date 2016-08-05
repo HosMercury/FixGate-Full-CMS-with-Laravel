@@ -10,7 +10,7 @@ class Worker extends Model
 
     public function orders()
     {
-        return $this->belongsToMany('App\Order')->withTimestamps()->withPivot('assignment','reason');
+        return $this->belongsToMany('App\Order')->withTimestamps();
     }
 
 }

@@ -10,34 +10,34 @@
             <table class="table table-responsive table-hover">
                 <tbody>
                 <tr>
-                    <th style="width: 10px">#</th>
+                    <td>#</td>
                     <th>Description</th>
                     <th>SubTotal</th>
                 </tr>
 
-                @for($i=0; $i < count($costs) ; $i++)
-                    <tr class=" costs-show">
-                        <th style="width: 10px">{{$i+1}}</th>
-                        <td>{{$costs[$i]['description']}}</td>
-                        <td>{{$costs[$i]['cost']}}</td>
+                @foreach($costs as $cost)
+                    <tr class="costs-show">
+                        <td>{{$cost->id}}</td>
+                        <td>{{$cost->description}}</td>
+                        <td>{{$cost->cost}}</td>
                     </tr>
 
-                @endfor
-                <form action="/order/{{$id}}/costs/delete" method="post"
+                @endforeach
+                <form action="/orders/{{$order->id}}/costs/delete" method="post"
                       onsubmit="return confirm('Do you really want to delete your this costs(s)?');">
                     {{csrf_field()}}
                     {{ method_field('DELETE') }}
-                    @for($i=0; $i < count($costs) ; $i++)
+                    @foreach($costs as $cost)
                         <tr class="del-cost" style="display: none;">
                             <td>
                                 <input type="checkbox" name="cost_select[]" class="checkbox"
-                                       value="{{$costs[$i]['id']}}"/>
+                                       value="{{$cost->id}}"/>
                             </td>
-                            <td>{{$costs[$i]['description']}}</td>
-                            <td>{{$costs[$i]['cost']}}</td>
-                        </tr>
-                    @endfor
-                    <tr>
+                            <td>{{$cost->description}}</td>
+                            <td>{{$cost->cost}}</td>
+                        <tr>
+                    @endforeach
+
                         <td>
                             <button type="submit" class="delete-submit-cost btn btn-sm btn-danger"
                                     style="display: none;">
@@ -49,12 +49,12 @@
                 <tr>
                     <th></th>
                     <th class="pull-right">Costs Total</th>
-                    <th>{{$cost_total}}</th>
+                    <th>{{$costs->sum('cost')}}</th>
                 </tr>
                 <tr>
                     <th></th>
                     <th><p class="pull-right">Total Materials & costs</p></th>
-                    <th><p>{{$cost_total+$materials_total}}</p></th>
+                    <th><p>{{$costs->sum('cost')+$materials_total}}</p></th>
                 </tr>
                 </tbody>
             </table>
@@ -82,7 +82,7 @@
     <div class="col-xs-1"><strong>SubTotal</strong></div>
 </div>
 
-<form name="costs" class="form-horizontal" method="POST" action="/order/{{$id}}/costs/">
+<form name="costs" class="form-horizontal" method="POST" action="/orders/{{$order->id}}/costs/">
     {{csrf_field()}}
     <div class="cost-container" id="costs"></div>
 
@@ -107,7 +107,7 @@
 <div class="col-xs-12 d-zone" style="margin: auto;">
     <h4>Add bills' image files</h4>
 
-    <form action="/order/{{$id}}/bills"
+    <form action="/orders/{{$order->id}}/bills"
           class="dropzone"
           id="my-awesome-dropzone"
           style="border:solid thin #ccc;">

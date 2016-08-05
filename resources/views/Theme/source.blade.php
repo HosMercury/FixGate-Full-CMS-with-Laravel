@@ -1,7 +1,9 @@
 <html>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 @include('theme.partials.head')
-@section('orders_active') class = "active" @stop
+@section('orders_active')
+    class = "active"
+@stop
 <body class="layout-top-nav skin-red">
 <div class="wrapper">
 

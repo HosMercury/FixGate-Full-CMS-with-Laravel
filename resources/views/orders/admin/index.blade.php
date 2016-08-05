@@ -14,7 +14,7 @@
 
                 <div class="box-body">
                     <div class="container">
-                        <form action="order" method="post">
+                        <form action="orders" method="post">
                             {{csrf_field()}}
                             <fieldset>
                                 <legend>Orders By Date</legend>
@@ -62,12 +62,13 @@
                             </div>
                             <hr>
                             <div class="col-xs-11 box box-widget">
-                                <table id="data" class="display" cellspacing="0" class=" table table-responsive">
+                                <table id="data" class="display" cellspacing="0" class="table table-responsive">
                                     <thead>
                                     <tr>
                                         <th>Open</th>
                                         <th>Id</th>
                                         <th>Title</th>
+                                        <th>Location</th>
                                         <th>Trade</th>
                                         <th>Priority</th>
                                         <th>Status</th>
@@ -78,6 +79,7 @@
                                         <th>Open</th>
                                         <th>Id</th>
                                         <th>Title</th>
+                                        <th>Location</th>
                                         <th>Trade</th>
                                         <th>Priority</th>
                                         <th>Status</th>
@@ -88,10 +90,11 @@
                                         @foreach($order->assignments as $assignment)
                                             <tr>
                                                 <td>
-                                                    <a class="btn btn-sm btn-info" href="order/{{$order->id}}">Open</a>
+                                                    <a class="btn btn-sm btn-info" href="orders/{{$order->id}}">Open</a>
                                                 </td>
                                                 <td>{{$order->id}}</td>
                                                 <td>{{$order->title}}</td>
+                                                <td>{{--$order->location->location_id--}}</td>
                                                 <td>{{$order->trade}}</td>
                                                 <td>{{$order->priority}}</td>
                                                 <td>{{$assignment->status}}</td>
@@ -116,6 +119,7 @@
     <script>
         $(document).ready(function () {
             $('#data').DataTable();
+            $('#data').css('min-height','200px');
         });
     </script>
 
@@ -128,11 +132,6 @@
                 strokeColor: "rgba(151,187,205,1)",
                 pointColor: "rgba(151,187,205,1)",
                 data: {{$count_values}}
-
-
-
-
-
             }]
 
         }

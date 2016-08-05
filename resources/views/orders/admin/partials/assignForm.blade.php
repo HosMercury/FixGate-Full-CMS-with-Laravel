@@ -1,30 +1,31 @@
 <h5><strong>Choose :</strong></h5>
 {{csrf_field()}}
-<input type="hidden" name="order_id" value="{{$id}}">
-
+<input type="hidden" name="order_id" value="{{$order->id}}">
 <div class="row">
     <div class="form-group col-sm-4">
         <label class="control-label">Technician(s)</label>
+
         <div class="">
             <select name="worker[]" class="form-control" multiple>
-                @for($i=0; $i<count($all_workers); $i++)
-                    @if($all_workers[$i]['role'] == 'technician')
-                        <option value="{{$all_workers[$i]['id']}}">{{$all_workers[$i]['name']}}</option>
+                @foreach($workers as $worker)
+                    @if($worker->role == 'technician')
+                        <option value="{{$worker->id}}">{{$worker->name}}</option>
                     @endif
-                @endfor
+                @endforeach
             </select>
         </div>
     </div>
 
     <div class="form-group col-sm-4">
         <label class="control-label">Labor(s)</label>
+
         <div class="">
             <select name="worker[]" class="form-control" multiple>
-                @for($i=0; $i<count($all_workers); $i++)
-                    @if($all_workers[$i]['role'] == 'labor')
-                        <option value="{{$all_workers[$i]['id']}}">{{$all_workers[$i]['name']}}</option>
+                @foreach($workers as $worker)
+                    @if($worker->role == 'labor')
+                        <option value="{{$worker->id}}">{{$worker->name}}</option>
                     @endif
-                @endfor
+                @endforeach
             </select>
         </div>
     </div>
@@ -34,11 +35,11 @@
 
         <div class="">
             <select name="worker[]" class="form-control" multiple>
-                @for($i=0; $i<count($all_workers); $i++)
-                    @if($all_workers[$i]['role'] == 'external')
-                        <option value="{{$all_workers[$i]['id']}}">{{$all_workers[$i]['name']}}</option>
+                @foreach($workers as $worker)
+                    @if($worker->role == 'external')
+                        <option value="{{$worker->id}}">{{$worker->name}}</option>
                     @endif
-                @endfor
+                @endforeach
             </select>
         </div>
     </div>

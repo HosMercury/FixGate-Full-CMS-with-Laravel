@@ -16,7 +16,7 @@ class CreateCostsTable extends Migration
             $table->increments('id');
             $table->integer('order_id');
             $table->string('description');
-            $table->integer('cost');
+            $table->float('cost');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -16,10 +16,9 @@ class CreateMaterialOrderTable extends Migration
             $table->increments('id');
             $table->integer('order_id');
             $table->integer('material_id');
-            $table->integer('quantity');
+            $table->float('quantity');
             $table->softDeletes();
             $table->timestamps();
-
         });
     }
 

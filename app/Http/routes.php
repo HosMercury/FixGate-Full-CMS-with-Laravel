@@ -21,14 +21,24 @@
 */
 
 Route::group(['middleware' => ['web']], function () {
+
     Route::auth();
-    Route::resource('/order', 'OrderController');
-    Route::post('/order', 'OrderController@indexByDate');
-    Route::resource('/order/{id}/assign', 'OrderAssignmentController');
-    Route::resource('/order/{id}/reassign', 'OrderReassignmentController');
-    Route::resource('/order/{id}/materials', 'OrderMaterialController');
-    Route::resource('/order/{id}/costs', 'OrderCostController');
-    Route::resource('/order/{id}/bills', 'OrderBillController');
+
+    Route::get('/', 'OrdersController@index')->middleware('auth');
+
+    Route::group(['middleware'=>'auth','prefix' => 'orders'], function () {
+        Route::get('/', 'OrdersController@index');
+        Route::post('/', 'OrdersController@indexByDate');
+        Route::get('/{order}', 'OrdersController@show');
+        Route::post('/{order}', 'OrdersController@update');
+        Route::post('/{order}', 'OrdersController@delete');
+        Route::post('/{order}/edit', 'OrdersController@edit');
+        Route::resource('/{id}/assign', 'OrderAssignmentController');
+        Route::resource('/{id}/reassign', 'OrderReassignmentController');
+        Route::resource('/{id}/materials', 'OrderMaterialController');
+        Route::resource('/{id}/costs', 'OrderCostController');
+        Route::resource('/{id}/bills', 'OrderBillController');
+    });
 
 });
 

@@ -2,25 +2,38 @@
 
 namespace App;
 
-use Carbon;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class Order extends Model
 {
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    protected $fillable = ['description', 'trade', 'contact', 'priority', 'notes', 'entry', 'exit'];
+    protected $fillable = [
+        'title',
+        'description',
+        'type',
+        'contact',
+        'priority',
+        'notes',
+        'location_id',
+        'user_id',
+        'entry',
+        'exit',
+        'close_key'
+    ];
 
     public function getCreatedAtAttribute($date)
     {
-        return Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)->toDayDateTimeString();
+        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->toDayDateTimeString();
     }
 
     public function getUpdatedAtAttribute($date)
     {
-        return Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)->toDayDateTimeString();
+        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->toDayDateTimeString();
     }
+
+    ////////////////////  Relationships //////////////////
 
     public function assignments()
     {
@@ -49,7 +62,7 @@ class Order extends Model
 
     public function location()
     {
-        return $this->hasOne('App\Location','id');
+        return $this->belongsTo('App\Location');
     }
 
     public function user()
@@ -57,16 +70,38 @@ class Order extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function isAllowed()
+    public function isSeenBy(User $user, $snippet = null)
     {
-        //dd($this->location->city);
-        //dd(Auth::user()->role->name);
+        dd($this->location);
+        switch ($snippet) {
+            case null:
+                return $user->owns($this) ||
 
-        $order_user_id = $this->user->id;
-        $auth_user_role = auth()->user()->role->name;
-        $order_location = $this->location;
-        $location_manger = $order_location->manger;
-        //dd($order_location);
+                //SuperVisor|Manager
+                $user->manage($this.location);
+                $user->id === $this->location->manager_id ||
+
+                //Same Auth selected Location
+                $user->location_id === $this->location->id;
+
+                //Area Manager//Regional Manager//Location Admin//Super Admin
+                break;
+
+            case 'details':
+                return false;
+                break;
+
+            case 'assignments':
+                return true;
+                break;
+
+            case 'costs':
+                return true;
+                break;
+        }
+
+
     }
+
 
 }

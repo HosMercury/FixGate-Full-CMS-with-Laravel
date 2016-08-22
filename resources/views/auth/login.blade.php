@@ -1,5 +1,4 @@
 @extends('Theme.source')
-
 @section('content')
     <div class="container">
         <div class="row">
@@ -11,7 +10,7 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/login') }}">
                             {!! csrf_field() !!}
 
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -72,8 +71,8 @@
                                         <i class="fa fa-btn fa-sign-in"></i>Login
                                     </button>
 
-                                    <a class="btn btn-link" href="{{ url('/register') }}">Register</a>|
-                                    <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Password?</a>
+                                    <a class="btn btn-link" href="{{ url('auth/register') }}">Register</a>|
+                                    <a class="btn btn-link" href="{{ url('auth/password/reset') }}">Forgot Password?</a>
                                 </div>
                             </div>
                         </form>

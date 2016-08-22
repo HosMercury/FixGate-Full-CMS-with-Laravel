@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
     protected $fillable = [
-      'order_id','location_id','address','name','latitude','longitude','city'
+        'id','name', 'manager', 'address', 'created_by', 'latitude', 'longitude', 'city'
     ];
 
     public function orders()
     {
-        return $this->hasMany('App\Order');
+        return $this->belongsToMany('App\Order');
     }
 
-    public function location()
+    public function owns(Order $order)
     {
-        return $this->belongsToMany('App\Order');
+        return $order->location->manager_id;
     }
 
 }

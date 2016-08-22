@@ -117,6 +117,6 @@
 
 @if(count($thumbs))
     <div class="col-xs-12" style="margin: auto;">
-        @include('orders.admin.partials.carousel')
+        @include('orders.partials.carousel')
     </div>
 @endif

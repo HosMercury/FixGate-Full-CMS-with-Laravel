@@ -7,7 +7,7 @@
     {{--New Order--}}
     @if(!(in_array($assignment->status,['Assigned','Reassigned','Closed'])))
         <form action="/orders/{{$order->id}}/assign/" method="POST">
-            @include('orders.admin.partials.assignForm', ['submit' => 'Assign'])
+            @include('orders.partials.assignForm', ['submit' => 'Assign'])
         </form>
         {{--If Assigned Or reAssigned--}}
     @elseif( in_array( $assignment->status,['Assigned','Reassigned']))
@@ -16,7 +16,7 @@
             <small>{{$assignment->created_at}}</small>
         </p><p><strong>to :</strong></p>
 
-        @include('orders.admin.partials.workers',['status'=>'Assigned'])
+        @include('orders.partials.workers',['status'=>'Assigned'])
         <hr>
 
         {{--Assign Edit--}}
@@ -33,7 +33,7 @@
               method="post" class="editForm clearfix"
               style="display:none;">
             {{ method_field('PATCH') }}
-            @include('orders.admin.partials.assignForm', ['submit' => 'Update'])
+            @include('orders.partials.assignForm', ['submit' => 'Update'])
         </form>
         {{--2b sure it is not reassigned --}}
         @if($assignment->status !=='Reassigned')
@@ -51,7 +51,7 @@
                 <textarea name="reason" class="form-control col-xs-12 reason" rows="2"></textarea>
             </div>
             <br><br>
-            @include('orders.admin.partials.assignForm', ['submit' => 'Reassign'])
+            @include('orders.partials.assignForm', ['submit' => 'Reassign'])
         </form>
 
         {{--ReAssignments --}}
@@ -66,7 +66,7 @@
 
                 <p><strong>to :</strong></p>
 
-                @include('orders.admin.partials.workers',['status'=>'Reassigned'])
+                @include('orders.partials.workers',['status'=>'Reassigned'])
 
                 <form action="/orders/{{$order->id}}/reassign/{{$assignment->id}}" method="post"
                       class="editForm2 clearfix"
@@ -80,7 +80,7 @@
                       class="editForm2"
                       style="display:none;">
                     {{ method_field('PATCH') }}
-                    @include('orders.admin.partials.assignForm', ['submit' => 'Update'])
+                    @include('orders.partials.assignForm', ['submit' => 'Update'])
                 </form>
                 <a class="btn btn-default btn-sm pull-left edit2">Edit</a>
                 @endif

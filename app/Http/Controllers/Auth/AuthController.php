@@ -29,7 +29,7 @@ class AuthController extends Controller
      * @var string
      */
     protected $redirectTo = '/orders';
-    protected $redirectAfterLogout = '/login';
+    protected $redirectAfterLogout = '/auth/login';
 
     /**
      * Create a new authentication controller instance.
@@ -53,7 +53,7 @@ class AuthController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
-            'location_id' => 'required|exists:locations',
+            'location_id' => 'required|exists:locations,id',
         ]);
     }
 
@@ -65,12 +65,11 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        //dd($data);
         return User::create([
             'name' => ucwords($data['name']),
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'selected_location' => $data['location_id']
+            'location_id' => $data['location_id']
         ]);
     }
 }

@@ -15,16 +15,22 @@ class CreateMaterialsTable extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('type',['asset','material']);
-            $table->string('title');
-            $table->string('description');
-            $table->string('size')->nullable();
+            $table->enum('type',['material','asset']);
+            $table->string('name');
+            $table->string('description')->nullable();
+            $table->integer('created_by')->unsigned()->index();
+
+            //Size
+            $table->float('width')->nullable(); // cm
+            $table->float('length')->nullable(); // cm
+            $table->float('height')->nullable(); // cm
+
             $table->string('barcode')->nullable();
             $table->string('manufacturer')->nullable();
-            $table->string('store');
-            $table->string('substore')->nullable();
-            $table->float('price');
-            $table->integer('SOH');
+            $table->string('location');
+            $table->string('sub_location')->nullable();
+            $table->float('price')->defaults(0);//SR
+            $table->integer('SOH')->defaults(0);
             $table->softDeletes();
             $table->timestamps();
         });

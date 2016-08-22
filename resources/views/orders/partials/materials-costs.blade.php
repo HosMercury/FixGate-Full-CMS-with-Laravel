@@ -14,12 +14,12 @@
         <div class="tab-content">
             <!-- /.tab-pane -->
             <div class="tab-pane active" id="tab_1">
-                @include('orders.admin.partials.materials')
+                @include('orders.partials.materials')
             </div>
 
             <!-- /.tab-pane -->
             <div class="tab-pane" id="tab_2">
-                @include('orders.admin.partials.costs')
+                @include('orders.partials.costs')
                 <br style="height: 0px; clear: both;"/>
             </div>
             <!-- /.tab-pane -->

@@ -1,4 +1,4 @@
-@extends('theme.source')
+@extends('Theme.source')
 @section('header')
     <link type="text/css" rel="stylesheet" href="{{asset('Theme/plugins/datatables/jquery.dataTables.min.css')}}">
     <link type="text/css" rel="stylesheet" href="{{asset('Theme/plugins/datepicker/datepicker3.css')}}">
@@ -7,14 +7,19 @@
     <div class="row">
         <!-- left column -->
         <div class="col-md-12">
+            <br>
+
             <div class="box box-danger">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Work Orders (Last Month)</h3>
+                    <h3 class="box-title">Work Orders</h3>
+                    <a href="orders/create" class="btn btn-sm btn-success pull-right">
+                        <i class="fa fa-fw fa-plus"></i> Place a New Order</a>
+
                 </div>
 
                 <div class="box-body">
                     <div class="container">
-                        <form action="orders" method="post">
+                        <form action="orders/dates" method="post">
                             {{csrf_field()}}
                             <fieldset>
                                 <legend>Orders By Date</legend>
@@ -51,61 +56,73 @@
                         <hr>
                     </div>
 
+
                     <div class="box">
                         <div class="box-header">
                             <h3 class="box-title">Orders From {{$dateFrom}} To {{$dateTo}}</h3>
                         </div>
                         <!-- /.box-header -->
-                        <div class="box-body">
-                            <div class="col-xs-11 box box-widget">
-                                <canvas id="graph"></canvas>
-                            </div>
-                            <hr>
-                            <div class="col-xs-11 box box-widget">
-                                <table id="data" class="display" cellspacing="0" class="table table-responsive">
-                                    <thead>
-                                    <tr>
-                                        <th>Open</th>
-                                        <th>Id</th>
-                                        <th>Title</th>
-                                        <th>Location</th>
-                                        <th>Trade</th>
-                                        <th>Priority</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Open</th>
-                                        <th>Id</th>
-                                        <th>Title</th>
-                                        <th>Location</th>
-                                        <th>Trade</th>
-                                        <th>Priority</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </tfoot>
-                                    <tbody>
-                                    @foreach($orders as $order)
-                                        @foreach($order->assignments as $assignment)
+
+                        @if(count($orders))
+                            <div class="box-body">
+                                <div class="col-xs-11 box box-widget">
+                                    <canvas id="graph"></canvas>
+                                </div>
+                                <hr>
+                                <div class="col-xs-11 box box-widget">
+                                    <table id="data" class="display" cellspacing="0" class="table table-responsive">
+                                        <thead>
+                                        <tr>
+                                            <th>Open</th>
+                                            <th>Id</th>
+                                            <th>Title</th>
+                                            <th>Location</th>
+                                            <th>Type</th>
+                                            <th>Priority</th>
+                                        </tr>
+                                        </thead>
+                                        <tfoot>
+                                        <tr>
+                                            <th>Open</th>
+                                            <th>Id</th>
+                                            <th>Title</th>
+                                            <th>Location</th>
+                                            <th>Type</th>
+                                            <th>Priority</th>
+                                        </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        @foreach($orders as $order)
                                             <tr>
                                                 <td>
-                                                    <a class="btn btn-sm btn-info" href="orders/{{$order->id}}">Open</a>
+                                                    <a class="btn btn-sm btn-info"
+                                                       href="orders/{{$order->id}}">Open</a>
                                                 </td>
                                                 <td>{{$order->id}}</td>
                                                 <td>{{$order->title}}</td>
-                                                <td>{{--$order->location->location_id--}}</td>
-                                                <td>{{$order->trade}}</td>
+                                                <td>{{$order->location->location_id or ''}}</td>
+                                                <td>{{$order->type}}</td>
                                                 <td>{{$order->priority}}</td>
-                                                <td>{{$assignment->status}}</td>
                                             </tr>
+
                                         @endforeach
-                                    @endforeach
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <!-- /.box-body -->
+                            <!-- /.box-body -->
+                        @else
+                            <br>
+                            <div class="alert alert-warning alert-dismissible">
+                                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+
+                                <p>No service orders data in that period yet to show ...</p>
+
+                                <p>Hint : If you sure that you have service orders before , please select the
+                                    preferable period from datepickers above then GO</p>
+                            </div>
+                            <br>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -119,12 +136,11 @@
     <script>
         $(document).ready(function () {
             $('#data').DataTable();
-            $('#data').css('min-height','200px');
         });
     </script>
 
     <script>
-
+        //chartjs
         var data = {
             labels: {!! $count_keys !!},
             datasets: [{
@@ -132,6 +148,10 @@
                 strokeColor: "rgba(151,187,205,1)",
                 pointColor: "rgba(151,187,205,1)",
                 data: {{$count_values}}
+
+
+
+
             }]
 
         }

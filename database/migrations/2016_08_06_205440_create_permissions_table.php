@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class CreateMaterialOrderTable extends Migration
+class CreatePermissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,14 @@ class CreateMaterialOrderTable extends Migration
      */
     public function up()
     {
-        Schema::create('material_order', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('order_id');
-            $table->integer('material_id');
-            $table->float('quantity');
-            $table->softDeletes();
+            $table->string('name');
+            $table->string('label')->nullable();
             $table->timestamps();
         });
+
+
     }
 
     /**
@@ -29,6 +29,6 @@ class CreateMaterialOrderTable extends Migration
      */
     public function down()
     {
-        Schema::drop('material_order');
+        Schema::drop('permissions');
     }
 }

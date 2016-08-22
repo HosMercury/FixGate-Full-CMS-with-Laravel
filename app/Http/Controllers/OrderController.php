@@ -7,9 +7,10 @@ use App\Material;
 use App\Order;
 use App\Worker;
 use Carbon\Carbon;
+use Gate;
 use Illuminate\Http\Request;
 
-class OrdersController extends Controller
+class OrderController extends Controller
 {
 
     /**
@@ -19,8 +20,9 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        $from = Carbon::today()->subMonth();
+
         $to = Carbon::today();
+        $from = Carbon::today()->subMonth();
 
         $count = Order::select(array(
             \DB::raw('DATE(`created_at`) as `date`'),
@@ -30,14 +32,15 @@ class OrdersController extends Controller
             ->orderBy('date', 'ASC')
             ->lists('count', 'date');
 
+
         $orders = Order::with(['assignments' => function ($q) {
             $q->orderBy('updated_at', 'DESC')->get();
         }
-           // , 'location'
+             , 'location'
         ])->whereBetween('created_at', [$from, $to])->get();
 
 
-        return view('orders.admin.index', [
+        return view('orders.index', [
             'orders' => $orders,
             'count_keys' => $count->keys(),
             'count_values' => $count->values(),
@@ -51,7 +54,7 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function indexByDate(Request $request)
+    public function dates(Request $request)
     {
         $this->validate($request, [
             'fromDate' => 'required|date',
@@ -64,6 +67,7 @@ class OrdersController extends Controller
             $q->orderBy('updated_at', 'DESC')->get();
         }, 'location'])->whereBetween('created_at', [$from, $to])->get();
 
+
         $count = Order::select(array(
             \DB::raw('DATE(`created_at`) as `date`'),
             \DB::raw('COUNT(*) as `count`')
@@ -72,7 +76,7 @@ class OrdersController extends Controller
             ->orderBy('date', 'ASC')
             ->lists('count', 'date');
 
-        return view('orders.admin.index', [
+        return view('orders.index', [
             'orders' => $orders,
             'dateTo' => $to,
             'dateFrom' => $from,
@@ -88,7 +92,7 @@ class OrdersController extends Controller
      */
     public function create()
     {
-        //
+        return view('orders.pas.create');
     }
 
     /**
@@ -99,7 +103,25 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'title'=>'required|min:10|max:255',
+            'description'=>'required|min:20',
+            'type'=>'required|exists:types,name|max:255',
+            'priority'=>'required|integer|min:1|max:4',
+            'contact'=>'required|digits:10|regex:/^05/',
+            'notes'=>'min:10',
+        ]);
+
+
+        $request->location_id = 2000;
+//        $request->location_id = auth()->user()->location->id;
+        $request->user_id = auth()->user()->id;
+
+        $inserted = (new Order)->create($request->all());
+
+        \Session::flash('message', 'Thanks , Your service order No (' . $inserted->id . ') has been Successfully added');
+
+        return redirect('/orders');
     }
 
     /**
@@ -110,6 +132,12 @@ class OrdersController extends Controller
      */
     public function show(Order $order)
     {
+        auth()->loginUsingId(13);
+
+        if (Gate::denies('show_order_page', $order)) {
+            abort(403, 'Unauthorized Page Request');
+        }
+
         $total = 0;
         $materials = $order->materials()->get();
         $costs = $order->costs()->get();
@@ -122,7 +150,7 @@ class OrdersController extends Controller
             $total += ($mat->price * $mat->pivot->quantity);
         }
 
-        return view('orders.admin.show', [
+        return view('orders.pages.show', [
             'order' => $order,
             'assignment' => $order->assignments->last(),
             'workers' => $order['workers'],

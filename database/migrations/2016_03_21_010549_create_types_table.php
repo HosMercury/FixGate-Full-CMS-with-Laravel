@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTradesTable extends Migration
+class CreateTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,11 @@ class CreateTradesTable extends Migration
      */
     public function up()
     {
-        Schema::create('trades', function (Blueprint $table) {
+        Schema::create('types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description');
+            $table->string('name')->unique();
+            $table->text('description')->nullable();
+            $table->integer('created_by')->unsigned()->index();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,6 +29,6 @@ class CreateTradesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('trades');
+        Schema::drop('types');
     }
 }

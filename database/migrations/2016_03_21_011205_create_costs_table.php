@@ -14,7 +14,7 @@ class CreateCostsTable extends Migration
     {
         Schema::create('costs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('order_id');
+            $table->integer('order_id')->unsigned()->index();
             $table->string('description');
             $table->float('cost');
             $table->softDeletes();

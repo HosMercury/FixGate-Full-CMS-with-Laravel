@@ -18,19 +18,19 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li @yield('orders_active')><a href="/orders">Orders<span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Admin</a></li>
+                    <li @yield('orders_active')><a href="/orders">Dashborad<span class="sr-only">(current)</span></a></li>
+                    {{--<li><a href="#">Control Panel</a></li>--}}
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Dropdown
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Control Panel
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
+                            <li><a href="#">Materials & Assets</a></li>
+                            <li><a href="#">Locations</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
+                            <li><a href="#">Users & Workers</a></li>
+                            <li><a href="#">Assignments</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">One more separated link</a></li>
+                            <li><a href="#">Costs</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -63,7 +63,7 @@
                                 <img src="{{asset('/theme/dist/img/avatar5.png')}}" class="img-circle" alt="User Image">
 
                                 <p>{{auth()->user()->name }}
-                                <small>Location: {{auth()->user()->selected_location}}</small></p>
+                                <small>Location: {{auth()->user()->location}}</small></p>
 
                             </li>
                             <!-- Menu Body -->
@@ -74,7 +74,7 @@
                             <li class="user-footer">
 
                                 <div class="pull-right">
-                                    <a href="/logout" class="btn btn-danger btn-flat">Sign out</a>
+                                    <a href="/auth/logout" class="btn btn-danger btn-flat">Sign out</a>
                                 </div>
                             </li>
                         </ul>

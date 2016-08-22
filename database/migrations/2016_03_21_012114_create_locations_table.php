@@ -13,10 +13,10 @@ class CreateLocationsTable extends Migration
     public function up()
     {
         Schema::create('locations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('location_id')->unsigned()->index();
-            $table->integer('manager_id')->unsigned()->index();
-            $table->string('name');
+            $table->integer('id')->unsigned()->index();
+            $table->integer('manager')->unsigned()->index();
+            $table->integer('created_by')->unsigned()->index();
+            $table->string('name')->unique();
             $table->string('address')->nullable();
             $table->string('city');
             $table->float('latitude')->nullable();

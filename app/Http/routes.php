@@ -22,19 +22,42 @@
 
 Route::group(['middleware' => ['web']], function () {
 
-    Route::auth();
+//    Route::get('test', function(){
+//        $t = \DB::table('orders')->whereTrade('dolor')->get();
+//        dd($t);
+////        $manageHouse = new App\Permission;
+////        $manageHouse->name = 'manage_house';
+////        $manageHouse->save();
+////
+////        $role = App\Role::whereName('manager')->first();
+////        $role->givePermissionTo($manageHouse);
+////
+////        dd($role = App\Role::whereName('manager')->first());
+//////        $user = App\User::first();
+//////        $role = App\Role::first();
+//////        dd($role->users[0]);
+//        return view('welcome');
+//    });
 
-    Route::get('/', 'OrdersController@index')->middleware('auth');
+    Route::group(['prefix'=>'auth'],function(){
+        Route::auth();
+    });
 
-    Route::group(['middleware'=>'auth','prefix' => 'orders'], function () {
-        Route::get('/', 'OrdersController@index');
-        Route::post('/', 'OrdersController@indexByDate');
-        Route::get('/{order}', 'OrdersController@show');
-        Route::post('/{order}', 'OrdersController@update');
-        Route::post('/{order}', 'OrdersController@delete');
-        Route::post('/{order}/edit', 'OrdersController@edit');
+    Route::group(['middleware'=>'auth'],function(){
+        Route::get('/', 'OrderController@index');
+        Route::resource('/orders', 'OrderController');
+        Route::resource('/locations', 'LocationController');
+        Route::resource('/types', 'TypeController');
+        Route::resource('/materials', 'MaterialController');
+        Route::resource('/workers', 'WorkerController');
+    });
+
+    Route::group(['prefix' => 'orders','middleware'=>'auth'], function () {
+        Route::post('/dates', 'OrderController@dates');
+
         Route::resource('/{id}/assign', 'OrderAssignmentController');
         Route::resource('/{id}/reassign', 'OrderReassignmentController');
+
         Route::resource('/{id}/materials', 'OrderMaterialController');
         Route::resource('/{id}/costs', 'OrderCostController');
         Route::resource('/{id}/bills', 'OrderBillController');

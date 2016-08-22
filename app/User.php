@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','selected_location'
+        'id','manager_id','name', 'email', 'password', 'location_id'
     ];
 
     /**
@@ -24,18 +24,54 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function role()
-    {
-        return $this->hasOne('App\Role');
-    }
-
     public function orders()
     {
-        return $this->hasMany('App\Order');
+        return $this->hasMany(Order::class);
     }
 
-    public function isAllowed(Order $order)
+    public function roles()
     {
-        return $order->user->id === $this->id;
+        return $this->belongsToMany(Role::class);
     }
+
+    public function hasRole($role)
+    {
+        if (is_string($role)) {
+            return $this->roles->contains('name', $role);
+        }
+
+        return !!$role->intersect($this->roles)->count();
+    }
+
+
+    public function assignRole($role)
+    {
+        return $this->roles()->save(
+            Role::whereName($role)->firstOrFail()
+        );
+    }
+
+
+    public function hasPermission()
+    {
+        foreach ($this->getPermissions() as $permission) {
+            return $this->hasRole($permission->roles);
+        }
+    }
+
+
+    protected function getPermissions()
+    {
+        try {
+            return Permission::with('roles')->get();
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function owns(Order $order)
+    {
+        return $this->id === $order->user_id;
+    }
+
 }

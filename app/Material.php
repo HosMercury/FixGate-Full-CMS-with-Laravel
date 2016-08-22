@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Material extends Model
 {
     protected $fillable =[
-        'type','title','SOH','description','size','price',
-        'store','substore','manufacturer','barcode'
+        'type','name','description','width','length','height','created_by',
+        'barcode','location','sub_location','price','SOH'
     ];
     /**
      * The attributes that are mass assignable.

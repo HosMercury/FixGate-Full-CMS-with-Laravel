@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWorkersTable extends Migration
+class CreateMaterialOrderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,11 @@ class CreateWorkersTable extends Migration
      */
     public function up()
     {
-        Schema::create('workers', function (Blueprint $table) {
-            $table->increments('id')->unsigned()->index();
-            $table->string('name');
-            $table->enum('role',['technician','labor','external']);
+        Schema::create('material_order', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('order_id')->unsigned()->index();
+            $table->integer('material_id')->unsigned()->index();
+            $table->float('quantity');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +29,6 @@ class CreateWorkersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('workers');
+        Schema::drop('material_order');
     }
 }

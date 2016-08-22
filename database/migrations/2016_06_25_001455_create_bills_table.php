@@ -15,10 +15,10 @@ class CreateBillsTable extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->increments('id');
             $table->string('order_id');
+            $table->string('bill_number')->nullable();
             $table->string('name');
             $table->boolean('thumbnail')->nullable();
             $table->timestamps();
-
         });
     }
 

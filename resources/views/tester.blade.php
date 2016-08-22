@@ -1,3 +1,3 @@
-{{--@include('orders.admin.partials.array')--}}
+{{--@include('orders.partials.array')--}}
 
 {{dd($order)}}

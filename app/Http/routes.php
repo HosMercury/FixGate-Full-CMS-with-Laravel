@@ -49,7 +49,16 @@ Route::group(['middleware' => ['web']], function () {
         Route::resource('/locations', 'LocationController');
         Route::resource('/types', 'TypeController');
         Route::resource('/materials', 'MaterialController');
-        Route::resource('/workers', 'WorkerController');
+
+        Route::resource('/users', 'UserController');
+        Route::post('/users/{user}/roles', 'UserController@assignRole');
+        Route::delete('/users/{user}/roles/{role}', 'UserController@deleteRole');
+
+        Route::post('/roles/{role}/permissions', 'RoleController@assignPermission');
+        Route::delete('/roles/{role}/permissions/{permission}', 'RoleController@deletePermission');
+
+        Route::resource('/roles', 'RoleController');
+        Route::resource('/permissions', 'PermissionController');
     });
 
     Route::group(['prefix' => 'orders','middleware'=>'auth'], function () {

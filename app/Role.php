@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    protected $fillable = ['name', 'label'];
+    protected $fillable = ['name', 'label','creator'];
 
     public function users()
     {
@@ -18,8 +18,18 @@ class Role extends Model
         return $this->belongsToMany(Permission::class);
     }
 
-    public function givePermissionTo(Permission $permission)
+
+    public function givePermissionTo( $permission)
     {
         return $this->permissions()->save($permission);
     }
+
+    public function hasPermission($permission_id)
+    {
+
+        foreach($this->permissions as $permission){
+            return $permission->id == $permission_id ? true : false;
+        }
+    }
+
 }

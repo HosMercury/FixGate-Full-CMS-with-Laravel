@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Permission;
 use App\Http\Requests;
-use App\Type;
 
-class TypeController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,8 @@ class TypeController extends Controller
      */
     public function index()
     {
-        $types = Type::all();
-
-        return view('types.index',compact('types'));
+        $permissions = Permission::all();
+        return view('users.permissions.index',compact('permissions'));
     }
 
     /**
@@ -28,7 +27,7 @@ class TypeController extends Controller
      */
     public function create()
     {
-        return view('types.create');
+        return view('users.permissions.create');
     }
 
     /**
@@ -40,18 +39,18 @@ class TypeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-           'name'=>'required|min:2|max:220|unique:types,name',
-           'description'=>'max:1000',
+            'name'=>'required|min:2|max:220|unique:Permissions,name',
+            'label'=>'max:1000',
         ]);
 
-        $request['created_by'] = 8888;
+        $request['creator'] = 8888;
 
-        $inserted = (new Type)->create($request->all());
+        $inserted = (new Permission)->create($request->all());
 
-        \Session::flash('message', 'Thanks , Your Type Name (' . $inserted->name . ')
+        \Session::flash('message', 'Thanks , Your Permission with Name (' . $inserted->name . ')
                                     has been Successfully added');
 
-        return redirect('/types');
+        return redirect('/permissions');
     }
 
     /**
@@ -62,7 +61,7 @@ class TypeController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**

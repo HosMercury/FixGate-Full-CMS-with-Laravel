@@ -55,10 +55,10 @@ class Order extends Model
         return $this->hasMany('App\Bill');
     }
 
-    public function workers()
-    {
-        return $this->belongsToMany('App\Worker')->withPivot(['assignment'])->withTimestamps();
-    }
+//    public function workers()
+//    {
+//        return $this->belongsToMany('App\Worker')->withPivot(['assignment'])->withTimestamps();
+//    }
 
     public function location()
     {

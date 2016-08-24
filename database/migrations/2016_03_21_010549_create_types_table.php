@@ -16,7 +16,7 @@ class CreateTypesTable extends Migration
             $table->increments('id');
             $table->string('name')->unique();
             $table->text('description')->nullable();
-            $table->integer('created_by')->unsigned()->index();
+            $table->integer('creator')->unsigned()->index();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -18,6 +18,7 @@ class CreateBillsTable extends Migration
             $table->string('bill_number')->nullable();
             $table->string('name');
             $table->boolean('thumbnail')->nullable();
+            $table->integer('creator')->unsigned()->index();
             $table->timestamps();
         });
     }

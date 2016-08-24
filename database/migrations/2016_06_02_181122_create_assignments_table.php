@@ -17,6 +17,7 @@ class CreateAssignmentsTable extends Migration
             $table->integer('order_id')->unsigned()->index();
             $table->enum('status',['New','Assigned','Reassigned','Closed'])->default('New');
             $table->text('reason')->nullable();
+            $table->integer('creator')->unsigned()->index();
             $table->softDeletes();
             $table->timestamps();
         });

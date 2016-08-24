@@ -16,6 +16,7 @@ class CreatePermissionsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('label')->nullable();
+            $table->integer('creator')->unsigned()->index();
             $table->timestamps();
         });
 

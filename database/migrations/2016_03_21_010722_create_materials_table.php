@@ -18,7 +18,7 @@ class CreateMaterialsTable extends Migration
             $table->enum('type',['material','asset']);
             $table->string('name');
             $table->string('description')->nullable();
-            $table->integer('created_by')->unsigned()->index();
+            $table->integer('creator')->unsigned()->index();
 
             //Size
             $table->float('width')->nullable(); // cm

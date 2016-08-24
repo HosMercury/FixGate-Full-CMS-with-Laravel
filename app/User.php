@@ -34,6 +34,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+
     public function hasRole($role)
     {
         if (is_string($role)) {
@@ -43,7 +44,6 @@ class User extends Authenticatable
         return !!$role->intersect($this->roles)->count();
     }
 
-
     public function assignRole($role)
     {
         return $this->roles()->save(
@@ -51,14 +51,12 @@ class User extends Authenticatable
         );
     }
 
-
     public function hasPermission()
     {
         foreach ($this->getPermissions() as $permission) {
             return $this->hasRole($permission->roles);
         }
     }
-
 
     protected function getPermissions()
     {

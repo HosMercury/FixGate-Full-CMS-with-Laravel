@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Permission;
 use Illuminate\Http\Request;
 
+use App\Role;
 use App\Http\Requests;
-use App\Type;
 
-class TypeController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +17,8 @@ class TypeController extends Controller
      */
     public function index()
     {
-        $types = Type::all();
-
-        return view('types.index',compact('types'));
+        $roles = Role::all();
+        return view('users.roles.index', compact('roles'));
     }
 
     /**
@@ -28,7 +28,7 @@ class TypeController extends Controller
      */
     public function create()
     {
-        return view('types.create');
+        return view('users.roles.create');
     }
 
     /**
@@ -40,18 +40,18 @@ class TypeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-           'name'=>'required|min:2|max:220|unique:types,name',
-           'description'=>'max:1000',
+            'name'=>'required|min:2|max:220|unique:roles,name',
+            'label'=>'max:1000',
         ]);
 
-        $request['created_by'] = 8888;
+        $request['creator'] = 8888;
 
-        $inserted = (new Type)->create($request->all());
+        $inserted = (new Role)->create($request->all());
 
-        \Session::flash('message', 'Thanks , Your Type Name (' . $inserted->name . ')
+        \Session::flash('message', 'Thanks , Your Role with Name (' . $inserted->name . ')
                                     has been Successfully added');
 
-        return redirect('/types');
+        return redirect('/roles');
     }
 
     /**
@@ -62,7 +62,9 @@ class TypeController extends Controller
      */
     public function show($id)
     {
-        //
+        $role = Role::findOrFail($id);
+        $permissions = Permission::all();
+        return view('users.roles.show', compact('role','permissions'));
     }
 
     /**
@@ -97,5 +99,28 @@ class TypeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function assignPermission(Request $request, Role $role ,Permission $permission)
+    {
+        $this->validate($request, [
+            'permission' => 'required|numeric|exists:permissions,id'
+        ]);
+
+        if ($role->hasPermission($request->permission)) {
+            \Session::flash('alert', 'This Permission has been Assigned before to this user .');
+            return back();
+        }else{
+            $role->permissions()->attach($request->permission);
+            \Session::flash('message', 'Thanks , Permission has been added Successfully');
+            return back();
+        }
+    }
+
+    public function deletePermission(Request $request,Role $role,Permission $permission)
+    {
+        $role->permissions()->detach($permission);
+        \Session::flash('message', 'Thanks , Permission has been deleted Successfully');
+        return back();
     }
 }

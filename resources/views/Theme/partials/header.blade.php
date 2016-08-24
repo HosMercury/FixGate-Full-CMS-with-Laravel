@@ -1,7 +1,6 @@
 <header class="main-header">
     <nav class="navbar navbar-static-top">
 
-
         <div class="container">
             <img src="/Theme/dist/img/nahdi.png" class="pull-left">
 

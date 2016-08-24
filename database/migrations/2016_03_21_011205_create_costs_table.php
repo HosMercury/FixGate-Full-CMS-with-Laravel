@@ -17,6 +17,7 @@ class CreateCostsTable extends Migration
             $table->integer('order_id')->unsigned()->index();
             $table->string('description');
             $table->float('cost');
+            $table->integer('creator')->unsigned()->index();
             $table->softDeletes();
             $table->timestamps();
         });

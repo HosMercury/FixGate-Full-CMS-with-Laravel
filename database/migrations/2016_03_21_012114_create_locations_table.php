@@ -15,7 +15,7 @@ class CreateLocationsTable extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->integer('id')->unsigned()->index();
             $table->integer('manager')->unsigned()->index();
-            $table->integer('created_by')->unsigned()->index();
+            $table->integer('creator')->unsigned()->index();
             $table->string('name')->unique();
             $table->string('address')->nullable();
             $table->string('city');

@@ -21,7 +21,7 @@ class CreateOrdersTable extends Migration
             $table->integer('priority')->unsigned();
             $table->text('notes')->nullable();
             $table->integer('location_id')->unsigned()->index();
-            $table->integer('user_id')->unsigned()->index();
+            $table->integer('creator')->unsigned()->index();
             $table->timestamp('entry');
             $table->timestamp('exit');
             $table->integer('close_key')->unsigned();

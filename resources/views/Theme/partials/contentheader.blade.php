@@ -12,5 +12,6 @@
 <br>
 @if(Session::has('message'))
     <p class="alert {{ Session::get('alert', 'alert-success') }}">{{ Session::get('message') }}</p>
+@elseif(Session::has('alert'))
+    <p class="alert alert-warning">{{ Session::get('alert') }}</p>
 @endif
-{{--@include('common.errors')--}}

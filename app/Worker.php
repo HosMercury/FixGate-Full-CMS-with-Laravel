@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Worker extends Model
 {
-    protected $fillable = ['name','role','assignment','reason'];
+//    protected $fillable = ['name','role','assignment','reason'];
 
 //    public function orders()
 //    {

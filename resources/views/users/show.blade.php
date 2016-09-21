@@ -1,13 +1,12 @@
-@extends('Theme.source')
+@extends('theme.index')
 @section('content')
     <div class="row">
         <!-- left column -->
         <div class="col-md-12">
             <br>
-
-            <div class="box box-danger">
+            <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Show User #{{$user->id}}</h3>
+                    <h3 class="box-title">User #{{$user->id}}</h3>
                     <a href="/auth/register" class="btn btn-sm btn-success pull-right">
                         <i class="fa fa-fw fa-plus"></i> Register New user</a>
                 </div>
@@ -21,11 +20,8 @@
                     </div>
                 </div>
                 <!-- /.box-body -->
-
             </div>
         </div>
-    </div>
-    </div>
     </div>
 @stop
 @section('scripts')

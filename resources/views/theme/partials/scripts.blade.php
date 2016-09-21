@@ -10,5 +10,4 @@
 <script src="{{ asset('/theme/dist/js/app.min.js')}}"></script>
 <!-- AdminLTE for demo purposes
 <script src="{{-- asset('/theme/dist/js/demo.js')--}}"></script>-->
-
 @yield('scripts')

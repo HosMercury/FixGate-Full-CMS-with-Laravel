@@ -17,10 +17,10 @@
     <p>This Role has No permissions Added</p>
 @endif
 <button class="btn btn-reddit btn-xs assign-btn-permissions">Assign {{count($role->permissions)?'more':''}} permissions to the role
-            <span class="arrows-permissions">
-                <span class="fa fa-caret-down"> </span>
-                <span class="fa fa-caret-up"> </span>
-            </span>
+        <span class="arrows-permissions">
+            <span class="fa fa-caret-down"> </span>
+            <span class="fa fa-caret-up"> </span>
+        </span>
 </button>
 
 <div class="assign-frm-permissions" style="display: {{!count($errors) ?'none':''}}">

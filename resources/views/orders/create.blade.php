@@ -1,41 +1,76 @@
-@extends('Theme.source')
+@extends('theme.index')
+@section('styles')
+    <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/ionslider/ion.rangeSlider.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/ionslider/ion.rangeSlider.skinFlat.css')}}">
+@stop
+@section('title') Create Order @stop
+@section('bread-header') Service Orders @stop
+@section('bread-small') create a new order @stop
+@section('breadcrumb')
+    <li class=""><a href="/orders">Orders</a></li>
+    <li class="active"><a href="/orders/create">Create</a></li>
+@stop
 @section('orders_active')
 @section('content')
-    <div class="box box-danger" xmlns="http://www.w3.org/1999/html">
+    <div class="box box-primary" xmlns="http://www.w3.org/1999/html">
         <div class="box-header with-border">
+            <span class="glyphicon glyphicon-pencil"></span>
+
             <h2 class="box-title">New Order</h2>
         </div>
 
         <div class="box-body">
-            <p>User : {{auth()->user()->id}}</p>
 
-            <p>Location : {{--auth()->user()->location->id--}}</p>
+            {!! Form::open(['url'=>'/orders' , 'method'=>'post','class' =>'form-horizontal' ,'role'=>'form']) !!}
+            {!! csrf_field() !!}
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/orders') }}">
+                    <!--Type-->
+            @if(count($types))
+                <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
+                    {!! Form::label('type','Type*' ,['class'=>'col-md-4 control-label']) !!}
+                    <div class="col-md-3">
+                        {!! Form::select('type', $types , null ,[ 'class' => 'form-control','placeholder' => 'Pick a type'])!!}
 
-                {!! csrf_field() !!}
+                        @if ($errors->has('type'))
+                            <span class="help-block">
+                             <strong>{{ $errors->first('type') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+                </div>
+            @else
+                <div class="container">
+                    <div class="callout callout-warning">
+                        <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+
+                        <p>Until Now , You didn't add any type , yet . Note that you
+                            can't add an order untill you add type(s)</p>
+                        </p>Please <a href="/types/create"><strong>Add type</strong></a> First </p>
+                    </div>
+                </div>
+                @endif
 
                         <!--Title-->
-                <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-                    <label class="col-md-4 control-label">Title</label>
+                <div class="form-group{{ $errors->has('title') ? ' has-error' : ''}}">
+                    {!! Form::label('title','Title*' , ['class' => 'col-md-4 control-label']) !!}
 
                     <div class="col-md-6">
-                        <input type="text" class="form-control" name="title" value="{{ old('title') }}">
-
+                        {!! Form::text('title',null, ['class' => 'form-control']) !!}
                         @if ($errors->has('title'))
                             <span class="help-block">
-                                  <strong>{{ $errors->first('title') }}</strong>
-                            </span>
+                            <strong>{{ $errors->first('title') }}</strong>
+                        </span>
                         @endif
                     </div>
                 </div>
 
+
                 <!--Description-->
                 <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
-                    <label class="col-md-4 control-label">Description</label>
+                    {!! Form::label('description' ,'Description*' , ['class' => 'col-md-4 control-label']) !!}
 
                     <div class="col-md-6">
-                        <textarea class="form-control" name="description">{{old('description')}}</textarea>
+                        {!! Form::textarea('description',null,['class' => 'form-control' , 'rows' =>'4']) !!}
                         @if ($errors->has('description'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('description') }}</strong>
@@ -44,68 +79,45 @@
                     </div>
                 </div>
 
-                <!--Type-->
-                <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
-                    <label class="col-md-4 control-label">Type*</label>
-
-                    <div class="col-md-6">
-                        <select class="form-control" name="type">
-                            <option>A.C.</option>
-                            <option>Tv</option>
-                        </select>
-                        @if ($errors->has('type'))
-                            <span class="help-block">
-                                 <strong>{{ $errors->first('type') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                </div>
 
                 <!--Priority-->
                 <div class="form-group{{ $errors->has('priority') ? ' has-error' : '' }}">
-                    <label class="col-md-4 control-label">Priority*</label>
+                    {!! Form::label('priority','Priority*' ,['class'=>'col-md-4 control-label']) !!}
 
-                    <div class="col-md-2">
-                        <select class="form-control" name="priority">
-                            <option value="" disabled selected>Select</option>
-                            <option value="1">Regular - 72hr</option>
-                            <option value="2">Important - 48hr</option>
-                            <option value="3">Urgent - 24hr</option>
-                            <option value="4">Crisis - ASAP</option>
-                        </select>
+                    <div class="col-md-3">
+                        {{--{!! Form::text('priority', null , ['id' => 'priority']) !!}--}}
+                        <input type="text" name="priority" id="priority" value="">
+                        <span class="changeable pull-right"></span>
                         @if ($errors->has('priority'))
                             <span class="help-block">
-                                  <strong>{{ $errors->first('priority') }}</strong>
-                            </span>
+                             <strong>{{ $errors->first('priority') }}</strong>
+                        </span>
                         @endif
                     </div>
                 </div>
 
                 <!--Contact-->
                 <div class="form-group{{ $errors->has('contact') ? ' has-error' : '' }}">
-                    <label class="col-md-4 control-label">Contact Number*
-                        <small>05xxxxxxxx</small>
-                    </label>
+                    {!! Form::label('contact','Contact Number*',['class'=>'col-md-4 control-label']) !!}
 
                     <div class="col-md-6">
-                        <input type="text" class="form-control" name="contact" value="{{ old('contact') }}">
+                        {!! Form::text('contact',null,['class' =>'form-control']) !!}
+                        <span><small>ex : 05xxxxxxxx</small></span>
 
                         @if ($errors->has('contact'))
                             <span class="help-block">
-                                  <strong>{{ $errors->first('contact') }}</strong>
-                            </span>
+                            <strong>{{ $errors->first('contact') }}</strong>
+                        </span>
                         @endif
                     </div>
                 </div>
 
                 <!--Notes-->
                 <div class="form-group{{ $errors->has('notes') ? ' has-error' : '' }}">
-                    <label class="col-md-4 control-label">Notes
-                        <small>(optional)</small>
-                    </label>
+                    {!! Form::label('notes','Notes',['class'=>'col-md-4 control-label' ]) !!}
 
                     <div class="col-md-6">
-                        <textarea class="form-control" name="notes">{{old('notes')}}</textarea>
+                        {!! Form::textarea('notes',null,['class'=>'form-control' ,'rows'=>2]) !!}
                         @if ($errors->has('notes'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('notes') }}</strong>
@@ -116,14 +128,54 @@
 
                 <!--Submit-->
                 <div class="form-group">
-                    <div class="col-md-6 col-md-offset-4">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-btn fa-send"></i> Send
-                        </button>
-                    </div>
+                    @if(count($types))
+                        <div class="col-md-6 col-md-offset-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-btn fa-send"></i> Send
+                            </button>
+                        </div>
+                    @endif
                 </div>
 
-            </form>
+                {{--<input type="text" id="priority" name="priority" value="" />--}}
+
+                </form>
         </div>
     </div>
+@stop
+@section('scripts')
+    <script src="{{asset('theme/plugins/ionslider/ion.rangeSlider.min.js')}}"></script>
+    <script>
+        $("#priority").ionRangeSlider({
+            type: "single",
+            grid: true,
+            min: 1,
+            max: 4,
+        from: {{old('priority')?old('priority'): 1}},
+            step: 1,
+            keyboard: true,
+            onStart: function (data) {
+                console.log('mines')
+            },
+            onChange: function (data) {
+                switch (data.fromNumber) {
+                    case 1 :
+                        $('.changeable').text('Regular - 72 hrs');
+                        break;
+                    case 2 :
+                        $('.changeable').text('Important - 48 hrs');
+                        break;
+                    case 3 :
+                        $('.changeable').text('Urgent - 24 hrs');
+                        break;
+                    case 4 :
+                        $('.changeable').text('Crisis - ASAP');
+                        break;
+                    default :
+                        $('.changeable').text('Regular - 72 hrs');
+                        break;
+                }
+            },
+        });
+    </script>
 @stop

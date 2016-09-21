@@ -1,5 +1,5 @@
 <div class="box-header with-border">
-    <h3 class="box-title">Materials and Cost</h3>
+    <h3 class="box-title"><i class="fa fa-fw fa-cubes"></i> Materials and Costs</h3>
 </div>
 <div class="box-body">
     <div class="nav-tabs-custom">

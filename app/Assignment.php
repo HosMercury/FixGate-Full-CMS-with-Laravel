@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Assignment extends Model
 {
-    protected $fillable = ['order_id', 'status','reason'];
+    protected $fillable = ['order_id', 'status','worker','creator'];
 
-    public $timestamps = ['creates_at', 'updated_at', 'deleted_at'];
+    public $timestamps = ['created_at', 'updated_at', 'deleted_at'];
 
     public function getCreatedAtAttribute($date)
     {
@@ -24,6 +24,7 @@ class Assignment extends Model
 
     public function orders()
     {
-        return $this->belongsTo('App\Order')->withPivot('reason')->withTimestamps();
+        return $this->belongsTo('App\Order')
+            ->withTimestamps();
     }
 }

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Permission;
-use Illuminate\Http\Request;
-
-use App\Role;
 use App\Http\Requests;
+use App\Permission;
+use App\Role;
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
@@ -34,14 +33,14 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name'=>'required|min:2|max:220|unique:roles,name',
-            'label'=>'max:1000',
+        $this->validate($request, [
+            'name' => 'required|min:2|max:220|unique:roles,name',
+            'label' => 'max:1000',
         ]);
 
         $request['creator'] = 8888;
@@ -57,20 +56,20 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $role = Role::findOrFail($id);
         $permissions = Permission::all();
-        return view('users.roles.show', compact('role','permissions'));
+        return view('users.roles.show', compact('role', 'permissions'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -81,8 +80,8 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -93,7 +92,7 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -101,23 +100,23 @@ class RoleController extends Controller
         //
     }
 
-    public function assignPermission(Request $request, Role $role ,Permission $permission)
+    public function assignPermission(Request $request, Role $role, Permission $permission)
     {
         $this->validate($request, [
             'permission' => 'required|numeric|exists:permissions,id'
         ]);
 
         if ($role->hasPermission($request->permission)) {
-            \Session::flash('alert', 'This Permission has been Assigned before to this user .');
+            \Session::flash('alert', 'This Permission has been Assigned previously this user .');
             return back();
-        }else{
+        } else {
             $role->permissions()->attach($request->permission);
-            \Session::flash('message', 'Thanks , Permission has been added Successfully');
+            \Session::flash('message', 'Thanks , The Permission has been added Successfully');
             return back();
         }
     }
 
-    public function deletePermission(Request $request,Role $role,Permission $permission)
+    public function deletePermission(Request $request, Role $role, Permission $permission)
     {
         $role->permissions()->detach($permission);
         \Session::flash('message', 'Thanks , Permission has been deleted Successfully');

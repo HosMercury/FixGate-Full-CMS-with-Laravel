@@ -1,19 +1,36 @@
-@extends('Theme.source')
-@section('header')
-    <link type="text/css" rel="stylesheet" href="{{asset('Theme/plugins/datatables/jquery.dataTables.min.css')}}">
+@extends('theme.index')
+@section('styles')
+    <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/datatables/jquery.dataTables.min.css')}}">
+@stop
+@section('title') Users @stop
+@section('bread-header') Users @stop
+@section('bread-small') Users index @stop
+@section('breadcrumb')
+    <li class="active">
+        <a href="/users">Users</a>
+    </li>
 @stop
 @section('content')
     <div class="row">
         <!-- left column -->
         <div class="col-md-12">
             <br>
-            <div class="box box-danger">
-                <div class="box-header with-border">
-                    <h3 class="box-title">All Users</h3>
-                    <a href="auth/register" class="btn btn-sm btn-success pull-right">
-                        <i class="fa fa-fw fa-plus"></i> Register New user</a>
-                </div>
 
+            <div class="box ">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-fw fa-list-ul"></i> All Users</h3>
+
+                    <a href="auth/register" class="btn btn-sm btn-success pull-right">
+                        <i class="fa fa-fw fa-plus"></i> Register New user
+                    </a>
+                    <p>Quick Navigation :
+                        <a href="users/workers" class="btn  btn-toolbar">Workers</a> |
+                        <a href="roles" class="btn  btn-toolbar">Roles</a> |
+                        <a href="permissions" class="btn  btn-toolbar">Permissions</a>
+                    </p>
+
+
+                </div>
 
                 <!-- /.box-header -->
                 @if(count($users))
@@ -61,7 +78,7 @@
                     <div class="alert alert-warning alert-dismissible">
                         <h4><i class="icon fa fa-warning"></i> Alert!</h4>
 
-                        <p>No Users data -->  yet to show ...</p>
+                        <p>No Users data --> yet to show ...</p>
 
                         <p>Hint : Register Users to be shown here</p>
                     </div>
@@ -70,16 +87,13 @@
             </div>
         </div>
     </div>
-    </div>
-    </div>
 @stop
 
 @section('scripts')
-    <script src="{{asset('Theme/plugins/datatables/jquery.datatables.min.js')}}"></script>
+    <script src="{{asset('theme/plugins/datatables/jquery.datatables.min.js')}}"></script>
     <script>
         $(document).ready(function () {
             $('#data').DataTable();
         });
     </script>
-
 @stop

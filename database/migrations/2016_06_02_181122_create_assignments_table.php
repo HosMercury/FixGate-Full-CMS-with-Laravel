@@ -15,9 +15,9 @@ class CreateAssignmentsTable extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->unsigned()->index();
-            $table->enum('status',['New','Assigned','Reassigned','Closed'])->default('New');
-            $table->text('reason')->nullable();
-            $table->integer('creator')->unsigned()->index();
+            $table->integer('status')->defaults(0);
+            $table->integer('worker')->nullable();
+            $table->integer('creator')->nullable()->unsigned()->index();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -1,3 +1,15 @@
+<script src="{{asset('theme/plugins/dropzone/dropzone.js')}}"></script>
+<link rel="stylesheet" href="{{asset('theme/dist/css/dropzone.css')}}">
+<link type="text/css" rel="stylesheet"
+      href="{{asset('theme/plugins/lity/dist/lity.min.css')}}"/>
+<script src="{{asset('theme/plugins/lity/dist/lity.min.js')}}"></script>
+<script>
+    Dropzone.options.myAwesomeDropzone = {
+        paramName: "file", // The name that will be used to transfer the file
+        maxFilesize: 3, // MB
+        acceptedFiles: "image/*"
+    };
+</script>
 <script>
     var count = 0;
     var otherCount = 0;
@@ -161,18 +173,5 @@
         }
 
     });
-</script>
-
-<script src="{{asset('Theme/plugins/dropzone/dropzone.js')}}"></script>
-<link rel="stylesheet" href="{{asset('Theme/dist/css/dropzone.css')}}">
-<link type="text/css" rel="stylesheet"
-      href="{{asset('Theme/plugins/lity/dist/lity.min.css')}}"/>
-<script src="{{asset('Theme/plugins/lity/dist/lity.min.js')}}"></script>
-<script>
-    Dropzone.options.myAwesomeDropzone = {
-        paramName: "file", // The name that will be used to transfer the file
-        maxFilesize: 3, // MB
-        acceptedFiles: "image/*"
-    };
 </script>
 </div>

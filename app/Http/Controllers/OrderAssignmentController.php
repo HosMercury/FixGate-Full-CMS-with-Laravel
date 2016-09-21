@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Order;
 use App\Assignment;
 use App\Http\Requests;
+use App\Order;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -36,28 +36,45 @@ class OrderAssignmentController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $id, $status = 'Assigned', $new = true)
+    public function store(Request $request, $id)
     {
 
         $this->validate($request, [
-            'worker' => 'required'
+            'workers' => 'required|exists:users,id'
         ]);
 
         $order = Order::find($id);
+        $status = $order->assignments->last()->status;
+        $workers = $request->workers;
 
-        $workers = $request->worker;
-        $reason = $request->reason;
-
-        if ($new) {
-            $request['status'] = $status;
-            if (Assignment::create($request->all()))
-                $order->workers()->attach($workers, ['assignment' => $status]);
-        } else {
-            \DB::table('order_worker')->where('assignment', $status)->delete();
-            $order->workers()->attach($workers, ['assignment' => $status]);
+        if (empty($status)) { // New Order
+            foreach ($workers as $key => $value) {
+                (new Assignment)->create([
+                    'order_id' => $order->id,
+                    'status' => 1,
+                    'creator' => auth()->user()->id,
+                    'worker' => intval($value)
+                ]);
+                \Session::flash('success', 'Great ,The order has been Assigned Successfully');
+                return back();
+            }
+            \Session::flash('danger', 'Unexpected Error occured , please contact your admin');
+            return back();
+        } elseif ($status > 0)
+        { // Assigned
+            foreach ($workers as $key => $value) {
+                (new Assignment)->create([
+                    'order_id' => $order->id,
+                    'status' => 1,
+                    'creator' => auth()->user()->id,
+                    'worker' => intval($value)
+                ]);
+            }
+            \Session::flash('success', 'Great ,The order has been Assigned Successfully');
+            return back();
         }
-        \Session::flash('message', 'Great ,The order has been ' . $status . ' Successfully');
-        return back();
+            \Session::flash('danger', 'Unexpected Error occured , please contact your administrator');
+            return back();
     }
 
     /**

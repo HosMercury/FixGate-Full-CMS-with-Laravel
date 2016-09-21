@@ -1,7 +1,7 @@
-@extends('Theme.source')
+@extends('theme.index')
 @section('orders_active')
 @section('content')
-    <div class="box box-danger" xmlns="http://www.w3.org/1999/html">
+    <div class="box " xmlns="http://www.w3.org/1999/html">
         <div class="box-header with-border">
             <h2 class="box-title">New Location</h2>
         </div>

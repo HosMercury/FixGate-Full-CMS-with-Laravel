@@ -22,23 +22,6 @@
 
 Route::group(['middleware' => ['web']], function () {
 
-//    Route::get('test', function(){
-//        $t = \DB::table('orders')->whereTrade('dolor')->get();
-//        dd($t);
-////        $manageHouse = new App\Permission;
-////        $manageHouse->name = 'manage_house';
-////        $manageHouse->save();
-////
-////        $role = App\Role::whereName('manager')->first();
-////        $role->givePermissionTo($manageHouse);
-////
-////        dd($role = App\Role::whereName('manager')->first());
-//////        $user = App\User::first();
-//////        $role = App\Role::first();
-//////        dd($role->users[0]);
-//        return view('welcome');
-//    });
-
     Route::group(['prefix'=>'auth'],function(){
         Route::auth();
     });
@@ -49,6 +32,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::resource('/locations', 'LocationController');
         Route::resource('/types', 'TypeController');
         Route::resource('/materials', 'MaterialController');
+        Route::resource('/users/workers', 'WorkerController');
 
         Route::resource('/users', 'UserController');
         Route::post('/users/{user}/roles', 'UserController@assignRole');
@@ -62,7 +46,8 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::group(['prefix' => 'orders','middleware'=>'auth'], function () {
-        Route::post('/dates', 'OrderController@dates');
+        Route::get('/filter', 'OrderController@index');
+        Route::post('/filter', 'OrderController@filter');
 
         Route::resource('/{id}/assign', 'OrderAssignmentController');
         Route::resource('/{id}/reassign', 'OrderReassignmentController');

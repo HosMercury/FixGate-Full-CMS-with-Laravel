@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use App\Assignment;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -38,6 +39,11 @@ class Order extends Model
     public function assignments()
     {
         return $this->hasMany('App\Assignment');
+    }
+
+    public function groupedAssignments()
+    {
+        return $this->hasMany(Assignment::class)->groupBy('status');
     }
 
     public function materials()
@@ -99,9 +105,5 @@ class Order extends Model
                 return true;
                 break;
         }
-
-
     }
-
-
 }

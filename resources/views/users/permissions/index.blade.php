@@ -1,15 +1,15 @@
-@extends('Theme.source')
+@extends('theme.index')
 @section('header')
-    <link type="text/css" rel="stylesheet" href="{{asset('Theme/plugins/datatables/jquery.dataTables.min.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/datatables/jquery.dataTables.min.css')}}">
 @stop
 @section('content')
     <div class="row">
         <!-- left column -->
         <div class="col-md-12">
             <br>
-            <div class="box box-danger">
+            <div class="box ">
                 <div class="box-header with-border">
-                    <h3 class="box-title">All permissions</h3>
+                    <h3 class="box-title"><i class="fa fa-fw fa-list-ul"></i> permissions</h3>
                     <a href="/permissions/create" class="btn btn-sm btn-success pull-right">
                         <i class="fa fa-fw fa-plus"></i>  New Permission</a>
                 </div>
@@ -64,12 +64,10 @@
             </div>
         </div>
     </div>
-    </div>
-    </div>
 @stop
 
 @section('scripts')
-    <script src="{{asset('Theme/plugins/datatables/jquery.datatables.min.js')}}"></script>
+    <script src="{{asset('theme/plugins/datatables/jquery.datatables.min.js')}}"></script>
     <script>
         $(document).ready(function () {
             $('#data').DataTable();

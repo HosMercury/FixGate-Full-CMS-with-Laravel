@@ -1,12 +1,14 @@
-@extends('Theme.source')
+@extends('auth.base')
+@section('title') Register @stop
+@section('content')
 @section('content')
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="box box-danger">
+                    <div class="box ">
                         <div class="box-header with-border">
-                            <h2 class="box-title">Register</h2>
+                            <h2 class="box-title"><i class="fa fa-fw fa-user-plus"></i> Register</h2>
                         </div>
                     </div>
                     <div class="box-body">

@@ -10,7 +10,7 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('name');
     }
 
     public function permissions()
@@ -26,10 +26,11 @@ class Role extends Model
 
     public function hasPermission($permission_id)
     {
-
+        $result = [];
         foreach($this->permissions as $permission){
-            return $permission->id == $permission_id ? true : false;
+            $result[] = $permission->id == intval($permission_id);
         }
+        return in_array(false,$result);
     }
 
 }

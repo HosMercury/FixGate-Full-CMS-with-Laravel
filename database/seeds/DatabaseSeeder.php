@@ -23,14 +23,10 @@ class DatabaseSeeder extends Seeder
             \DB::table($table)->truncate();
         }
 
-        factory('App\Location',5)->create();
+//        factory(App\Location::class,5)->create();
+//        factory(App\User::class,5)->create();
 
-        factory(App\Order::class, 10)->create()->each(function($o) {
-            $o->workers()->save(factory(App\Worker::class)->make());
-            $o->assignments()->save(factory(App\Assignment::class)->make());
-            $o->materials()->save(factory(App\Material::class)->make());
-        });
-
+        factory(App\Order::class, 50)->create();
         Model::reguard();
     }
 }

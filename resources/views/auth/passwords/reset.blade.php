@@ -1,10 +1,11 @@
-@extends('Theme.source')
+@extends('auth.base')
+@section('title') Password Reset @stop
 @section('content')
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="box box-danger">
+                    <div class="box ">
                         <div class="box-header with-border">
                             <h2 class="box-title"> Reset</h2>
                         </div>

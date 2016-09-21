@@ -1,12 +1,16 @@
-@extends('Theme.source')
+@extends('auth.base')
+@section('title') Login @stop
+@section('styles')
+    <link rel="stylesheet" href="{{asset('theme/plugins/iCheck/square/blue.css')}}">
+@stop
 @section('content')
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="box box-danger">
+                    <div class="box ">
                         <div class="box-header with-border">
-                            <h2 class="box-title">Login</h2>
+                            <h2 class="box-title"><i class="fa fa-fw fa-sign-in"></i> Login</h2>
                         </div>
                     </div>
                     <div class="box-body">
@@ -57,7 +61,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
-                                    <div class="checkbox">
+                                    <div class="checkbox icheck">
                                         <label>
                                             <input type="checkbox" name="remember"> Remember Me
                                         </label>
@@ -82,3 +86,15 @@
         </div>
     </div>
 @endsection
+@section('scripts')
+    <script src="{{asset('theme/plugins/iCheck/icheck.min.js')}}"></script>
+    <script>
+        $(function () {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+        });
+    </script>
+@stop

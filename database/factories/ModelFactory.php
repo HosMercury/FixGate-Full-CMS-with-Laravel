@@ -89,10 +89,10 @@ $factory->define(App\Location::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Order::class, function (Faker\Generator $faker) {
     return [
-        'user_id'=> $faker->numberBetween(1000,1005),
+        'creator'=> $faker->numberBetween(1000,1005),
         'title' => $faker->sentence,
         'description' => $faker->paragraph,
-        'type' => $faker->word,
+        'type' => 'A.C.',
         'priority' => $faker->randomElement(['Regular-72h','Important-48h','Urgent-24h','Crisis-psh']),
         'contact' => $faker->phoneNumber,
         'notes' => $faker->text,

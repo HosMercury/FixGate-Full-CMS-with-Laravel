@@ -1,20 +1,23 @@
 <html>
-<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-@include('theme.partials.head')
-@section('orders_active')
-    class = "active"
-@stop
-<body class="layout-top-nav skin-red">
+@include('theme.partials.metas')
+<body class="layout-top-nav skin-blue-light">
 <div class="wrapper">
-
     @include('theme.partials.header')
             <!-- Full Width Column -->
     <div class="content-wrapper" style="min-height: 375px;">
-        <div class="container">
-            <!-- Content Header (Page header) -->
-            @include('theme.partials.contentheader')
 
-                    <!-- Main content -->
+        @if(auth()->check())
+            @include('theme.partials.horizontal-nav')
+        @endif
+
+        <div class="">
+            <!-- Content Header (Page header) -->
+            @if(auth()->check())
+                @include('theme.partials.flash')
+                @include('theme.partials.breadcrumb')
+            @endif
+            <br>
+            <!-- Main content -->
             <section class="content">
                 @yield('content')
             </section>
@@ -24,9 +27,7 @@
     </div>
     <!-- /.content-wrapper -->
     @include('theme.partials.footer')
-
 </div>
 <!-- ./wrapper -->
-@include('theme.partials.footerscripts')
 </body>
 </html>

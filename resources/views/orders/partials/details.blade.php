@@ -1,15 +1,14 @@
 <div class="box-header with-border">
-    <h2 class="box-title">Work Order #{{$order->id}} -Details</h2>
+    <h2 class="box-title"><i class="fa fa-fw fa-reorder"></i> Work Order #{{$order->id}} -Details</h2>
 </div>
-
 <div class="box-body">
     <table class="table table-bordered table-responsive">
-        <tr class="list-group-item-success">
-            <th><strong>Order No </strong> : {{$order->id}}</th>
+        <tr class="list-group-item-info">
+            <th><strong>Order No :</strong>{{$order->id}}</th>
             <th><i class="fa fa-fw fa-clock-o"></i><strong>Date </strong> : {{$order->created_at}}</th>
-            <th><strong>Type </strong> : {{$order->trade}}</th>
+            <th><strong>Type </strong> : {{$order->type}}</th>
         </tr>
-        <tr class="list-group-item-success">
+        <tr class="list-group-item-info">
             <th><strong>Location </strong> : {{$order->location_id}}</th>
             <th><strong>Priority </strong> : {{$order->priority}}</th>
             <th><i class="fa fa-fw fa-mobile"></i>{{$order->contact}}</th>

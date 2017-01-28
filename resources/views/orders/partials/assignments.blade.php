@@ -11,10 +11,23 @@
     @if(! $assigns->isEmpty())
         <ol>
             @foreach($assigns as $index=>$assign)
-                <h4>Assignment Number : {{$index}}</h4>
+                <h4>Assignment Number : ({{$index}})
+                    {{--detect the laST assign --}}
+                    @if($index === count($assigns))
+                        <a class="btn btn-info btn-xs edit-assignment" href="">edit</a>
+                    @endif
+                </h4>
                 <ol class="col-md-12">
                     @foreach($assign as $assign)
-                        <li class="col-md-3">{{$assign->name}} (#{{ $assign->id }})</li>
+                        <li class="col-md-4">
+                            <form method="post" class="" action="">
+                                {{csrf_field()}}{{method_field('DELETE')}}
+                                <label>{{$assign->name}} (#{{ $assign->id }})</label>
+                                <button type="submit" class="btn btn-xs btn-danger delete-assignment hidden"><i
+                                            class="fa fa-fw fa-remove "> </i>
+                                </button>
+                            </form>
+                        </li>
                     @endforeach
                 </ol>
             @endforeach

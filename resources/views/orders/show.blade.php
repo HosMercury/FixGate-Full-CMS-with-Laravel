@@ -66,6 +66,12 @@
             placeholder: "Select worker(s)",
             allowClear: true
         });
-
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('.edit-assignment').click(function(){
+                $('.delete-assignment').show();
+            });
+        });
     </script>
 @stop

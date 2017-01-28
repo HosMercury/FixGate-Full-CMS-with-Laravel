@@ -38,16 +38,15 @@ class OrderAssignmentController extends Controller
      */
     public function store(Request $request, $id)
     {
-
         $this->validate($request, [
             'workers' => 'required|exists:users,id'
-        ]);
+        ]);//try to return to the assignment section upon failure
 
         $order = Order::find($id);
         $status = $order->assignments->last()->status;
         $workers = $request->workers;
 
-        if (empty($status)) { // New Order
+//        if (empty($status)) { // New Order
             foreach ($workers as $key => $value) {
                 (new Assignment)->create([
                     'order_id' => $order->id,
@@ -60,8 +59,7 @@ class OrderAssignmentController extends Controller
             }
             \Session::flash('danger', 'Unexpected Error occured , please contact your admin');
             return back();
-        } elseif ($status > 0)
-        { // Assigned
+//        } elseif ($status > 0) { // Assigned
             foreach ($workers as $key => $value) {
                 (new Assignment)->create([
                     'order_id' => $order->id,
@@ -72,9 +70,9 @@ class OrderAssignmentController extends Controller
             }
             \Session::flash('success', 'Great ,The order has been Assigned Successfully');
             return back();
-        }
-            \Session::flash('danger', 'Unexpected Error occured , please contact your administrator');
-            return back();
+//        }
+        \Session::flash('danger', 'Unexpected Error occured , please contact your administrator');
+        return back();
     }
 
     /**

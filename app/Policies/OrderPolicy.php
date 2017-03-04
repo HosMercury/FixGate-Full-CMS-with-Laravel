@@ -10,23 +10,26 @@ class OrderPolicy
 {
     use HandlesAuthorization;
 
-    public function show_order_page(User $user, Order $order)
+    public function show_order(User $user, Order $order)
     {
-        return $user->hasPermission() && $order->isSeenBy($user);
+
+        return $user->can('show_orders')
+//        && $order->isSeenBy($user)
+            ;
     }
 
     public function show_order_details(User $user, Order $order)
     {
-        return $order->isSeenBy($user,'details');
+        return $order->viewedBy($user,'details');
     }
 
     public function show_order_assignments(User $user, Order $order)
     {
-        return $order->isSeenBy($user, 'assignments');
+        return $order->viewedBy($user, 'assignments');
     }
 
-    public function show_order_costs(User $user, Order $order)
+    public function show_order_financial(User $user, Order $order)
     {
-        return $order->isSeenBy($user, 'costs');
+        return $order->viewedBy($user, 'costs');
     }
 }

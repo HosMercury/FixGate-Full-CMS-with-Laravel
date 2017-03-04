@@ -9,5 +9,7 @@ bread crumb small
 title capitalized
 
 
-البلجن سيلكتت ٢ مش بيظهر الاي دي بتاع اليوزر
-وبعد ما يظهره عاوز اعمل assign
+delete worker
+
+there is error in the id field- users table ... duplicate entry
+may be index or uniq method  is errored

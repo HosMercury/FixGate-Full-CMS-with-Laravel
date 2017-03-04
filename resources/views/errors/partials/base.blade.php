@@ -1,6 +1,5 @@
 @extends('auth.base')
 @section('title') Page Not Found @stop
-@section('styles')
     <style>
         .content-wrapper{
             padding-top: 5em;
@@ -9,7 +8,6 @@
             padding-bottom: 2em;
         }
     </style>
-@stop
 @section('content')
     <div class="container">
         <div class="row">

@@ -1,0 +1,29 @@
+#table {
+    border:1px solid #3c8dbc;
+}
+thead{
+    background-color: #3c8dbc;
+    color: white;
+}
+.dataTables_wrapper .dataTables_filter input{
+    margin-right: 1em;
+}
+th input{
+    width: 100%;
+}
+.top{
+}
+tfoot input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+    text-indent: 3px;
+}
+.dt-buttons{
+    margin-left: 1em;
+    margin-bottom: 5px;
+    height: 80%;
+}
+#date_range{
+    float: right;
+}

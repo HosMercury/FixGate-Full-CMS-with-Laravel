@@ -15,8 +15,8 @@ class CreateRatingsTable extends Migration
         Schema::create('ratings', function (Blueprint $table) {
             $table->increments('id');
             $table->enum('rating',[1,2,3,4,5]);
+            $table->text('feedback')->nullable();
             $table->integer('order_id')->unsigned()->index();
-            $table->softDeletes();
             $table->timestamps();
         });
     }

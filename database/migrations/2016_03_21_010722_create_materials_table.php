@@ -30,8 +30,7 @@ class CreateMaterialsTable extends Migration
             $table->string('location');
             $table->string('sub_location')->nullable();
             $table->float('price')->defaults(0);//SR
-            $table->integer('SOH')->defaults(0);
-            $table->softDeletes();
+            $table->integer('soh')->defaults(0);
             $table->timestamps();
         });
     }

@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Permission;
 use App\Role;
 use Illuminate\Http\Request;
+use Yajra\Datatables\Facades\Datatables;
 
 class RoleController extends Controller
 {
@@ -16,8 +17,25 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
-        return view('users.roles.index', compact('roles'));
+        return view('users.roles.index');
+    }
+
+    /**
+     * Display a listing of roles.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function data()
+    {
+        $cols = ['id', 'name'];
+
+        $roles = Role::select($cols);
+
+        return Datatables::of($roles)
+            ->editColumn('name', function($role) {
+                return '<a href="/roles/' . $role->id .'"class="">' . str_limit($role->name, 50) . '</a>';
+            })
+            ->make(true);
     }
 
     /**
@@ -39,15 +57,15 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|min:2|max:220|unique:roles,name',
-            'label' => 'max:1000',
+            'name' => 'required|min:4|max:220|unique:roles,name',
+            'label' => 'max:500',
         ]);
 
-        $request['creator'] = 8888;
+        $request['creator'] = auth()->user()->id;
 
         $inserted = (new Role)->create($request->all());
 
-        \Session::flash('message', 'Thanks , Your Role with Name (' . $inserted->name . ')
+        \Session::flash('success', 'Thanks , Your Role with Name (' . $inserted->name . ')
                                     has been Successfully added');
 
         return redirect('/roles');
@@ -67,17 +85,6 @@ class RoleController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
@@ -86,7 +93,20 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|min:2|max:220',
+            'label' => 'max:1000',
+        ]);
+
+        $role = Role::find($id) ;
+        $role->name = $request->name;
+        $role->label = $request->label;
+        $role->save();
+
+        \Session::flash('success', 'Thanks , Your Role with Name (' . $role->name . ')
+                                    has been Successfully Updated');
+
+        return redirect('/roles/'.$role->id);
     }
 
     /**
@@ -97,7 +117,9 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Role::find($id)->delete();
+        \Session::flash('success', 'Thanks , Your Role has been Successfully Deleted');
+        return redirect('roles');
     }
 
     public function assignPermission(Request $request, Role $role, Permission $permission)
@@ -111,7 +133,7 @@ class RoleController extends Controller
             return back();
         } else {
             $role->permissions()->attach($request->permission);
-            \Session::flash('message', 'Thanks , The Permission has been added Successfully');
+            \Session::flash('success', 'Thanks , The Permission has been added Successfully');
             return back();
         }
     }
@@ -119,7 +141,7 @@ class RoleController extends Controller
     public function deletePermission(Request $request, Role $role, Permission $permission)
     {
         $role->permissions()->detach($permission);
-        \Session::flash('message', 'Thanks , Permission has been deleted Successfully');
+        \Session::flash('success', 'Thanks , Permission has been deleted Successfully');
         return back();
     }
 }

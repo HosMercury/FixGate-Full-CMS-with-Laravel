@@ -7,6 +7,8 @@ use App\Role;
 use App\Permission;
 use App\User;
 use Illuminate\Http\Request;
+use Yajra\Datatables\Facades\Datatables;
+
 
 class UserController extends Controller
 {
@@ -17,8 +19,31 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('users.index', compact('users'));
+//          return User::with('roles')->get();
+        return view('users.index');
+    }
+
+    /**
+     * Display a listing of users.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function data()
+    {
+//        $cols = ['id', 'name','location_id','roles.name'];
+
+        $users = User::with('roles')->get();
+
+        return Datatables::of($users)
+            ->addColumn('roles',function($user){
+                return $user->roles->map(function($role) {
+                    return str_limit($role->name, 30, '...');
+                })->implode(' - ');
+            })
+            ->editColumn('name', function($user) {
+                return '<a href="/users/' . $user->id .'"class="">' . str_limit($user->name, 50) . '</a>';
+            })
+            ->make(true);
     }
 
     /**
@@ -76,7 +101,20 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'location_id' => 'required|exists:locations,id',
+            'manager_id' => 'numeric',
+        ]);
+
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->save();
+
+        \Session::flash('success', 'Thanks , User with Name (' . $user->name . ')
+                                    has been Successfully Updated');
+
+        return redirect('/users/'.$user->id);
     }
 
     /**
@@ -87,7 +125,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::find($id)->delete();
+        \Session::flash('success', 'Thanks , User has been Successfully Deleted');
+        return redirect('users');
     }
 
     public function assignRole(Request $request, User $user)
@@ -102,7 +142,7 @@ class UserController extends Controller
             return back();
         }else{
             $user->assignRole($role_name);
-            \Session::flash('message', 'Thanks , Role has been added Successfully');
+            \Session::flash('success', 'Thanks , Role has been added Successfully');
             return back();
         }
     }
@@ -110,7 +150,7 @@ class UserController extends Controller
     public function deleteRole(Request $request,User $user,Role $role)
     {
         $user->roles()->detach($role);
-        \Session::flash('message', 'Thanks , Role has been deleted Successfully');
+        \Session::flash('success', 'Thanks , Role has been deleted Successfully');
         return back();
     }
 

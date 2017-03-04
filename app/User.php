@@ -69,7 +69,7 @@ class User extends Authenticatable
 
     public function owns(Order $order)
     {
-        return $this->id === $order->user_id;
+        return $this->id === $order->creator;
     }
 
 }

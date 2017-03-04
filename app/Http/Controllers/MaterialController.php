@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Location;
 use App\Material;
-use Illuminate\Http\Request;
-
+use App\User;
 use App\Http\Requests;
+use Illuminate\Http\Request;
+use Yajra\Datatables\Facades\Datatables;
 
 class MaterialController extends Controller
 {
@@ -16,8 +18,24 @@ class MaterialController extends Controller
      */
     public function index()
     {
-        $materials = Material::all();
-        return view('materials.index',compact('materials'));
+        return view('materials.index');
+    }
+
+    /**
+     * Display a listing of materials.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function data()
+    {
+        $cols = ['id', 'name', 'type', 'price', 'soh', 'location'];
+        $materials = Material::select($cols);
+
+        return Datatables::of($materials)
+            ->editColumn('name', function ($material) {
+                return '<a href="/materials/' . $material->id . '"class="">' . str_limit($material->name, 50) . '</a>';
+            })
+            ->make(true);
     }
 
     /**
@@ -27,7 +45,8 @@ class MaterialController extends Controller
      */
     public function create()
     {
-        return view('materials.create');
+        $locations = Location::all();
+        return view('materials.create',compact('locations'));
     }
 
     /**
@@ -58,7 +77,7 @@ class MaterialController extends Controller
         \Session::flash('message', 'Thanks , Your Material or Asset with Name (' . $inserted->name . ')
                                                has been Successfully added');
 
-        return redirect('/materials');
+        return redirect('/materials/'.$inserted->id);
     }
 
     /**
@@ -69,7 +88,8 @@ class MaterialController extends Controller
      */
     public function show($id)
     {
-        //
+        $material = Material::find($id);
+        return view('materials.show',compact('material'));
     }
 
     /**
@@ -80,7 +100,9 @@ class MaterialController extends Controller
      */
     public function edit($id)
     {
-        //
+        $material = Material::find($id);
+        $locations = Location::all();
+        return view('materials.edit',compact('locations','material'));
     }
 
     /**
@@ -92,7 +114,26 @@ class MaterialController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'type'=>'required|in:material,asset',
+            'name'=>'required|min:3|max:200',
+            'description'=>'max:1000',
+            'width'=>'numeric',
+            'length'=>'numeric',
+            'height'=>'numeric',
+            'soh'=>'required|numeric',
+            'price'=>'required|numeric',
+            'location'=>'required|exists:locations,id',
+            'sub_location'=>'max:225',
+        ]);
+
+        //add user to the request;
+
+        Material::find($id)->update($request->all());
+
+        \Session::flash('success', 'Thanks , The Material  has been Successfully updated');
+
+        return redirect('/materials/' . $id);
     }
 
     /**
@@ -103,6 +144,11 @@ class MaterialController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Material::find($id)->delete();
+
+        \Session::flash('success', 'Thanks , The Material  has been Successfully deleted');
+
+        return redirect('/materials');
+
     }
 }

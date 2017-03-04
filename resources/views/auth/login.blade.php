@@ -1,8 +1,6 @@
 @extends('auth.base')
 @section('title') Login @stop
-@section('styles')
     <link rel="stylesheet" href="{{asset('theme/plugins/iCheck/square/blue.css')}}">
-@stop
 @section('content')
     <div class="container">
         <div class="row">

@@ -17,7 +17,6 @@ class CreateTypesTable extends Migration
             $table->string('name')->unique();
             $table->text('description')->nullable();
             $table->integer('creator')->unsigned()->index();
-            $table->softDeletes();
             $table->timestamps();
         });
     }

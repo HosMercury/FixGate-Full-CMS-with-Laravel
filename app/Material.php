@@ -9,7 +9,7 @@ class Material extends Model
     protected $fillable =[
         'type','name','description','width',
         'length','height','user_id','barcode',
-        'location','sub_location','price','SOH'
+        'location','sub_location','price','soh'
     ];
     /**
      * The attributes that are mass assignable.

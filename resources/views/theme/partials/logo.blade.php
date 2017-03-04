@@ -1,4 +1,4 @@
-<div style="padding: 5px;">
+<div style="font-size: 1.3em">
     <span class="glyphicon glyphicon-lock"></span>
-    <b>CMMS</b><i class="bg-red" style="">gate</i>
+    <b>Fix</b><i class="bg-red" style="">gate</i>
 </div>

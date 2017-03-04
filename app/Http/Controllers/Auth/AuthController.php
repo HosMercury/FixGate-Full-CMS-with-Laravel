@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Symfony\Component\HttpFoundation\Request;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -67,7 +68,7 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['id'],
+            'id' => $data['id'],
             'name' => ucwords($data['name']),
             'email' => $data['email'],
             'password' => bcrypt($data['password']),

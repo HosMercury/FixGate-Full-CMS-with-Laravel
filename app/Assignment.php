@@ -8,9 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Assignment extends Model
 {
-    protected $fillable = ['order_id', 'status','worker','creator'];
 
-    public $timestamps = ['created_at', 'updated_at', 'deleted_at'];
+    public $timestamps = true;
+
+
+    protected $fillable = ['order_id', 'status','worker','creator','created_at','updated_at'];
+
 
     public function getCreatedAtAttribute($date)
     {

@@ -13,7 +13,8 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned(); // have not to be zero
+            $table->string('number')->unique(); // have not to be zero
             $table->string('title');
             $table->text('description');
             $table->string('type');
@@ -22,10 +23,7 @@ class CreateOrdersTable extends Migration
             $table->text('notes')->nullable();
             $table->integer('location_id')->unsigned()->index();
             $table->integer('creator')->unsigned()->index();
-            $table->timestamp('entry');
-            $table->timestamp('exit');
-            $table->integer('close_key')->unsigned();
-            $table->softDeletes();
+            $table->integer('key')->unsigned();
             $table->timestamps();
         });
     }

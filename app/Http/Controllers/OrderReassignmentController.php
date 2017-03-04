@@ -77,7 +77,7 @@ class OrderReassignmentController extends Controller
     {
         $reAssUpdate = new OrderAssignmentController();
         $reAssUpdate->update($request,$id,$status_id,'Reassigned');
-        \Session::flash('message', 'Great ,The Reassignment has been Updated Successfully');
+        \Session::flash('success', 'Great ,The Reassignment has been Updated Successfully');
         return back();
     }
 
@@ -91,7 +91,7 @@ class OrderReassignmentController extends Controller
     {
         \DB::table('order_worker')->where('assignment', 'Reassigned')->delete();
         Assignment::where('order_id', $id)->where('status', 'Reassigned')->delete();
-        \Session::flash('message', 'Great ,The Reassignment has been Deleted Successfully');
+        \Session::flash('success', 'Great ,The Reassignment has been Deleted Successfully');
         return back();
     }
 }

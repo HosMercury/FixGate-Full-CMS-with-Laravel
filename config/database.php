@@ -63,7 +63,7 @@ return [
             'prefix'    => '',
             'strict'    => false,
             'engine'    => null,
-            'port' => '3306',
+            'port'      => '8889'
         ],
 
         'pgsql' => [

@@ -1,28 +1,28 @@
-<div class="invoice margin  text-center " style="padding: 0;">
-    {{--<p>Add the classes <code>.btn.btn-app</code> to an <code>&lt;a&gt;</code> tag to achieve the following:</p>--}}
+<div class="invoice margin " style="padding: 0;">
+    {{--<p>Add the classes <code>.btn.</code> to an <code>&lt;a&gt;</code> tag to achieve the following:</p>--}}
     <div class="">
-        <a class="btn btn-app" href="/orders" style="background-color: #3c8dbc; color:white">
+        <a class="btn btn-md nav-btn" href="/orders" >
             <i class="fa fa-list"></i> Orders
         </a>
 
-        <a class="btn btn-app" href="/users" style="background-color: #3c8dbc; color:white">
+        <a class="btn btn-md nav-btn" href="/users">
             <i class="fa fa-users"></i> Users
         </a>
 
-        <a class="btn btn-app" href="/locations" style="background-color: #3c8dbc; color:white">
+        <a class="btn btn-md nav-btn" href="/locations">
             <i class="fa fa-location-arrow"></i> Locations
         </a>
 
-        <a class="btn btn-app" href="/materials" style="background-color: #3c8dbc; color:white">
+        <a class="btn btn-md nav-btn" href="/materials">
             <i class="fa fa-barcode"></i> Materials
         </a>
 
-        <a class="btn btn-app" href="/types" style="background-color: #3c8dbc; color:white">
+        <a class="btn btn-md nav-btn" href="/types">
             <i class="fa fa-tag"></i> Types
         </a>
 
-        <a class="btn btn-app" href="/cost" style="background-color: #3c8dbc; color:white">
-            <i class="fa fa-money"></i> Cost
+        <a class="btn btn-md nav-btn" href="/financial">
+            <i class="fa fa-money"></i> Financial
         </a>
 
     </div>

@@ -1,200 +1,51 @@
 <html>
 <head>
-    <link  rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
-    <link  rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/dataTables.jqueryui.min.css">
-    <link rel="stylesheet" href="DataTables/media/css/jquery.dataTables_themeroller.css"/>
-
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
-            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.12/js/dataTables.jqueryui.min.js"></script>
-</head>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 <body>
+{{--<div id="demo">--}}
+{{--<h2>Let AJAX change this text</h2>--}}
+{{--<button type="button" id="btn">play</button>--}}
+{{--</div>--}}
 
-<table id="table_id" class="display">
-    <thead>
-    <tr>
-        <th>Column 1</th>
-        <th>Column 2</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-        <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-        <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-        <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-        <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-        <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-        <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-        <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-        <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 1 Data 1</td>
-        <td>Row 1 Data 2</td>
-    </tr>
-    <tr>
-        <td>Row 2 Data 1</td>
-        <td>Row 2 Data 2</td>
-    </tr>
-    </tbody>
-</table>
-
+<div class="result"></div>
+<div id="loader" style="display: none;">loading</div>
+<button id="load">load</button>
+<form method="post" action="test2" id="comment">
+   {{csrf_field()}}
+    <input name="test">
+    <button id="btn" type="submit">submit</button>
+</form>
 
 <script>
-    $(document).ready( function () {
-        $('#table_id').DataTable( {
-            "bJQueryUI": true,
-            "sPaginationType": "full_numbers"
-        } );
-    } );
+//    jQuery(document).ready(function ($) {
+//
+//        $('#comment').on('submit', function (e) {
+//            e.preventDefault();
+//
+//            var name = $(this).find('input[name=test]').val();
+//
+//            $.ajax({
+//                type: "POST",
+//                url: 'test2',
+//                data: $(this).serialize(),
+//                beforeSend: function()
+//                {
+//                    $("#loader").show();
+//                },
+//                success : function(msg)
+//                {
+//                    $('.result').html(JSON.stringify(msg.test+' milano'));$("#loader").hide();
+//                }
+//            });
+//        });
+//    });
+
+    $(document).ready(function(){
+        $('#load').click(function(){
+            $('.result').load('test2');
+        })
+    });
 </script>
 </body>
 </html>

@@ -8,11 +8,12 @@
         </div>
     @endforeach
 </div>
+{{--delete bill--}}
 <a href="#inline" class="btn btn-sm btn-danger" data-lity>Delete Bill(s)</a>
 
 <div id="inline" style="overflow: auto;overflow-y: scroll;height:100%; padding: 20px; max-width: 100%;
  border-radius: 6px; max-height: 300px; background: rgb(253, 253, 246);" class="lity-hide col-xs-11">
-    <form action="/orders/{{$id}}/bills/delete" method="POST">
+    <form action="/orders/{{$order->id}}/bills/delete" method="POST">
         {{csrf_field()}}
         {{method_field('DELETE')}}
         <h4>* Select bill(s) to delete</h4>

@@ -17,12 +17,13 @@
                 @foreach($materials as $material)
                     <tr class="mats-show">
                         <td>{{$material->id}}</td>
-                        <td>{{$material->title}}</td>
+                        <td>{{$material->name}}</td>
                         <td>{{$material->pivot->quantity}}</td>
                         <td>{{$material->price}}</td>
                         <td>{{$material->pivot->quantity * $material->price}}</td>
                     </tr>
                 @endforeach
+
                 <form action="/orders/{{$order->id}}/materials/delete" method="post"
                       onsubmit="return confirm('Do you really want to delete your this material(s)?');">
                     {{csrf_field()}}
@@ -33,10 +34,10 @@
                                 <input type="checkbox" name="material_select[]" class="checkbox"
                                        value="{{$material->id}}"/>
                             </td>
-                            <td>{{$material->title}}</td>
-                            <td>{{$material->quantity}}</td>
+                            <td>{{$material->name}}</td>
+                            <td>{{$material->pivot->quantity}}</td>
                             <td>{{$material->price}}</td>
-                            <td>{{$material->quantity * $material->price}}</td>
+                            <td>{{$material->pivot->quantity * $material->price}}</td>
                         </tr>
                     @endforeach
                     <tr>
@@ -107,7 +108,7 @@
 
     <div class="row col-xs-12">
         <button type="submit" class="btn btn-success pull-right headers"
-                name="submit-mat" style="display: none">Save
+                name="submit-mat" style="display: none">Send
         </button>
     </div>
 </form>

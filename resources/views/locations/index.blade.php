@@ -1,14 +1,18 @@
 @extends('theme.index')
-@section('header')
-    <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/datatables/jquery.dataTables.min.css')}}">
-    <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/datepicker/datepicker3.css')}}">
+@section('title') Locations @stop
+@section('bread-header') Locations @stop
+@section('bread-small') Locations index @stop
+@section('breadcrumb')
+    <li class="active">
+        <a href="/locations">Locations</a>
+    </li>
 @stop
+@include('orders.partials.datatables-styles')
 @section('content')
     <div class="row">
         <!-- left column -->
         <div class="col-md-12">
             <br>
-
             <div class="box ">
                 <div class="box-header">
                     <h3 class="box-title"><i class="fa fa-fw fa-list-ul"></i> Locations</h3>
@@ -18,61 +22,39 @@
 
                 <!-- /.box-header -->
                 <div class="box-body">
-                    @if(count($locations))
-                        <table id="data" class="display" cellspacing="0" class="table table-responsive">
-                            <thead>
-                            <tr>
-                                <th>Show</th>
-                                <th>Id</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                            </tr>
-                            </thead>
-                            <tfoot>
-                            <tr>
-                                <th>Show</th>
-                                <th>Id</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                            </tr>
-                            </tfoot>
-                            <tbody>
-                            @foreach($locations as $location)
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-sm btn-info"
-                                           href="locations/{{$location->id}}">Show
-                                        </a>
-                                    </td>
-                                    <td>{{$location->id}}</td>
-                                    <td>{{$location->name}}</td>
-                                    <td>{{$location->address}}</td>
-                                </tr>
-
-                            @endforeach
-                            </tbody>
-                        </table>
-                        <!-- /.box-body -->
-                    @else
-                        <div class="alert alert-warning alert-dismissible">
-                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
-
-                            <p>No location data in that period yet to show ...</p>
-
-                            <p>Hint : If you sure that you have locations before , contact your administrator</p>
-                        </div>
-                    @endif
+                    <table cellspacing="0" width="100%" class="table table-bordered" id="table">
+                        <tfoot>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Manager</th>
+                            <th>Created_at</th>
+                        </tr>
+                        </tfoot>
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Manager</th>
+                            <th>Created_at</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
-                <br>
             </div>
         </div>
     </div>
 @stop
 @section('scripts')
-    <script src="{{asset('theme/plugins/datatables/jquery.datatables.min.js')}}"></script>
-    <script>
-        $(document).ready(function () {
-            $('#data').DataTable();
-        });
-    </script>
+    @include('orders.partials.datatables-scripts',
+    [ 'cols' =>[
+                    ['id'         , 20 ,'id'],
+                    ['name'       , 40 ,'name'],
+                    ['manager'    , 20 ,'manager'],
+                    ['created_at' , 20 ,'created_at'],
+                ],
+      'route' => 'locations',
+      'order' => 0,
+      'sort_type' => 'asc'
+    ]);
 @stop

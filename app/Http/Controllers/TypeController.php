@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Type;
+use Yajra\Datatables\Facades\Datatables;
+
 
 class TypeController extends Controller
 {
@@ -16,9 +18,24 @@ class TypeController extends Controller
      */
     public function index()
     {
-        $types = Type::all();
+        return view('types.index');
+    }
 
-        return view('types.index',compact('types'));
+
+    /**
+     * Display a listing of types.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function data()
+    {
+        $cols = ['id', 'name','created_at'];
+        $types = Type::select($cols);
+        return Datatables::of($types)
+            ->editColumn('name', function ($type) {
+                return '<a href="/types/' . $type->id . '"class="">' . str_limit($type->name, 50) . '</a>';
+            })
+            ->make(true);
     }
 
     /**
@@ -48,7 +65,7 @@ class TypeController extends Controller
 
         $inserted = (new Type)->create($request->all());
 
-        \Session::flash('message', 'Thanks , Your Type Name (' . $inserted->name . ')
+        \Session::flash('success', 'Thanks , Your Type Name (' . $inserted->name . ')
                                     has been Successfully added');
 
         return redirect('/types');
@@ -62,7 +79,8 @@ class TypeController extends Controller
      */
     public function show($id)
     {
-        //
+        $type = Type::find($id);
+        return view('types.show',compact('type'));
     }
 
     /**
@@ -73,7 +91,8 @@ class TypeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $type = Type::find($id);
+        return view('types.edit',compact('type'));
     }
 
     /**
@@ -85,7 +104,18 @@ class TypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'name'=>'required|min:2|max:220|unique:types,name',
+            'description'=>'max:1000',
+        ]);
+
+        //add user to the request;
+
+        Type::find($id)->update($request->all());
+
+        \Session::flash('success', 'Thanks , The Type  has been Successfully updated');
+
+        return redirect('/types/' . $id);
     }
 
     /**
@@ -96,6 +126,10 @@ class TypeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Type::find($id)->delete();
+
+        \Session::flash('success', 'Thanks , The Type  has been Successfully deleted');
+
+        return redirect('/types');
     }
 }

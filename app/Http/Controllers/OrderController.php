@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Assignment;
 use App\Http\Requests;
+use App\Http\Requests\OrderRequest;
 use App\Material;
 use App\Order;
+use App\Rating;
+use Mail;
 use App\User;
 use Carbon\Carbon;
 use Gate;
 use Illuminate\Http\Request;
+use Yajra\Datatables\Facades\Datatables;
 
 class OrderController extends Controller
 {
@@ -20,25 +25,44 @@ class OrderController extends Controller
      */
     public function index()
     {
+
         $to = Carbon::today();
-        $from = Carbon::today()->subMonth();
+        $from = Carbon::today()->subWeek();
 
         $count = Order::select([
-            \DB::raw('DATE_FORMAT(`created_at`,"%d-%m") AS `date`'), //mysql resulted date format
+            \DB::raw('DATE_FORMAT(`created_at`,"%d-%m") AS `date`'),
             \DB::raw('COUNT(*) AS `count`')
         ])->whereBetween('created_at', [$from, $to])
             ->groupBy('date')
             ->orderBy('date', 'ASC')
             ->lists('count', 'date');
 
-        $order = Order::with('assignments')->get();
-
         return view('orders.index', [
-            'orders' => $order,
             'count' => $count,
             'dateTo' => $to->format('d-m'),
             'dateFrom' => $from->format('d-m')
         ]);
+
+        return view('orders.index');
+    }
+
+    /**
+     * Display a listing of orders.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function data()
+    {
+        $cols = ['number', 'title', 'priority', 'type', 'location_id', 'created_at'];
+        $orders = Order::select($cols);
+        return Datatables::of($orders)
+            ->editColumn('title', function ($order) {
+                return '<a href="/orders/' . substr($order->number, 0, 4) . '/' . substr($order->number, 5) . '">' . str_limit($order->title, 50) . '</a>';
+            })
+            ->editColumn('number', function ($order) {
+                return '<a href="/orders/' . substr($order->number, 0, 4) . '/' . substr($order->number, 5) . '">' . $order->number . '</a>';
+            })
+            ->make(true);
     }
 
     /**
@@ -99,27 +123,40 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OrderRequest $request)
     {
-        $this->validate($request, [
-            'title' => 'required|min:10|max:255',
-            'description' => 'required|min:20',
-            'type' => 'required|exists:types,name',
-            'priority' => 'required|integer|min:1|max:4',
-            'contact' => 'required|digits:10|regex:/^05/',
-            'notes' => 'min:10',
-        ]);
+        $user = auth()->user();
 
+        $max_number = Order::whereLocationId(auth()->user()->location_id)
+            ->pluck('number')
+            ->map(function ($number) {
+                return substr($number, 5);
+            })->max();
 
-        $request->location_id = 2000;
-//        $request->location_id = auth()->user()->location->id;
-        $request->user_id = auth()->user()->id;
+        if (!isset($max_number)) {
+            $max_number = 1000000;
+        }
 
+        $request['location_id'] = auth()->user()->location_id;
+        $request['creator'] = auth()->user()->id;
+        $request['key'] = rand(0000, 9999);
+        $request['number'] = auth()->user()->location_id . '-' . ($max_number + 1);
         $inserted = (new Order)->create($request->all());
 
-        \Session::flash('message', 'Thanks , Your service order No (' . $inserted->id . ') has been Successfully added');
+        if (isset($inserted)) {
+            \Session::flash('success', 'Thanks , Your service order No (' . $inserted->number . ') has been Successfully added');
 
-        return redirect('/orders');
+            Mail::send('emails.confirm', ['inserted' =>$inserted,'user'=>$user], function ($m) use ($user) {
+                $m->from('hello@app.com', 'Your Application');
+
+                $m->to($user->email, $user->name)->subject('Order Created');
+            });
+
+            return redirect('/orders/' . substr($inserted->number,0,4).'/'. substr($inserted->number,5));
+        } else {
+            \Session::flash('success', 'Error Occurred');
+            return redirect('/orders/');
+        }
     }
 
     /**
@@ -128,15 +165,12 @@ class OrderController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $orders)
+    public function show($location, $number)
     {
-//        auth()->loginUsingId(13);
-//
-//        if (Gate::denies('show_order_page', $order)) {
-//            abort(403, 'Unauthorized Page Request');
-//        }
+        if (is_nan($location) || is_nan($number)) abort(404);
 
-        $order = $orders;
+        $order = Order::whereNumber($location . '-' . $number)->first();
+
         $total = 0;
         $materials = $order->materials()->get();
         $costs = $order->costs()->get();
@@ -161,31 +195,36 @@ class OrderController extends Controller
             $total += ($mat->price * $mat->pivot->quantity);
         }
 
-        $assigns = $order->assignments()
-            ->having('status', '>', 0)
-            ->orderBy('created_at', 'des')
-            ->get(['status', 'worker', 'created_at'])
-            ->groupBy('status');
+        $assignments = Assignment::where(['order_id' => $order->id])
+            ->orderBy('created_at', 'asc')->get()->groupBy('status');
 
-        $assigns = $assigns->map(function ($assign) {
-            return User::whereIn('id', $assign->pluck('worker'))->get();
+        $assignments = $assignments->map(function ($assignment) {
+            return $assignment->map(function ($w) {
+                return $w = User::find($w->worker);
+            });
         });
+
+        $closed = Assignment::where([
+            'status' => '-1',
+            'order_id' => $order->id
+        ])->first();
+
+        $assigns_count = $closed ? $assignments->count() - 1 : $assignments->count();
 
         return view('orders.show', [
             'order' => $order,
             'materials' => $materials,
             'costs' => $costs,
             'materials_total' => $total,
-
-            'assigns' => $assigns,
-
+            'assigns' => $assignments,
             'workers' => $workers,
             'labors' => $labors,
             'techs' => $techs,
             'vendors' => $vendors,
-
             'materials_ids' => $materials_ids,
             'thumbs' => $thumbs,
+            'closed' => $closed,
+            'assigns_count' => $assigns_count
         ]);
     }
 
@@ -197,7 +236,9 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-
+        $order = Order::findOrFail($id);
+        $types = \DB::table('types')->lists('name', 'name');
+        return view('orders.edit', compact('order', 'types'));
     }
 
     /**
@@ -207,9 +248,17 @@ class OrderController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function  update(OrderRequest $request, $id)
     {
-        //
+        $request->location_id = 2000;
+//        $request->location_id = auth()->user()->location->id;
+        $request->user_id = auth()->user()->id;
+
+        Order::find($id)->update($request->all());
+
+        \Session::flash('success', 'Thanks , Your service order has been Successfully updated');
+
+        return redirect('/orders/' . $id);
     }
 
     /**
@@ -220,8 +269,40 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Order::find($id)->delete();
+        \Session::flash('success', 'Thanks , Your service order has been Successfully deleted');
+
+        return redirect('/orders');
     }
 
+    /**
+     * close te order .
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function close(Request $request, Order $order)
+    {
+        $this->validate($request, [
+            'rating' => 'required|min:1|max:5',
+            'closekey' => 'required|min:0000|max:9999',
+            'feedback' => 'max:500'
+        ]);
 
+        if ($request->closekey != $order->close_key) {
+            \Session::flash('danger', 'You have entered wrong Close Key , try again');
+            return redirect('/orders/' . $order->id);
+        } else {
+            if ((New Rating)->create($request->all())) {
+
+                $order->assignments()->create(['order_id' => $order->id, 'status' => '-1']);
+
+                \Session::flash('success', 'Thanks , Your service order has been Successfully Closed');
+                return redirect('/orders/' . $order->id);
+            } else {
+                \Session::flash('danger', 'An error has been occur , please conact your admin..');
+                return redirect('/orders/' . $order->id);
+            }
+        }
+    }
 }

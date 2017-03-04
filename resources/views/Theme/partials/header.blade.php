@@ -2,11 +2,10 @@
     <nav class="navbar navbar-static-top">
         <div class="container">
             <div class="">
-                {{--<img src="/theme/dist/img/nahdi.png" class="pull-left">--}}
                 <div class="navbar-header">
-                        <a href="/" class="navbar-brand">
-                            @include('theme.partials.logo')
-                        </a>
+                    <a href="/" class="navbar-brand">
+                        @include('theme.partials.logo')
+                    </a>
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                             data-target="#navbar-collapse">
                         <i class="fa fa-bars"></i>

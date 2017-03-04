@@ -5,23 +5,12 @@
 @section('breadcrumb')
     <li class="active">
         <a href="/orders">Orders</a>
-    <li class="active"><a href="/orders/{{$order->id}}">{{$order->id}}</a></li>
+    <li class="active"><a href="/order/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}">{{$order->number}}</a></li>
     </li>
 @stop
-@section('styles')
-    <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/select2/select2.min.css')}}">
-    <style>
-        .select2-container--default .select2-selection--multiple .select2-selection__choice {
-            color: black !important;
-            background-color: #d9edf7;
-        }
-        @media(max-width: 1000px){
-            .assigner{
-                margin: 10px 40px;
-            }
-        }
-    </style>
-@stop
+<link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/select2/select2.min.css')}}">
+<link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/rating/rating.css')}}">
+@include('orders.partials.orders-show-styles')
 @section('content')
     {{--@can('show_order_page',$order)--}}
     <div class="row">
@@ -29,11 +18,26 @@
             <!-- Order Details -->
             {{--@can('show_order_details',$order)--}}
             <div class="box">
+                <!-- close this order -->
                 @include('orders.partials.details')
+                <hr>
+                <a href="/order/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}/edit" class="btn btn-sm btn-info">Edit Order</a>
+
+                <form action="/order/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}" method="POST"
+                      onsubmit="return confirm('are you sure, you want to delete !?');"
+                      style="display: inline;">
+                    {{csrf_field()}}
+                    {{method_field('DELETE')}}
+                    <button type="submit" class="btn btn-sm btn-danger pull-right">Delete Order</button>
+                </form>
+
             </div>
+
             {{--@endcan--}}
         </div>
 
+        @include('orders.partials.modal')
+                <!-- /.modal -->
         <!-- Order Assignments -->
         {{--@can('show_order_assignments',$order)--}}
         @if(count($workers))
@@ -61,16 +65,36 @@
 @section('scripts')
     @include('orders.partials.scripts')
     <script src="{{asset('theme/plugins/select2/select2.min.js')}}"></script>
-    <script type="text/javascript">
-        $('select').select2({
-            placeholder: "Select worker(s)",
-            allowClear: true
+    <script src="{{asset('theme/plugins/rating/rating.js')}}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('select').select2({
+                placeholder: "Select worker(s)",
+                allowClear: true
+            });
+
+            $('#myModal').on('shown.bs.modal', function () {
+                $('#myInput').focus()
+            });
+
+            $('#rating').rating();
         });
     </script>
+    @if (count($errors) > 0)
+        <script>
+            $('#rateModal').modal('show');
+        </script>
+    @endif
     <script>
-        $(document).ready(function(){
-            $('.edit-assignment').click(function(){
-                $('.delete-assignment').show();
+        $(document).ready(function () {
+            $('.edit-assignment').on('click', function () {
+                $(this).text(function (i, text) {
+                    return text === "Cancel" ? "Edit" : "Cancel";
+                });
+                $('.delete-assignment').toggle();
+                $('.new-assignment').toggle();
+                $('.add-worker-form').toggle();
             });
         });
     </script>

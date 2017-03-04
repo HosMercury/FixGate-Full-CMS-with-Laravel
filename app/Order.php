@@ -3,7 +3,6 @@
 namespace App;
 
 use Carbon\Carbon;
-use App\Assignment;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -19,9 +18,8 @@ class Order extends Model
         'notes',
         'location_id',
         'user_id',
-        'entry',
-        'exit',
-        'close_key'
+        'key',
+        'number'
     ];
 
     public function getCreatedAtAttribute($date)
@@ -35,6 +33,11 @@ class Order extends Model
     }
 
     ////////////////////  Relationships //////////////////
+
+    public function type()
+    {
+        return $this->belongsTo('App\Type');
+    }
 
     public function assignments()
     {
@@ -54,6 +57,11 @@ class Order extends Model
     public function costs()
     {
         return $this->hasMany('App\Cost');
+    }
+
+    public function rating()
+    {
+        return $this->hasOne('App\Rating');
     }
 
     public function bills()
@@ -76,34 +84,8 @@ class Order extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function isSeenBy(User $user, $snippet = null)
+    public function viewers()
     {
-        dd($this->location);
-        switch ($snippet) {
-            case null:
-                return $user->owns($this) ||
 
-                //SuperVisor|Manager
-                $user->manage($this.location);
-                $user->id === $this->location->manager_id ||
-
-                //Same Auth selected Location
-                $user->location_id === $this->location->id;
-
-                //Area Manager//Regional Manager//Location Admin//Super Admin
-                break;
-
-            case 'details':
-                return false;
-                break;
-
-            case 'assignments':
-                return true;
-                break;
-
-            case 'costs':
-                return true;
-                break;
-        }
     }
 }

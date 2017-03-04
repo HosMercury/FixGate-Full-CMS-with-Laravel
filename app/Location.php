@@ -18,7 +18,6 @@ class Location extends Model
 
     public function owns(Order $order)
     {
-        return $order->location->manager_id;
     }
 
 }

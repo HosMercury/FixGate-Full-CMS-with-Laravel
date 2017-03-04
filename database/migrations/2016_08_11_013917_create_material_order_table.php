@@ -17,8 +17,17 @@ class CreateMaterialOrderTable extends Migration
             $table->integer('order_id')->unsigned()->index();
             $table->integer('material_id')->unsigned()->index();
             $table->float('quantity');
-            $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('order_id')
+                ->references('id')
+                ->on('orders')
+                ->onDelete('cascade');
+
+            $table->foreign('material_id')
+                ->references('id')
+                ->on('materials')
+                ->onDelete('cascade');
         });
     }
 

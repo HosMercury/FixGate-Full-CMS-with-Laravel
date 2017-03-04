@@ -1,9 +1,13 @@
 @extends('theme.index')
-@section('header')
-    <link material="text/css" rel="stylesheet" href="{{asset('theme/plugins/datatables/jquery.dataTables.min.css')}}">
-    <link material="text/css" rel="stylesheet" href="{{asset('theme/plugins/datatables/extensions/responsive/css/dataTables.responsive.css')}}">
-    <link material="text/css" rel="stylesheet" href="{{asset('theme/plugins/datepicker/datepicker3.css')}}">
+@section('title') Materials & Assets @stop
+@section('bread-header') Materials & Assets @stop
+@section('bread-small') Materials & Assets index @stop
+@section('breadcrumb')
+    <li class="active">
+        <a href="/materials">Materials & Assets</a>
+    </li>
 @stop
+@include('orders.partials.datatables-styles')
 @section('content')
     <div class="row">
         <!-- left column -->
@@ -12,70 +16,53 @@
 
             <div class="box ">
                 <div class="box-header">
-                    <h3 class="box-title"><i class="fa fa-fw fa-list-ul"></i> materials</h3>
+                    <h3 class="box-title"><i class="fa fa-fw fa-list-ul"></i> Materials</h3>
                     <a href="/materials/create" class="btn btn-sm btn-success pull-right">
                         <i class="fa fa-fw fa-plus"></i> New material</a>
                 </div>
 
                 <!-- /.box-header -->
                 <div class="box-body">
-                    @if(count($materials))
-                        <table id="data" class="display" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>Show</th>
-                                <th>Id</th>
-                                <th>Name</th>
-                            </tr>
-                            </thead>
-                            <tfoot>
-                            <tr>
-                                <th>Show</th>
-                                <th>Id</th>
-                                <th>Name</th>
-                            </tr>
-                            </tfoot>
-                            <tbody>
-                            @foreach($materials as $location)
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-sm btn-info"
-                                           href="materials/{{$location->id}}">Show
-                                        </a>
-                                    </td>
-                                    <td>{{$location->id}}</td>
-                                    <td>{{$location->name}}</td>
-                                </tr>
+                    <table cellspacing="0" width="100%" class="table table-bordered" id="table">
+                        <tfoot>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Location</th>
+                        </tr>
+                        </tfoot>
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Location</th>
+                        </tr>
+                        </thead>
 
-                            @endforeach
-                            </tbody>
-                        </table>
-                        <!-- /.box-body -->
-                    @else
-                        <br>
-                        <div class="alert alert-warning alert-dismissible">
-                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
-
-                            <p>No location data yet to show ...</p>
-
-                            <p>Hint : If you sure that you have materials before , contact your administrator</p>
-                        </div>
-                    @endif
+                    </table>
                 </div>
-                <br>
             </div>
         </div>
     </div>
 @stop
 @section('scripts')
-    <script src="{{asset('theme/plugins/datatables/jquery.datatables.min.js')}}"></script>
-    <script src="{{asset('theme/plugins/datatables/extensions/responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script>
-        $(document).ready(function () {
-            $('#data').DataTable({
-                responsive: true,
-                bAutoWidth : false
-            });
-        });
-    </script>
+    @include('orders.partials.datatables-scripts',
+    [ 'cols' =>[
+                    ['id'         , 5  ,'id'],
+                    ['name'       , 40 ,'name'],
+                    ['type'       , 15 ,'type'],
+                    ['price'      , 10 ,'price'],
+                    ['soh'        , 10 ,'soh'],
+                    ['location'   , 20 ,'location'],
+                ],
+      'route' => 'materials',
+      'order' => 0,
+      'sort_type' => 'asc'
+    ]);
 @stop

@@ -3,6 +3,7 @@
 <link type="text/css" rel="stylesheet"
       href="{{asset('theme/plugins/lity/dist/lity.min.css')}}"/>
 <script src="{{asset('theme/plugins/lity/dist/lity.min.js')}}"></script>
+{{--{{dd($materials_ids->where('id', 5)->first()->price)}}--}}
 <script>
     Dropzone.options.myAwesomeDropzone = {
         paramName: "file", // The name that will be used to transfer the file
@@ -14,18 +15,19 @@
     var count = 0;
     var otherCount = 0;
     var maters_ids = {!! $materials_ids !!};
+
     var tableRow =
             '<div class="added col-xs-11" style="margin: 1em 0">'
             + '<div class="col-xs-4">'
             + '<select name="material_id[]" class="form-control select-mat">'
             + '<option>Select Material</option>'
     $.each(maters_ids, function (i) {
-        tableRow += '<option class="mat-option" value="' + maters_ids[i].id + '" >' + maters_ids[i].title + '</option>'
+        tableRow += '<option class="mat-option" value="' + maters_ids[i].id + '" >' + maters_ids[i].name + '</option>'
     });
     tableRow += '</select>'
             + '</div>'
             + '<div class="col-xs-2 parent">'
-            + '<input name="quantity[]" type="number" step="0.1" class="col-xs-11 .input-sm qty form-control" required />'
+            + '<input name="quantity[]" type="number" step="0.5" class="col-xs-11 .input-sm qty form-control" required />'
             + '</div>'
             + '<div class="price col-xs-2">'
     tableRow += '<p class="mat-price"></p>'
@@ -84,6 +86,7 @@
             $('#mts').append(tableRow);
             $('.alert-warning').hide(300);
         });
+
         //show cost headers and append row
         $(".add-cost").click(function () {
             $('.headers-cost').slideDown('slow');
@@ -128,14 +131,20 @@
             calc();
         });
 
+
         $(document).on('change', '.select-mat', function () {
-//                        var optionSelected = $("option:selected", this);
             var valueSelected = this.value;
             $this = $(this);
             row = $this.parents("div.added");
-            parseFloat(row.find(".mat-price").text(maters_ids[valueSelected - 1].price));
+
+            price = maters_ids.find(function (mat) {
+                return mat.id == valueSelected;
+            })['price'];
+            parseFloat(row.find(".mat-price").text(price));
             calc();
         });
+
+
         $(document).on('change keyup', '.costs-sub', function () {
             cost_calc();
         });
@@ -171,7 +180,6 @@
             });
             $('p.cost-grand').text(cost_grandTotal);
         }
-
     });
 </script>
 </div>

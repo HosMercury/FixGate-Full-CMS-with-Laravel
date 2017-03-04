@@ -1,10 +1,10 @@
-{!!Form::open(['url' => "/orders/$order->id/assign/", 'method'=>'POST',$order->id])!!}
 {{csrf_field()}}
-<div class="form-group {{ $errors->has('workers') ? ' has-error' : '' }}">
-    {!! Form::label('Assign To : ') !!}
-    <select name="workers[]"
+<div class="form-group {{ $errors->has($add.'workers') ? ' has-error' : '' }}">
+    {!! Form::label($label) !!}
+
+    <select name="{{$add}}workers[]"
             class="js-example-basic-multiple pull-right"
-            multiple="multiple" style="width: 82%;"
+            multiple="multiple" style="width:100%;"
     >
 
         @if(count($labors))
@@ -31,70 +31,15 @@
             </optgroup>
         @endif
     </select>
-    {!! Form::submit('Assign',['name'=>'submit','class'=>'btn btn-success btn-md pull-right col-md-1 assigner']) !!}
+    <div class="assigner">
+        {!! Form::submit($assign,['name'=>'submit','class'=>'btn btn-success btn-md pull-right col-md-1']) !!}
+    </div>
 
-    @if ($errors->has('workers'))
+    @if ($errors->has($add.'workers'))
         <span class="help-block">
-                 <strong>{{ $errors->first('workers') }}</strong>
+                 <strong>{{ $errors->first($add.'workers')}}</strong>
             </span>
     @endif
 </div>
-{{--<div class="form-group col-sm-4">--}}
-{{--<label class="control-label">Technician(s)</label>--}}
 
-{{--<div class="">--}}
-{{--<select name="worker[]" class="form-control" multiple>--}}
-{{--@foreach($workers as $worker)--}}
-{{--@foreach($worker->roles as $role)--}}
-{{--@if($role->name == 'labor')--}}
-{{--<option value="{{$worker->id}}">{{$worker->name}}</option>--}}
-{{--@elseif($role->name == 'technician')--}}
-{{--<option value="{{$worker->id}}">{{$worker->name}}</option>--}}
-{{--@elseif($role->name == 'vendor')--}}
-{{--<option value="{{$worker->id}}">{{$worker->name}}</option>--}}
-{{--@endif--}}
-{{--@endforeach--}}
-{{--@endforeach--}}
-{{--</select>--}}
-{{--</div>--}}
-{{--</div>--}}
-
-{{--<div class="form-group col-sm-4">--}}
-{{--<label class="control-label">Labor(s)</label>--}}
-
-{{--<div class="">--}}
-{{--<select name="worker[]" class="form-control" multiple>--}}
-{{--@foreach($workers as $worker)--}}
-{{--@if($$worker->pivot->name == 'labor')--}}
-{{--<option value="{{$worker->id}}">{{$worker->name}}</option>--}}
-{{--@endif--}}
-{{--@endforeach--}}
-{{--</select>--}}
-{{--</div>--}}
-{{--</div>--}}
-
-{{--<div class="form-group col-sm-4">--}}
-{{--<label class="control-label">External Vendor(s)</label>--}}
-
-{{--<div class="">--}}
-{{--<select name="worker[]" class="form-control" multiple>--}}
-{{--@foreach($workers as $worker)--}}
-
-{{--@if($worker->pivot->name == 'external')--}}
-{{--<option value="{{$worker->id}}">{{$worker->name}}</option>--}}
-{{--@endif--}}
-{{--@endforeach--}}
-{{--</select>--}}
-{{--</div>--}}
-{{--</div>--}}
-
-{{--<p>--}}
-{{--<small>Note: You can choose Multiple and/or various workers as needed</small>--}}
-{{--</p>--}}
-{{--<div class="form-group">--}}
-{{--<button type="reset" class="btn btn-default btn-xs">Clear</button>--}}
-{{--</div>--}}
-
-{{--<div class="form-group pull-right form-inline">--}}
-{{--</div>--}}
 {!! Form::close() !!}

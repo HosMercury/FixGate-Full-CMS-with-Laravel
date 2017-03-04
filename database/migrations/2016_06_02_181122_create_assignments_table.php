@@ -18,7 +18,6 @@ class CreateAssignmentsTable extends Migration
             $table->integer('status')->defaults(0);
             $table->integer('worker')->nullable();
             $table->integer('creator')->nullable()->unsigned()->index();
-            $table->softDeletes();
             $table->timestamps();
         });
     }

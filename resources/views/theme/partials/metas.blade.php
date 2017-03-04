@@ -1,7 +1,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>CMMS gate | @yield('title')</title>
+    <title>Fix gate | @yield('title')</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
@@ -16,7 +16,6 @@
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{ asset('/theme/dist/css/skins/skin-blue-light.min.css') }}">
 
-    @yield('styles')
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -24,4 +23,13 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="https://pagead2.googlesyndication.com/pub-config/r20160212/ca-pub-4495360934352473.js"></script>
+    <style>
+        @media screen and (min-width: 480px) {
+            .flash{
+                margin: 0 27%;
+                font-weight: bold;
+                text-align: center;
+            }
+        }
+    </style>
 </head>

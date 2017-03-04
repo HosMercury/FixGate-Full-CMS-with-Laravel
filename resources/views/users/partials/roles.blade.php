@@ -1,6 +1,7 @@
 <legend>User Roles</legend>
 @if(count($user->roles))
     <p>This user has these roles :</p>
+
     <ul>
         @foreach($user->roles as $role)
             <li>
@@ -46,8 +47,8 @@
                     </select>
                     @if ($errors->has('role'))
                         <span class="help-block">
-                                                    <strong>{{$errors->first('role') }}</strong>
-                                                </span>
+                             <strong>{{$errors->first('role') }}</strong>
+                        </span>
                     @endif
                 </div>
             </div>

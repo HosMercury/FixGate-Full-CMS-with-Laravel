@@ -20,43 +20,87 @@
 |
 */
 
+Route::get('test', function () {
+    dd(Carbon\Carbon::createFromFormat('Y-m-d', '1017-02-31')->toDateTimeString());
+    return view('test');
+});
+
+Route::get('test2', function () {
+    return \App\User::all();
+});
+
+Route::post('test2', function () {
+    if (Request::ajax()) {
+        $data = Request::all();
+        return $data;
+    }
+});
+
 Route::group(['middleware' => ['web']], function () {
 
-    Route::group(['prefix'=>'auth'],function(){
+    //Auth routes
+    Route::group(['prefix' => 'auth'], function () {
         Route::auth();
     });
 
-    Route::group(['middleware'=>'auth'],function(){
-        Route::get('/', 'OrderController@index');
-        Route::resource('/orders', 'OrderController');
-        Route::resource('/locations', 'LocationController');
-        Route::resource('/types', 'TypeController');
-        Route::resource('/materials', 'MaterialController');
-        Route::resource('/users/workers', 'WorkerController');
+    Route::group(['middleware' => 'auth'], function () {
 
+        Route::get('/', 'OrderController@index');
+        //Ajax
+        Route::get('/orders/data', 'OrderController@data');
+        Route::post('/orders/{order}/close', 'OrderController@close');
+        Route::get('/materials/data', 'MaterialController@data');
+        Route::get('/types/data', 'TypeController@data');
+        Route::get('/locations/data', 'LocationController@data');
+        Route::get('/users/data', 'UserController@data');
+        Route::get('/roles/data', 'RoleController@data');
+        Route::get('/permissions/data', 'PermissionController@data');
+
+
+        //Resources
+        Route::get('orders', 'OrderController@index');
+        Route::post('orders', 'OrderController@store');
+        Route::get('orders/create', 'OrderController@create');
+        Route::get('orders/{location}/{number}', 'OrderController@show');
+
+        Route::resource('locations', 'LocationController');
+        Route::resource('types', 'TypeController');
+        Route::resource('materials', 'MaterialController');
+
+        //Financial
+        Route::get('/financial/costs/data', 'FinancialCostsController@data');
+        Route::get('/financial/materials/data2', 'FinancialCostsController@data2');
+        Route::get('/financial', 'FinancialCostsController@index');
+        Route::get('/financial/orders/{order}/costs', 'FinancialCostsController@showCost');
+        Route::get('/financial/orders/{order}/costs', 'FinancialCostsController@showCost');
+        Route::get('/financial/{id}/material/{material}/order/{order}', 'FinancialCostsController@showMaterial');
+
+        Route::resource('/users/workers', 'WorkerController');
         Route::resource('/users', 'UserController');
         Route::post('/users/{user}/roles', 'UserController@assignRole');
         Route::delete('/users/{user}/roles/{role}', 'UserController@deleteRole');
 
         Route::post('/roles/{role}/permissions', 'RoleController@assignPermission');
         Route::delete('/roles/{role}/permissions/{permission}', 'RoleController@deletePermission');
-
         Route::resource('/roles', 'RoleController');
+
         Route::resource('/permissions', 'PermissionController');
+        Route::get('permissions','PermissionController@assign');
+        Route::post('permissions','PermissionController@storeassign');
     });
 
-    Route::group(['prefix' => 'orders','middleware'=>'auth'], function () {
-        Route::get('/filter', 'OrderController@index');
-        Route::post('/filter', 'OrderController@filter');
+    Route::group(['prefix' => 'orders', 'midleware' => 'auth'], function () {
+        //try combine these
+        Route::post('/{order}/assignments/', 'OrderAssignmentController@store');
+        Route::patch('/{order}/assignments/{assignment}/', 'OrderAssignmentController@update');
+        Route::delete('/{order}/assignments/{assignment}/workers/{user}/delete/', 'OrderAssignmentController@destroy');
+        Route::delete('/{order}/assignments/{assignment}/delete/', 'OrderAssignmentController@destroy');
 
-        Route::resource('/{id}/assign', 'OrderAssignmentController');
-        Route::resource('/{id}/reassign', 'OrderReassignmentController');
+        Route::resource('/{order}/materials', 'OrderMaterialController');
+        Route::resource('/{order}/costs', 'OrderCostController');
+        Route::resource('/{order}/bills', 'OrderBillController');
 
-        Route::resource('/{id}/materials', 'OrderMaterialController');
-        Route::resource('/{id}/costs', 'OrderCostController');
-        Route::resource('/{id}/bills', 'OrderBillController');
     });
-
 });
 
 

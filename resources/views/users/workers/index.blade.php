@@ -1,7 +1,6 @@
 @extends('theme.index')
-@section('styles')
-    <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/datatables/jquery.dataTables.min.css')}}">
-@stop
+<link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/datatables/jquery.dataTables.min.css')}}">
+
 @section('content')
     <div class="row">
         <!-- left column -->

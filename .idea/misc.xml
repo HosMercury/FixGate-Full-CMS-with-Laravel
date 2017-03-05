@@ -10,5 +10,8 @@
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/database/migrations/2019_08_12_123941_create_permission_role_table.php" />
+  </component>
   <component name="ProjectRootManager" version="2" />
 </project>

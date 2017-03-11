@@ -27,7 +27,6 @@
                         <tr>
                             <th>Id</th>
                             <th>Name</th>
-                            <th>Manager</th>
                             <th>Created_at</th>
                         </tr>
                         </tfoot>
@@ -35,7 +34,6 @@
                         <tr>
                             <th>Id</th>
                             <th>Name</th>
-                            <th>Manager</th>
                             <th>Created_at</th>
                         </tr>
                         </thead>
@@ -50,8 +48,7 @@
     [ 'cols' =>[
                     ['id'         , 20 ,'id'],
                     ['name'       , 40 ,'name'],
-                    ['manager'    , 20 ,'manager'],
-                    ['created_at' , 20 ,'created_at'],
+                    ['created_at' , 40 ,'created_at'],
                 ],
       'route' => 'locations',
       'order' => 0,

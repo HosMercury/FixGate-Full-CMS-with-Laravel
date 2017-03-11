@@ -17,18 +17,14 @@
             <div class="box ">
                 <div class="box-header">
                     <h3 class="box-title"><i class="fa fa-fw fa-list-ul"></i> Roles</h3>
-                    <a href="/roles/create" class="btn btn-sm btn-success pull-right">
+                    <a href="/users/roles/create" class="btn btn-sm btn-success pull-right">
                         <i class="fa fa-fw fa-plus"></i> New Role</a>
                 </div>
 
                 <!-- /.box-header -->
                 <div class="box-body">
 
-                    <p><strong>Related :</strong>
-                        <a href="users/workers" class="btn  btn-toolbar">Workers</a> |
-                        <a href="roles" class="btn  btn-toolbar">Roles</a> |
-                        <a href="permissions" class="btn  btn-toolbar">Permissions</a>
-                    </p>
+                    @include('users.partials.related')
 
                     <table cellspacing="0" width="100%" class="table table-bordered" id="table">
                         <tfoot>
@@ -55,7 +51,7 @@
                     ['id'          , 10 ,  'id'],
                     ['name'        , 35 ,  'name'],
                 ],
-      'route' => 'roles',
+      'route' => 'users/roles',
       'order' => 0,
       'sort_type' => 'asc'
     ]);

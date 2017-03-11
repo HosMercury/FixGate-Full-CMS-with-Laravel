@@ -63,7 +63,7 @@ return [
             'prefix'    => '',
             'strict'    => false,
             'engine'    => null,
-            'port'      => '8889'
+            'port'      => env('DB_PORT', '33060')
         ],
 
         'pgsql' => [

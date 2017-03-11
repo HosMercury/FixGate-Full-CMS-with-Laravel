@@ -10,7 +10,7 @@
 @section('content')
     <div class="box " xmlns="http://www.w3.org/1999/html">
         <div class="box-header with-border">
-            <h2 class="box-title">New</h2>
+            <h2 class="box-title">New Type</h2>
         </div>
 
         <div class="box-body">

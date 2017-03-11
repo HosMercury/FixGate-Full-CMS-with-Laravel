@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Permission;
+use App\Role;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Facades\Datatables;
 
@@ -83,34 +84,20 @@ class PermissionController extends Controller
         return view('users.permissions.show', compact('permission'));
     }
 
-    /**
-     * Show the form for assign the perms.
-     *
-     */
-    public function assign()
-    {
-        return view('users.permissions.assign');
-    }
 
     /**
      * Show the form for store perms assigns.
      *
      */
-    public function storeassign()
+    public function assign(Role $role)
     {
-        $perms = [];
-        $permissions = array_keys(request()->all());
-        if (in_array('accountant', $permissions)) {
-            $perms[] = 'accountant';
+        $permissions = request('permissions');
+        $permissions_ids = [];
+        foreach($permissions as $permission){
+            $permissions_ids[] = Permission::whereName($permission)->first()->id;
         }
-        if (in_array('admin', $permissions)) {
-            $perms[] = 'admin';
-        }
-        if (in_array('superadmin', $permissions)) {
-            $perms[] = 'superadmin';
-        }
-
-        return $perms;
+        $role->permissions()->sync($permissions_ids);
+        return redirect('/roles/'.$role->id);
     }
 
     /**

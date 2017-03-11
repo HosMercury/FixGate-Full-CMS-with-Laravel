@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    protected $fillable = ['name', 'label','creator'];
+    protected $fillable = ['name', 'label', 'creator'];
 
     public function users()
     {
@@ -19,7 +19,7 @@ class Role extends Model
     }
 
 
-    public function givePermissionTo( $permission)
+    public function givePermissionTo($permission)
     {
         return $this->permissions()->save($permission);
     }
@@ -27,10 +27,9 @@ class Role extends Model
     public function hasPermission($permission_id)
     {
         $result = [];
-        foreach($this->permissions as $permission){
+        foreach ($this->permissions as $permission) {
             $result[] = $permission->id == intval($permission_id);
         }
-        return in_array(false,$result);
+        return in_array(false, $result);
     }
-
 }

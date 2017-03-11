@@ -33,7 +33,7 @@ class RoleController extends Controller
 
         return Datatables::of($roles)
             ->editColumn('name', function($role) {
-                return '<a href="/roles/' . $role->id .'"class="">' . str_limit($role->name, 50) . '</a>';
+                return '<a href="/users/roles/' . $role->id .'"class="">' . str_limit($role->name, 50) . '</a>';
             })
             ->make(true);
     }
@@ -74,13 +74,12 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  int $role
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Role $role)
     {
-        $role = Role::findOrFail($id);
-        $permissions = Permission::all();
+        $permissions = $role->permissions->pluck('name');
         return view('users.roles.show', compact('role', 'permissions'));
     }
 
@@ -144,4 +143,6 @@ class RoleController extends Controller
         \Session::flash('success', 'Thanks , Permission has been deleted Successfully');
         return back();
     }
+
+
 }

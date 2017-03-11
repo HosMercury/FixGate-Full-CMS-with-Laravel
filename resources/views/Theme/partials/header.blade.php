@@ -19,7 +19,7 @@
             <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li @yield('orders_active')>
-                        <a href="/">Home
+                        <a href="">Home
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
@@ -32,13 +32,11 @@
                             <li><a href="/orders">Orders</a></li>
                             <li><a href="/types">Types</a></li>
                             <li class="divider"></li>
-                            <li><a href="/materials">Materials & Assets</a></li>
                             <li><a href="/locations">Locations</a></li>
+                            <li><a href="/materials">Materials & Assets</a></li>
+                            <li><a href="/financial">Financial</a></li>
                             <li class="divider"></li>
                             <li><a href="/users">Users</a></li>
-                            <li><a href="/users/workers">workers</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Costs</a></li>
                         </ul>
                     </li>
                 </ul>

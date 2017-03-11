@@ -27,7 +27,7 @@ class LocationController extends Controller
      */
     public function data()
     {
-        $cols = ['id', 'name', 'manager', 'created_at'];
+        $cols = ['id', 'name', 'created_at'];
         $locations = Location::select($cols);
 
         return Datatables::of($locations)
@@ -57,22 +57,21 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'id' => 'required|unique:locations,id|numeric',
+            'store_code' => 'required|unique:locations,id|numeric',
             'name' => 'required|unique:locations,name|max:200',
-            'address' => 'max:700',
+            'address' => 'max:500',
             'longitude' => 'numeric',
             'latitude' => 'numeric',
-            'city' => 'required|in:Riyadh,Jeddah,Medinah,Dammam,Mecca,Abha',
-            'manager' => 'required|exists:users,id'
+            'city' => 'required|min:2|max:255',
         ]);
 
-        $request['created_by'] = 8888;
+        $request['creator'] = auth()->user()->employee_id;
 
         $inserted = (new Location)->create($request->all());
 
         \Session::flash('message', 'Thanks , Your Location Name (' . $inserted->name . ')
                                                has been Successfully added');
-        return redirect('locations');
+        return redirect('locations/'.$inserted->id);
     }
 
     /**

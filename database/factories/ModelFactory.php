@@ -7,8 +7,7 @@ $factory->define(App\Material::class, function (Faker\Generator $faker) {
         'description' => $faker->text,
         'barcode' => $faker->isbn10,
         'manufacturer' => $faker->word,
-        'store' => $faker->randomElement(['RYD','JED','MEC','ABHA','DAM']),
-        'substore' => $faker->word,
+        'location' => 8000,
         'SOH' => $faker->numberBetween(0,9999),
         'Price' => $faker->numberBetween(0,9999),
         'created_at' => $faker->dateTime,
@@ -16,19 +15,6 @@ $factory->define(App\Material::class, function (Faker\Generator $faker) {
     ];
 });
 
-
-$factory->define(App\Location::class, function (Faker\Generator $faker) {
-    return [
-        'id' => $faker->numberBetween(2000,3000),
-        'name'=>$faker->name,
-        'city'=>$faker->randomElement(['RYD','JED','MED','MEC','ABHA','DAM']),
-        'address'=>$faker->address,
-        'latitude'=>$faker->latitude,
-        'longitude'=>$faker->longitude,
-        'created_at' => $faker->dateTime,
-        'updated_at' => $faker->dateTime
-    ];
-});
 
 $factory->define(App\Order::class, function (Faker\Generator $faker) {
     return [

@@ -9,16 +9,16 @@
     <div class="box-body">
 
         <!--Code-->
-        <div class="form-group{{ $errors->has('id') ? ' has-error' : '' }}">
-            <label class="col-md-4 control-label">Code*</label>
+        <div class="form-group{{ $errors->has('store_code') ? ' has-error' : '' }}">
+            <label class="col-md-4 control-label">Store Code*</label>
 
             <div class="col-md-3">
-                <input type="text" class="form-control" name="id" value="{{ $location->id or old('id')}}">
-                <span><small>Store Code ex: 8707</small></span>
+                <input type="text" class="form-control" name="store_code" value="{{ $location->store_code or old('id')}}">
+                <span><small>Store Code ex: 8000 - 900787</small></span>
 
-                @if ($errors->has('id'))
+                @if ($errors->has('store_code'))
                     <span class="help-block">
-                         <strong>{{ $errors->first('id') }}</strong>
+                         <strong>{{ $errors->first('store_code') }}</strong>
                     </span>
                 @endif
             </div>
@@ -69,15 +69,8 @@
             <label class="col-md-4 control-label">City*</label>
 
             <div class="col-md-3">
-                <select class="form-control" name="city">
-                    <option value="" @if(empty($location->city)) selected @endif disabled >Select</option>
-                    <option @if(!empty($location->city) and $location->city =='Jeddah' ) selected @endif value="Jeddah">Jeddah</option>
-                    <option @if(!empty($location->city) and $location->city =='Riyadh' ) selected @endif  value="Riyadh">Riyadh</option>
-                    <option @if(!empty($location->city) and $location->city =='Mecca' ) selected @endif  value="Mecca">Mecca</option>
-                    <option @if(!empty($location->city) and $location->city =='Medinah' ) selected @endif  value="Medinah">Medinah</option>
-                    <option @if(!empty($location->city) and $location->city =='Abha' ) selected @endif  value="Abha">Abha</option>
-                    <option @if(!empty($location->city) and $location->city =='Dammam' ) selected @endif  value="Dammam">Dammam</option>
-                </select>
+                <input type="text" class="form-control" name="city" value="{{ $location->city or old('city')}}">
+
                 @if ($errors->has('city'))
                     <span class="help-block">
                                   <strong>{{ $errors->first('city') }}</strong>
@@ -137,36 +130,6 @@
     </div>
     <!-- /.box-body -->
 </div>
-<div class="box box-solid">
-    <div class="box-header with-border">
-        <h3 class="box-title">Management</h3>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-
-        <!--Manger-->
-        <div class="form-group{{ $errors->has('manager') ? ' has-error' : '' }}">
-            <label class="col-md-4 control-label">Manager*</label>
-
-            <div class="col-md-4">
-                <select class="form-control" name="manager">
-                    <option value="" @if (isset($location)) selected disabled @endif >Select</option>
-                    {{--@foreach($managers as $manager)--}}
-                        {{--<option value="{{$manager->id}}"--}}
-                                {{--@if (isset($location)) selected @endif--}}
-                        {{-->{{$manager->name}}--}}
-                        {{--</option>--}}
-                    {{--@endforeach--}}
-                </select>
-                @if ($errors->has('manager'))
-                    <span class="help-block">
-                          <strong>{{ $errors->first('manager') }}</strong>
-                    </span>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="box box-solid">
     <!-- /.box-header -->
@@ -176,7 +139,7 @@
         <div class="form-group">
             <div class="col-md-6 col-md-offset-4">
                 <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-btn fa-send"></i> Send
+                    <i class="fa fa-btn fa-send"> </i> Save Location
                 </button>
             </div>
         </div>

@@ -51,7 +51,7 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'id'=>'required|numeric|unique:users,id',
+            'employee_id'=>'required|numeric|unique:users,employee_id',
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|confirmed|min:6',
@@ -68,7 +68,7 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'id' => $data['id'],
+            'employee_id' => $data['employee_id'],
             'name' => ucwords($data['name']),
             'email' => $data['email'],
             'password' => bcrypt($data['password']),

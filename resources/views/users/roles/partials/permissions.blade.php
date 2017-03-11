@@ -1,70 +1,140 @@
-<legend>Role Permissions</legend>
-@if(count($role->permissions))
-    <p>This role has these permissions :</p>
-    <ul>
-        @foreach($role->permissions as $permission)
-            <li>
-                <form method="post" action="/roles/{{$role->id}}/permissions/{{$permission->id}}">
-                    {!! csrf_field() !!}
-                    {!! method_field('DELETE') !!}
-                    <label>{{$permission->name}}</label>
-                    <button type="submit" class="btn btn-xs btn-danger"> <i class="fa fa-fw fa-remove ">  </i></button>
-                </form>
-            </li>
-        @endforeach
-    </ul>
-@else
-    <p>This Role has No permissions Added</p>
-@endif
-<button class="btn btn-reddit btn-xs assign-btn-permissions">Assign {{count($role->permissions)?'more':''}} permissions to the role
-        <span class="arrows-permissions">
-            <span class="fa fa-caret-down"> </span>
-            <span class="fa fa-caret-up"> </span>
-        </span>
-</button>
+<div class="box">
+    <div class="box-header with-border">
+        <h2 class="box-title">Assign Permissions</h2>
+    </div>
+    <div class="box-body">
+        <form class="form-horizontal" role="form" method="POST" action="{{url('role/'.$role->id.'/permissions') }}">
+            {!! csrf_field() !!}
 
-<div class="assign-frm-permissions" style="display: {{!count($errors) ?'none':''}}">
-    @if(count($permissions))
-        <p>
-            <small class="small-box">Use with very care</small>
-        </p>
+            <div class="col-xs-12">
 
-        <form method="post" class="form-group" action="/roles/{{$role->id}}/permissions/">
-            <!--Priority-->
-            <div class="form-group{{ $errors->has('permission') ? ' has-error' : '' }}">
-                {!! csrf_field() !!}
-                <label class="col-md-2 control-label">permission*</label>
+                <table class="table table-bordered table-responsive">
+                    <tr>
+                        <td>
+                            <h4>Staff Members</h4>
+                        </td>
+                        <td>
+                            <p><strong>Note :</strong>This is the default permission for any registered user .</p>
 
-                <div class="col-md-4">
-                    <select class="form-control" name="permission">
-                        <option value="" disabled selected>
-                            Select
-                        </option>
-                        @foreach($permissions as $permission)
-                            <option value="{{$permission->id}}">{{$permission->name}}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('permission'))
-                        <span class="help-block">
-                            <strong>{{$errors->first('permission') }}</strong>
-                        </span>
-                    @endif
-                </div>
+                            <p> Normally Staff members could view their own belonging orders
+                                without any
+                                security requirements ,
+                                But for any other staff member trying to view others` orders ,
+                                they will be promoted to enter the order`s key sent to the creator by email.
+                            </p>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Labor
+                        </td>
+                        <td>
+                            <div class="checkbox icheck">
+                                <label>
+                                    <input type="checkbox" name="permissions[]" value="labor_privileges"
+                                            {{$permissions->contains('labor_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Allowed to view
+                                    orders in which he assigned as a labor .
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Technician
+                        </td>
+                        <td>
+                            <div class="checkbox icheck">
+                                <label>
+                                    <input type="checkbox" name="permissions[]" value="technician_privileges"
+                                            {{$permissions->contains('technician_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Allowed to view
+                                    orders in which he assigned as a technician .
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Accountants
+                        </td>
+                        <td>
+                            <div class="checkbox icheck">
+                                <label>
+                                    <input type="checkbox" name="permissions[]" value="vendor_privileges"
+                                            {{$permissions->contains('vendor_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Allowed to view
+                                    orders in which he assigned as a vendor (external ) .
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            Accountants
+                        </td>
+                        <td>
+                            <div class="checkbox icheck">
+                                <label>
+                                    <input type="checkbox" name="permissions[]" value="accountant_privileges"
+                                            {{$permissions->contains('accountant_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Allowed to view
+                                    Financial pages ,
+                                    for used materials and costs .
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Administrators
+                        </td>
+                        <td>
+                            <div class="checkbox icheck">
+                                <label>
+                                    <input type="checkbox" name="permissions[]" value="admin_privileges"
+                                            {{$permissions->contains('admin_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Allowed to do
+                                    everything except Roles and
+                                    permissions .
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            SuperAdministrators
+                        </td>
+                        <td>
+                            <div class="checkbox icheck">
+                                <label>
+                                    <input type="checkbox" name="permissions[]" value="superadmin_privileges"
+                                            {{$permissions->contains('superadmin_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Can do everything
+                                    in every where .
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+
             </div>
 
             <!--Submit-->
-            <div class="form-group container">
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        <i class="fa fa-btn fa-send"></i> Send
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary pull-right">
+                        <i class="fa fa-btn fa-send"></i> Assign Permissions
                     </button>
                 </div>
             </div>
-        </form>
-    @else
-        There is No permissions to Assign , Please
-    @endif
-    <a href="/permissions/create" class="link-black btn-link">Add {{$permissions?"more":''}} permission(s)</a>
 
+        </form>
+    </div>
 </div>
-<br><br>

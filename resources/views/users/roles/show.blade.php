@@ -48,7 +48,7 @@
                     <hr>
 
 
-                    @include('users.roles.partials.assign-perms')
+                    @include('users.roles.partials.permissions')
 
                 </div>
                 <!-- Button trigger modal -->

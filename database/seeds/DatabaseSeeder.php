@@ -1,8 +1,13 @@
 <?php
 
-use Carbon\Carbon;
-use \Illuminate\Database\Eloquent\Model;
+use App\Material;
+use App\Order;
+use App\Permission;
+use App\Role;
+use App\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,83 +19,56 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run(){
-
+    public function run()
+    {
         Model::unguard();
 
-        foreach ($this->toTruncate as $table)
-        {
-            \DB::table($table)->truncate();
-        }
+        foreach ($this->toTruncate as $table) DB::table($table)->truncate();
 
-        // Manual inserts ...
-
-        // Users
-        DB::table('users')->insert([
-            'name' => str_random(10),
-            'email' => 'member@fixgate.com',
-            'password' => bcrypt('secret'),
-        ]);
-        DB::table('users')->insert([
-            'name' => str_random(10),
-            'email' => 'accountant@fixgate.com',
-            'password' => bcrypt('secret'),
-        ]);
-        DB::table('users')->insert([
-            'name' => str_random(10),
-            'email' => 'admin@fixgate.com',
-            'password' => bcrypt('secret'),
-        ]);
-        DB::table('users')->insert([
-            'name' => str_random(10),
-            'email' => 'superadmin@fixgate.com',
-            'password' => bcrypt('secret'),
+        // Locations ...
+        DB::table('locations')->insert([
+            ['store_code' => 8707, 'creator' => 6074, 'name' => 'paradise', 'city' => 'NY'],
+            ['store_code' => 8000, 'creator' => 6074, 'name' => 'bahya', 'city' => 'DT'],
+            ['store_code' => 7000, 'creator' => 6074, 'name' => 'sokaria', 'city' => 'IL']
         ]);
 
+        // Users ...
+        DB::table('users')->insert([
+            ['employee_id' => 6074, 'name' => 'Mr Staff Member', 'email' => 'member@mail.com',
+                'password' => bcrypt('secret'), 'location_id' => 8000],
+            ['employee_id' => 11309, 'name' => 'Mr Accountant', 'email' => 'accountant@mail.com',
+                'password' => bcrypt('secret'), 'location_id' => 8000],
+            ['employee_id' => 12345, 'name' => 'Mr Admin', 'email' => 'admin@mail.com',
+                'password' => bcrypt('secret'), 'location_id' => 8000],
+            ['employee_id' => 999999, 'name' => 'Mr Super Admin', 'email' => 'superadmin@mail.com',
+                'password' => bcrypt('secret'), 'location_id' => 8000]
+        ]);
 
-        // Roles
+        // Roles ...
         DB::table('roles')->insert([
-            'name' => 'admin',
-            'creator' => auth()->user()->id,
-        ]);
-        DB::table('roles')->insert([
-            'name' => 'accountant',
-            'creator' => auth()->user()->id,
-        ]);
-        DB::table('roles')->insert([
-            'name' => 'superadmin',
-            'creator' => auth()->user()->id,
+            ['name' => 'accountant', 'creator' => 6074],
+            ['name' => 'admin', 'creator' => 6074],
+            ['name' => 'superadmin', 'creator' => 6074]
         ]);
 
-        App\User::whereEmail('accountant@fixgate.com')->assignRole( App\User::whereName('accountant'));
-        App\User::whereEmail('admin@fixgate.com')->assignRole( App\User::whereName('admin'));
-        App\User::whereEmail('superadmin@fixgate.com')->assignRole( App\User::whereName('superadmin'));
-
-        // Permissions
+        // Permissions ...
         DB::table('permissions')->insert([
-            'id' => 1,
-            'name' => 'accountant_privileges',
-            'creator' => auth()->user()->id,
-        ]);
-        DB::table('permissions')->insert([
-            'id' => 2,
-            'name' => 'admin_privileges',
-            'creator' => auth()->user()->id,
-        ]);
-        DB::table('permissions')->insert([
-            'id' => 3,
-            'name' => 'superadmin_privileges',
-            'creator' => auth()->user()->id,
+            ['num' => 1, 'name' => 'accountant_privileges', 'creator' => 6074],
+            ['num' => 2, 'name' => 'admin_privileges', 'creator' => 6074],
+            ['num' => 3, 'name' => 'superadmin_privileges', 'creator' => 6074]
         ]);
 
-        App\Role::whereName('accountant')->givePermissionTo( App\Permission::whereName('accountant_privileges'));
-        App\Role::whereName('admin')->givePermissionTo( App\Permission::whereName('admin_privileges'));
-        App\Role::whereName('superadmin')->givePermissionTo( App\Permission::whereName('superadmin_privileges'));
 
+        User::whereEmail('accountant@mail.com')->first()->assignRole('accountant');
+        User::whereEmail('admin@mail.com')->first()->assignRole('admin');
+        User::whereEmail('superadmin@mail.com')->first()->assignRole('superadmin');
 
-        factory(App\Location::class,3)->create();
+        Role::whereName('accountant')->first()->givePermissionTo(Permission::whereName('accountant_privileges')->first());
+        Role::whereName('admin')->first()->givePermissionTo(Permission::whereName('admin_privileges')->first());
+        Role::whereName('superadmin')->first()->givePermissionTo(Permission::whereName('superadmin_privileges')->first());
 
-        factory(App\Order::class, 50)->create();
+        factory(Order::class, 50)->create();
+        factory(Material::class, 50)->create();
 
         Model::reguard();
     }

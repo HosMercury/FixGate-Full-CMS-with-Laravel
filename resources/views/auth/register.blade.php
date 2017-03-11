@@ -16,14 +16,14 @@
                             {!! csrf_field() !!}
 
                             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                <label class="col-md-4 control-label">Emp Id</label>
+                                <label class="col-md-4 control-label">Employee Id</label>
 
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="id" value="{{ old('id') }}">
+                                    <input type="text" class="form-control" name="employee_id" value="{{ old('employee_id') }}">
 
                                     @if ($errors->has('name'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('id') }}</strong>
+                                        <strong>{{ $errors->first('employee_id') }}</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -107,6 +107,10 @@
                                 </div>
                             </div>
                         </form>
+                        <a href="/auth/login" class="pull-left btn btn-xs btn-default">
+                            << &nbsp;&nbsp;&nbsp;I`m a member - <strong>Log in</strong></a>
+
+
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreatePermissionsTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -13,7 +14,8 @@ class CreatePermissionsTable extends Migration
     public function up()
     {
         Schema::create('permissions', function (Blueprint $table) {
-            $table->enum('id',[1,2,3])->index();
+            $table->increments('id');
+            $table->enum('num',[1,2,3]);
             $table->string('name');
             $table->integer('creator')->unsigned()->index();
             $table->timestamps();

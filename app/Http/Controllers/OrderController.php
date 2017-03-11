@@ -127,20 +127,20 @@ class OrderController extends Controller
     {
         $user = auth()->user();
 
-        $max_number = Order::whereLocationId(auth()->user()->location_id)
+        $last_order_number = Order::whereLocationId(auth()->user()->location_id)
             ->pluck('number')
             ->map(function ($number) {
                 return substr($number, 5);
             })->max();
 
-        if (!isset($max_number)) {
-            $max_number = 1000000;
+        if (!isset($last_order_number)) {
+            $last_order_number = 1000000;
         }
 
         $request['location_id'] = auth()->user()->location_id;
         $request['creator'] = auth()->user()->id;
         $request['key'] = rand(0000, 9999);
-        $request['number'] = auth()->user()->location_id . '-' . ($max_number + 1);
+        $request['number'] = auth()->user()->location_id . '-' . ($last_order_number + 1);
         $inserted = (new Order)->create($request->all());
 
         if (isset($inserted)) {

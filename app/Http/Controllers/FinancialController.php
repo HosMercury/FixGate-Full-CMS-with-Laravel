@@ -9,7 +9,7 @@ use App\Material;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Facades\Datatables;
 
-class FinancialCostsController extends Controller
+class FinancialController extends Controller
 {
     /**
      * Display a listing of the resource.

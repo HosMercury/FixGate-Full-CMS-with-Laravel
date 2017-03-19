@@ -1,13 +1,13 @@
 @extends('theme.index')
 @section('orders_active')
 @section('content')
-    <div class="box " xmlns="http://www.w3.org/1999/html">
+    <div class="box">
         <div class="box-header with-border">
             <h2 class="box-title">New Role</h2>
         </div>
 
         <div class="box-body">
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/roles') }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('/users/roles') }}">
                 {!! csrf_field() !!}
 
                         <!--Name-->

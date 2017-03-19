@@ -57,7 +57,7 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'store_code' => 'required|unique:locations,id|numeric',
+            'store_code' => 'required|unique:locations,store_code|numeric',
             'name' => 'required|unique:locations,name|max:200',
             'address' => 'max:500',
             'longitude' => 'numeric',
@@ -119,13 +119,12 @@ class LocationController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'id' => 'required|numeric',
-            'name' => 'required|max:200',
+            'store_code' => 'numeric|unique:locations,store_code,'.$id,
+            'name' => 'min:2|max:200|unique:locations,name',
             'address' => 'max:700',
             'longitude' => 'numeric',
             'latitude' => 'numeric',
-            'city' => 'required|in:Riyadh,Jeddah,Medinah,Dammam,Mecca,Abha',
-            'manager' => 'required|exists:users,id'
+            'city' => 'required|min:2|max:255',
         ]);
 
 //        $request->location_id = auth()->user()->location->id;

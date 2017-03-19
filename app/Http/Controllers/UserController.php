@@ -35,15 +35,15 @@ class UserController extends Controller
         $users = User::with('roles')->get();
 
         return Datatables::of($users)
-            ->addColumn('roles',function($user){
-                return $user->roles->map(function($role) {
-                    return str_limit($role->name, 30, '...');
-                })->implode(' - ');
-            })
-            ->editColumn('name', function($user) {
-                return '<a href="/users/' . $user->id .'"class="">' . str_limit($user->name, 50) . '</a>';
-            })
-            ->make(true);
+        ->addColumn('roles',function($user){
+            return $user->roles->map(function($role) {
+                return str_limit($role->name, 30, '...');
+            })->implode(' - ');
+        })
+        ->editColumn('name', function($user) {
+            return '<a href="/users/' . $user->employee_id .'"class="">' . str_limit($user->name, 50) . '</a>';
+        })
+        ->make(true);
     }
 
     /**
@@ -57,39 +57,17 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($employee_id)
     {
-        $user = User::findOrFail($id);
+        $user =  $this->getUser($employee_id);
         $roles = Role::all();
         $permissions = Permission::all();
         return view('users.show', compact('user', 'roles','permissions'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -99,22 +77,22 @@ class UserController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $employee_id)
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'location_id' => 'required|exists:locations,id',
-            'manager_id' => 'numeric',
-        ]);
+            'location_id' => 'required|exists:locations,store_code',
+            ]);
 
-        $user = User::find($id);
+        $user = $this->getUser($employee_id);
         $user->name = $request->name;
+        $user->location_id = $request->location_id;
         $user->save();
 
         \Session::flash('success', 'Thanks , User with Name (' . $user->name . ')
-                                    has been Successfully Updated');
+            has been Successfully Updated');
 
-        return redirect('/users/'.$user->id);
+        return redirect('/users/'.$user->employee_id);
     }
 
     /**
@@ -123,18 +101,19 @@ class UserController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($employee_id)
     {
-        User::find($id)->delete();
+        $this->getUser($employee_id)->delete();
         \Session::flash('success', 'Thanks , User has been Successfully Deleted');
         return redirect('users');
     }
 
-    public function assignRole(Request $request, User $user)
+    public function assignRole(Request $request,$user)
     {
+        $user =  $this->getUser($user);
         $this->validate($request, [
             'role' => 'required|numeric|exists:roles,id'
-        ]);
+            ]);
 
         $role_name = Role::findOrFail($request->role)->name;
         if ($user->hasRole($role_name)) {
@@ -147,11 +126,17 @@ class UserController extends Controller
         }
     }
 
-    public function deleteRole(Request $request,User $user,Role $role)
+    public function deleteRole($user,$role)
     {
+        $user =  $this->getUser($user);
         $user->roles()->detach($role);
         \Session::flash('success', 'Thanks , Role has been deleted Successfully');
         return back();
+    }
+
+    private function getUser($employee_id)
+    {
+        return User::where('employee_id',$employee_id)->first();
     }
 
 }

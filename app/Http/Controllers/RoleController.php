@@ -32,10 +32,10 @@ class RoleController extends Controller
         $roles = Role::select($cols);
 
         return Datatables::of($roles)
-            ->editColumn('name', function($role) {
-                return '<a href="/users/roles/' . $role->id .'"class="">' . str_limit($role->name, 50) . '</a>';
-            })
-            ->make(true);
+        ->editColumn('name', function($role) {
+            return '<a href="/users/roles/' . $role->id .'"class="">' . str_limit($role->name, 50) . '</a>';
+        })
+        ->make(true);
     }
 
     /**
@@ -59,16 +59,14 @@ class RoleController extends Controller
         $this->validate($request, [
             'name' => 'required|min:4|max:220|unique:roles,name',
             'label' => 'max:500',
-        ]);
+            ]);
 
-        $request['creator'] = auth()->user()->id;
+        $request['creator'] = auth()->user()->employee_id;
 
         $inserted = (new Role)->create($request->all());
 
-        \Session::flash('success', 'Thanks , Your Role with Name (' . $inserted->name . ')
-                                    has been Successfully added');
-
-        return redirect('/roles');
+        \Session::flash('success', 'Thanks , Your Role with Name (' . $inserted->name . ') has been Successfully added');
+        return redirect('/users/roles');
     }
 
     /**
@@ -95,7 +93,7 @@ class RoleController extends Controller
         $this->validate($request, [
             'name' => 'required|min:2|max:220',
             'label' => 'max:1000',
-        ]);
+            ]);
 
         $role = Role::find($id) ;
         $role->name = $request->name;
@@ -103,7 +101,7 @@ class RoleController extends Controller
         $role->save();
 
         \Session::flash('success', 'Thanks , Your Role with Name (' . $role->name . ')
-                                    has been Successfully Updated');
+            has been Successfully Updated');
 
         return redirect('/roles/'.$role->id);
     }
@@ -125,7 +123,7 @@ class RoleController extends Controller
     {
         $this->validate($request, [
             'permission' => 'required|numeric|exists:permissions,id'
-        ]);
+            ]);
 
         if ($role->hasPermission($request->permission)) {
             \Session::flash('alert', 'This Permission has been Assigned previously this user .');

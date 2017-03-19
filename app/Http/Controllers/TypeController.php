@@ -105,7 +105,7 @@ class TypeController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'name'=>'required|min:2|max:220|unique:types,name',
+            'name'=>'min:2|max:220|unique:types,name',
             'description'=>'max:1000',
         ]);
 

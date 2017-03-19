@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <li class="active">
         <a href="/orders">Orders</a>
-    <li class="active"><a href="/order/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}">{{$order->number}}</a></li>
+    <li class="active"><a href="/orders/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}">{{$order->number}}</a></li>
     </li>
 @stop
 <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/select2/select2.min.css')}}">
@@ -21,9 +21,9 @@
                 <!-- close this order -->
                 @include('orders.partials.details')
                 <hr>
-                <a href="/order/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}/edit" class="btn btn-sm btn-info">Edit Order</a>
+                <a href="/orders/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}/edit" class="btn btn-sm btn-info">Edit Order</a>
 
-                <form action="/order/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}" method="POST"
+                <form action="/orders/{{$order->id}}" method="POST"
                       onsubmit="return confirm('are you sure, you want to delete !?');"
                       style="display: inline;">
                     {{csrf_field()}}

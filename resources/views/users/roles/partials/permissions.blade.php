@@ -17,10 +17,7 @@
                             <p><strong>Note :</strong>This is the default permission for any registered user .</p>
 
                             <p> Normally Staff members could view their own belonging orders
-                                without any
-                                security requirements ,
-                                But for any other staff member trying to view others` orders ,
-                                they will be promoted to enter the order`s key sent to the creator by email.
+                                without any  security requirements , But for any other staff member trying to view others` orders , they will be promoted to enter the order`s key sent to the creator by email.
                             </p>
 
                         </td>
@@ -32,8 +29,8 @@
                         <td>
                             <div class="checkbox icheck">
                                 <label>
-                                    <input type="checkbox" name="permissions[]" value="labor_privileges"
-                                            {{$permissions->contains('labor_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="checkbox" name="permissions[]" value="labor"
+                                    {{$permissions->contains('labor_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
                                     Allowed to view
                                     orders in which he assigned as a labor .
                                 </label>
@@ -47,8 +44,8 @@
                         <td>
                             <div class="checkbox icheck">
                                 <label>
-                                    <input type="checkbox" name="permissions[]" value="technician_privileges"
-                                            {{$permissions->contains('technician_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="checkbox" name="permissions[]" value="technician"
+                                    {{$permissions->contains('technician_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
                                     Allowed to view
                                     orders in which he assigned as a technician .
                                 </label>
@@ -57,21 +54,18 @@
                     </tr>
                     <tr>
                         <td>
-                            Accountants
+                            Supervisors
                         </td>
                         <td>
                             <div class="checkbox icheck">
                                 <label>
-                                    <input type="checkbox" name="permissions[]" value="vendor_privileges"
-                                            {{$permissions->contains('vendor_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    Allowed to view
-                                    orders in which he assigned as a vendor (external ) .
+                                    <input type="checkbox" name="permissions[]" value="supervisor"
+                                    {{$permissions->contains('admin_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Allowed to assign , close and follow-up orders .
                                 </label>
                             </div>
                         </td>
                     </tr>
-
-
                     <tr>
                         <td>
                             Accountants
@@ -79,8 +73,8 @@
                         <td>
                             <div class="checkbox icheck">
                                 <label>
-                                    <input type="checkbox" name="permissions[]" value="accountant_privileges"
-                                            {{$permissions->contains('accountant_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="checkbox" name="permissions[]" value="accountant"
+                                    {{$permissions->contains('accountant_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
                                     Allowed to view
                                     Financial pages ,
                                     for used materials and costs .
@@ -91,13 +85,13 @@
 
                     <tr>
                         <td>
-                            Administrators
+                        Admins
                         </td>
                         <td>
                             <div class="checkbox icheck">
                                 <label>
-                                    <input type="checkbox" name="permissions[]" value="admin_privileges"
-                                            {{$permissions->contains('admin_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="checkbox" name="permissions[]" value="admin"
+                                    {{$permissions->contains('admin_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
                                     Allowed to do
                                     everything except Roles and
                                     permissions .
@@ -106,15 +100,16 @@
                         </td>
                     </tr>
 
+
                     <tr>
                         <td>
-                            SuperAdministrators
+                            Superadmins
                         </td>
                         <td>
                             <div class="checkbox icheck">
                                 <label>
-                                    <input type="checkbox" name="permissions[]" value="superadmin_privileges"
-                                            {{$permissions->contains('superadmin_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="checkbox" name="permissions[]" value="superadmin"
+                                    {{$permissions->contains('superadmin_privileges')?'checked':''}}>&nbsp;&nbsp;&nbsp;&nbsp;
                                     Can do everything
                                     in every where .
                                 </label>

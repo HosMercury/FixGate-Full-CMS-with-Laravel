@@ -16,7 +16,7 @@
 
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">User #{{$user->id}}</h3>
+                    <h3 class="box-title">User #{{$user->employee_id}}</h3>
                     <a href="/auth/register" class="btn btn-sm btn-success pull-right">
                         <i class="fa fa-fw fa-plus"></i> Register New user</a>
                 </div>
@@ -26,20 +26,21 @@
                     @include('users.partials.related')
 
                     <div class="col-xs-11 box box-widget">
-                        <h3><strong>User Name : </strong>{{$user->name}}</h3>
+                        <h3><strong>Name : </strong>{{$user->name}}</h3>
                         <hr>
-                        <p><strong>Email : </strong>{{$user->email or 'No label'}}</p>
+                        <p><strong>Email : </strong>{{$user->email or 'Missing'}}</p>
 
                         <p><strong>Location id : </strong>{{$user->location_id or 'not defined'}}</p>
 
-                        <p><strong>Created at : </strong>{{$user->created_at or 'no date'}}</p>
+                        <p><strong>Created at : </strong>{{$user->created_at or 'missing date'}}</p>
                     </div>
 
 
                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editModal">
                     Edit User
                 </button>
-                <form action="/users/{{$user->id}}" method="POST"
+
+                <form action="/users/{{$user->employee_id}}" method="POST"
                       onsubmit="return confirm('are you sure, you want to delete !?');"
                       style="display: inline;">
                     {{csrf_field()}}
@@ -62,7 +63,7 @@
                             <div class="modal-body">
                                 @include('common.errors')
 
-                                <form method="post" action="{{$user->id}}">
+                                <form method="post" action="/users/{{$user->employee_id}}">
                                     {{csrf_field()}}
                                     {{method_field('PATCH')}}
                                     <div class="form-group">

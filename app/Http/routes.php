@@ -104,6 +104,9 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('/', 'OrderController@store');
             Route::get('/create', 'OrderController@create');
             Route::get('/{location}/{number}', 'OrderController@show');
+            Route::patch('/{order}', 'OrderController@update');
+            Route::delete('/{order}', 'OrderController@destroy');
+            Route::get('/{location}/{number}/edit', 'OrderController@edit');
             Route::get('/data', 'OrderController@data');
             Route::post('/{order}/close', 'OrderController@close');
             Route::post('/{order}/assignments', 'OrderAssignmentController@store');
@@ -113,20 +116,31 @@ Route::group(['middleware' => ['web']], function () {
         });
 
         Route::group(['prefix' => 'users'], function () {
-            Route::get('/', 'UserController@index');
-            Route::get('/data', 'UserController@data');
+            //Roles...
             Route::get('/roles', 'RoleController@index');
-            Route::get('/roles/{role}', 'RoleController@show');
+            Route::post('/roles', 'RoleController@store');
             Route::get('/roles/data', 'RoleController@data');
             Route::get('/roles/create', 'RoleController@create');
+            Route::get('/roles/{user}', 'RoleController@show');
+            //Users...
+            Route::get('/', 'UserController@index');
+            Route::get('/data', 'UserController@data');
+            Route::get('/{employee}', 'UserController@show');
+            Route::patch('/{employee}', 'UserController@update');
+            Route::delete('/{employee}', 'UserController@destroy');           
+            Route::post('/{employee}/roles', 'UserController@assignRole');
+            Route::delete('/{employee}/roles/{role}', 'UserController@deleteRole');
+
         });
 
         Route::group(['prefix' => 'locations'], function () {
             Route::get('/', 'LocationController@index');
             Route::post('/', 'LocationController@store');
-            Route::get('/{location}', 'LocationController@show');
             Route::get('/create', 'LocationController@create');
             Route::get('/data', 'LocationController@data');
+            Route::get('/{location}', 'LocationController@show');
+            Route::patch('/{location}', 'LocationController@update');
+            Route::get('/{location}/edit', 'LocationController@edit');
         });
 
         Route::group(['prefix' => 'materials'], function () {
@@ -140,9 +154,13 @@ Route::group(['middleware' => ['web']], function () {
         Route::group(['prefix' => 'types'], function () {
             Route::get('/', 'TypeController@index');
             Route::post('/', 'TypeController@store');
-            Route::get('/{type}', 'TypeController@show');
             Route::get('/create', 'TypeController@create');
+            Route::get('/{type}/edit', 'TypeController@edit');
+            Route::patch('/{type}', 'TypeController@update');
+            Route::delete('/{type}', 'TypeController@destroy');
             Route::get('/data', 'TypeController@data');
+            Route::get('/{type}', 'TypeController@show');
+
         });
 
         Route::group(['prefix' => 'financial'], function () {
@@ -157,6 +175,8 @@ Route::group(['middleware' => ['web']], function () {
     });
 
 });
+
+//problem edit location type and others that unique give error ..
 
 // location edit manager field have to be removed
 

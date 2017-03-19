@@ -17,7 +17,7 @@
 
             <div class="box ">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ucfirst($type->type)}} #{{$type->id}}</h3>
+                    <h3 class="box-title">Type #{{$type->id}}</h3>
                     <a href="/types/create" class="btn btn-sm btn-success pull-right">
                         <i class="fa fa-fw fa-plus"></i> New Type</a>
                 </div>

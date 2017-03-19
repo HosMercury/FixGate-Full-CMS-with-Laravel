@@ -32,16 +32,16 @@ class OrderController extends Controller
         $count = Order::select([
             \DB::raw('DATE_FORMAT(`created_at`,"%d-%m") AS `date`'),
             \DB::raw('COUNT(*) AS `count`')
-        ])->whereBetween('created_at', [$from, $to])
-            ->groupBy('date')
-            ->orderBy('date', 'ASC')
-            ->lists('count', 'date');
+            ])->whereBetween('created_at', [$from, $to])
+        ->groupBy('date')
+        ->orderBy('date', 'ASC')
+        ->lists('count', 'date');
 
         return view('orders.index', [
             'count' => $count,
             'dateTo' => $to->format('d-m'),
             'dateFrom' => $from->format('d-m')
-        ]);
+            ]);
 
         return view('orders.index');
     }
@@ -56,13 +56,13 @@ class OrderController extends Controller
         $cols = ['number', 'title', 'priority', 'type', 'location_id', 'created_at'];
         $orders = Order::select($cols);
         return Datatables::of($orders)
-            ->editColumn('title', function ($order) {
-                return '<a href="/orders/' . substr($order->number, 0, 4) . '/' . substr($order->number, 5) . '">' . str_limit($order->title, 50) . '</a>';
-            })
-            ->editColumn('number', function ($order) {
-                return '<a href="/orders/' . substr($order->number, 0, 4) . '/' . substr($order->number, 5) . '">' . $order->number . '</a>';
-            })
-            ->make(true);
+        ->editColumn('title', function ($order) {
+            return '<a href="/orders/' . substr($order->number, 0, 4) . '/' . substr($order->number, 5) . '">' . str_limit($order->title, 50) . '</a>';
+        })
+        ->editColumn('number', function ($order) {
+            return '<a href="/orders/' . substr($order->number, 0, 4) . '/' . substr($order->number, 5) . '">' . $order->number . '</a>';
+        })
+        ->make(true);
     }
 
     /**
@@ -70,13 +70,14 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    /*
     public function filter(Request $request)
     {
         $this->validate($request, [
             'fromDate' => 'required|date',
             'toDate' => 'required|date',
             'location' => 'numeric|exists:locations,id'
-        ]);
+            ]);
 
         $location = $request->location;
 
@@ -92,10 +93,10 @@ class OrderController extends Controller
         $count = Order::select(array(
             \DB::raw('DATE(`created_at`) as `date`'),
             \DB::raw('COUNT(*) as `count`')
-        ))->whereBetween('created_at', [$from, $to])
-            ->groupBy('date')
-            ->orderBy('date', 'ASC')
-            ->lists('count', 'date');
+            ))->whereBetween('created_at', [$from, $to])
+        ->groupBy('date')
+        ->orderBy('date', 'ASC')
+        ->lists('count', 'date');
 
         return view('orders.index', [
             'orders' => $order->get(),
@@ -103,8 +104,8 @@ class OrderController extends Controller
             'dateFrom' => $from->toDateString(),
             'count_keys' => str_replace('2016-', '', $count->keys()),
             'count_values' => $count->values(),
-        ]);
-    }
+            ]);
+        }*/
 
     /**
      * Show the form for creating a new resource.
@@ -128,10 +129,10 @@ class OrderController extends Controller
         $user = auth()->user();
 
         $last_order_number = Order::whereLocationId(auth()->user()->location_id)
-            ->pluck('number')
-            ->map(function ($number) {
-                return substr($number, 5);
-            })->max();
+        ->pluck('number')
+        ->map(function ($number) {
+            return substr($number, 5);
+        })->max();
 
         if (!isset($last_order_number)) {
             $last_order_number = 1000000;
@@ -155,12 +156,12 @@ class OrderController extends Controller
             return redirect('/orders/' . substr($inserted->number,0,4).'/'. substr($inserted->number,5));
         } else {
             \Session::flash('success', 'Error Occurred');
-            return redirect('/orders/');
+            return redirect('/orders');
         }
     }
 
     /**
-     * Display the specified resource.
+     * Display the order.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
@@ -177,26 +178,34 @@ class OrderController extends Controller
         $thumbs = $order->bills()->where('thumbnail', 1)->get();
         $materials_ids = Material::all();
 
-        $labors = User::whereHas('roles', function ($q) {
-            $q->where('name', 'labor');
-        })->lists('id', 'name');
+        // get labors trials
 
-        $techs = User::whereHas('roles', function ($q) {
-            $q->where('name', 'technician');
-        })->lists('id', 'name');
+        return User::whereHas('roles');
 
-        $vendors = User::whereHas('roles', function ($q) {
-            $q->where('name', 'vendor');
-        })->lists('id', 'name');
+        return User::with('roles')->get()->map(function($u){
+            return $u->roles->map(function($role){
+                $role->hasPermission('labor');
+            });
+        });
 
-        $workers = collect(['labors' => $labors, 'Technicians' => $techs, 'Vendors' => $vendors])->all();
+
+
+        // $labors = User::has('roles', function ($q) {
+        //     $q->where('name', 'labor');
+        // })->lists('id', 'name');
+
+        // $technicians = User::whereHas('roles', function ($q) {
+        //     $q->where('name', 'technician');
+        // })->lists('id', 'name');
+
+        // $workers = collect(['labors' => $labors, 'Technicians' => $technicians])->all();
 
         foreach ($materials as $mat) {
             $total += ($mat->price * $mat->pivot->quantity);
         }
 
         $assignments = Assignment::where(['order_id' => $order->id])
-            ->orderBy('created_at', 'asc')->get()->groupBy('status');
+        ->orderBy('created_at', 'asc')->get()->groupBy('status');
 
         $assignments = $assignments->map(function ($assignment) {
             return $assignment->map(function ($w) {
@@ -207,7 +216,7 @@ class OrderController extends Controller
         $closed = Assignment::where([
             'status' => '-1',
             'order_id' => $order->id
-        ])->first();
+            ])->first();
 
         $assigns_count = $closed ? $assignments->count() - 1 : $assignments->count();
 
@@ -217,15 +226,14 @@ class OrderController extends Controller
             'costs' => $costs,
             'materials_total' => $total,
             'assigns' => $assignments,
-            'workers' => $workers,
-            'labors' => $labors,
-            'techs' => $techs,
-            'vendors' => $vendors,
+            // 'workers' => $workers,
+            // 'labors' => $labors,
+            // 'techs' => $technicians,
             'materials_ids' => $materials_ids,
             'thumbs' => $thumbs,
             'closed' => $closed,
             'assigns_count' => $assigns_count
-        ]);
+            ]);
     }
 
     /**
@@ -234,9 +242,9 @@ class OrderController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($location,$number)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::whereNumber($location.'-'.$number)->first();
         $types = \DB::table('types')->lists('name', 'name');
         return view('orders.edit', compact('order', 'types'));
     }
@@ -248,17 +256,15 @@ class OrderController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function  update(OrderRequest $request, $id)
+    public function  update(OrderRequest $request, $order)
     {
-        $request->location_id = 2000;
-//        $request->location_id = auth()->user()->location->id;
-        $request->user_id = auth()->user()->id;
+        $request->creator = auth()->user()->id;
 
-        Order::find($id)->update($request->all());
+        $order->update($request->all());
 
         \Session::flash('success', 'Thanks , Your service order has been Successfully updated');
 
-        return redirect('/orders/' . $id);
+        return redirect('/orders/'.substr($order->number, 0,4).'/'.substr($order->number, 5));
     }
 
     /**
@@ -267,9 +273,9 @@ class OrderController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($order)
     {
-        Order::find($id)->delete();
+        $order->delete();
         \Session::flash('success', 'Thanks , Your service order has been Successfully deleted');
 
         return redirect('/orders');
@@ -287,21 +293,21 @@ class OrderController extends Controller
             'rating' => 'required|min:1|max:5',
             'closekey' => 'required|min:0000|max:9999',
             'feedback' => 'max:500'
-        ]);
+            ]);
 
-        if ($request->closekey != $order->close_key) {
+        if ($request->closekey != $order->key) {
             \Session::flash('danger', 'You have entered wrong Close Key , try again');
-            return redirect('/orders/' . $order->id);
+            return redirect('/orders/'.substr($order->number,0,4).'/'.substr($order->number,5));
         } else {
             if ((New Rating)->create($request->all())) {
 
                 $order->assignments()->create(['order_id' => $order->id, 'status' => '-1']);
 
                 \Session::flash('success', 'Thanks , Your service order has been Successfully Closed');
-                return redirect('/orders/' . $order->id);
+                return redirect('/orders/'.substr($order->number,0,4).'/'.substr($order->number,5));
             } else {
                 \Session::flash('danger', 'An error has been occur , please conact your admin..');
-                return redirect('/orders/' . $order->id);
+                return redirect('/orders/'.substr($order->number,0,4).'/'.substr($order->number,5));
             }
         }
     }

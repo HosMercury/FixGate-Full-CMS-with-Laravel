@@ -1,71 +1,107 @@
-<legend>User Roles</legend>
-@if(count($user->roles))
-<p>This user has these roles :</p>
-
-<ul>
-    @foreach($user->roles as $role)
-    <li>
-        <form method="post" action="/users/{{$user->employee_id}}/roles/{{$role->id}}">
-            {!! csrf_field() !!}
-            {!! method_field('DELETE') !!}
-            <label>{{$role->name}}</label>
-            <button type="submit" class="btn btn-xs btn-danger"> <i class="fa fa-fw fa-remove ">  </i></button>
-        </form>
-    </li>
-    @endforeach
-</ul>
-@else
-<p>This user has No roles Assigned</p>
-@endif
-
-<button class="btn btn-reddit btn-xs assign-btn">Assign {{count($user->roles)?'more':''}} roles to the user
-    <span class="arrows">
-        <span class="fa fa-caret-down"> </span>
-        <span class="fa fa-caret-up"> </span>
-    </span>
-</button>
-
-<div class="assign-frm" style="display: {{!count($errors) ?'none':''}}">
-    @if(count($roles))
-    <p>
-        <small class="small-box">Use with very care</small>
-    </p>
-
-    <form method="post" class="form-group" action="{{$user->employee_id}}/roles">
-        {!! csrf_field() !!}
-        <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
-            <label class="col-md-1 control-label">Role*</label>
-
-            <div class="col-md-4">
-                <select class="form-control" name="role">
-                    <option value="" disabled selected>
-                        Select
-                    </option>
-                    @foreach($roles as $role)
-                    <option value="{{$role->id}}">{{$role->name}}</option>
-                    @endforeach
-                </select>
-                @if ($errors->has('role'))
-                <span class="help-block">
-                 <strong>{{$errors->first('role') }}</strong>
-             </span>
-             @endif
-         </div>
-     </div>
-
-     <!--Submit-->
-     <div class="form-group container">
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-sm btn-primary">
-                <i class="fa fa-btn fa-send"></i> Send
-            </button>
-        </div>
+<div class="box">
+    <div class="box-header with-border">
+        <h2 class="box-title">Assign Roles</h2>
     </div>
-</form>
-@else
-There is No roles to Assign , Please
-@endif
-<a href="/roles/create" class="link-black btn-link">Add {{$roles?"more":''}} role(s)</a>
+    <div class="box-body">
+        <form class="form-horizontal" role="form" method="POST" action="/users/{{$user->employee_id}}/roles">
+            {!! csrf_field() !!}
 
-</div>
-<br><br>
+            <div class="col-xs-12">
+
+                <table class="table table-bordered table-responsive">
+                    <tr>
+                        <td>
+                            <h4>Staff Members</h4>
+                        </td>
+                        <td>
+                            <p><strong>Note :</strong>This is the default permission for any registered user .</p>
+
+                            <p> Normally Staff members could view their own belonging orders without any security requirements , But for any other staff member trying to view others` orders , they will be promoted to enter the order`s key sent to the creator by email.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Labor
+                        </td>
+                        <td>
+                            <div class="checkbox icheck">
+                                <label>
+                                <input type="checkbox" name="roles[]" value="1" {{in_array('1',$roles)?'checked':''}}>Allowed to view orders in which he assigned as a labor .</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Technician
+                            </td>
+                            <td>
+                                <div class="checkbox icheck">
+                                    <label>
+                                        <input type="checkbox" name="roles[]" value="2" {{in_array('2',$roles)?'checked':''}}>Allowed to view orders in which he assigned as a technician . </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Supervisors
+                                </td>
+                                <td>
+                                    <div class="checkbox icheck">
+                                        <label>
+                                            <input type="checkbox" name="roles[]" value="3"{{in_array('3',$roles)?'checked':''}}>Allowed to assign , close and follow-up orders .</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Accountants
+                                    </td>
+                                    <td>
+                                        <div class="checkbox icheck">
+                                            <label>
+                                                <input type="checkbox" name="roles[]" value="4" {{in_array('4',$roles)?'checked':''}}>Allowed to view Financial pages ,for used materials and costs .</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            Admins
+                                        </td>
+                                        <td>
+                                            <div class="checkbox icheck">
+                                                <label>
+                                                    <input type="checkbox" name="roles[]" value="5" {{in_array('5',$roles)?'checked':''}}> Allowed to do everything except Roles and permissions .</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Superadmins
+                                            </td>
+                                            <td>
+                                                <div class="checkbox icheck">
+                                                    <label>
+                                                        <input type="checkbox" name="roles[]" value="6"{{in_array('6',$roles)?'checked':''}}>Can do everything in every where .</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+
+                                    </div>
+
+                                    <!--Submit-->
+                                    <div class="form-group">
+                                        <div class="col-md-6 col-md-offset-4">
+                                            <button type="submit" class="btn btn-primary pull-right">
+                                                <i class="fa fa-btn fa-send"></i> Assign Roles
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>

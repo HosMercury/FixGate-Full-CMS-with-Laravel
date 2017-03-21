@@ -26,7 +26,7 @@
 </select>
 <br><br>
 <div class="form-group">
-    <textarea class="form-control" rows="2" placeholder="In case of vendors , Please add details about them ."></textarea>
+    <input type="text"  name="vendor" class="form-control"  placeholder="Or assign to external vendor ">
 </div>
 <div class="assigner">
     {!! Form::submit($assign,['name'=>'submit','class'=>'btn btn-success btn-md pull-right col-md-1']) !!}

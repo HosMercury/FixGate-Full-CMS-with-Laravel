@@ -16,7 +16,6 @@
     <div class="row">
         <div class="col-md-12">
             <!-- Order Details -->
-            {{--@can('show_order_details',$order)--}}
             <div class="box">
                 <!-- close this order -->
                 @include('orders.partials.details')
@@ -33,13 +32,11 @@
 
             </div>
 
-            {{--@endcan--}}
         </div>
 
         @include('orders.partials.modal')
-                <!-- /.modal -->
+        <!-- /.modal -->
         <!-- Order Assignments -->
-        {{--@can('show_order_assignments',$order)--}}
         @if(count($workers))
             <div class="box">
                 @include('orders.partials.assignments')
@@ -57,10 +54,8 @@
                     If you are allowed , please <a href="/users/create"> add ones</a></p>
             </div>
         @endif
-        {{--@endcan--}}
     </div>
     <!--<div class="row">-->
-    {{--@endcan--}}
 @stop
 @section('scripts')
     @include('orders.partials.scripts')

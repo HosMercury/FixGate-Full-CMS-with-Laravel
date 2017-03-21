@@ -66,48 +66,6 @@ class OrderController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    /*
-    public function filter(Request $request)
-    {
-        $this->validate($request, [
-            'fromDate' => 'required|date',
-            'toDate' => 'required|date',
-            'location' => 'numeric|exists:locations,id'
-            ]);
-
-        $location = $request->location;
-
-        $from = Carbon::createFromFormat('Y-m-d H:i:s', $request->fromDate . '00:00:00');
-        $to = Carbon::createFromFormat('Y-m-d H:i:s', $request->toDate . '23:59:59');
-
-        $order = Order::with(['assignments' => function ($q) {
-            $q->orderBy('updated_at', 'DESC')->get();
-        }])->whereBetween('created_at', [$from, $to]);
-
-        if ($location) $order->where('location_id', $request->location);
-
-        $count = Order::select(array(
-            \DB::raw('DATE(`created_at`) as `date`'),
-            \DB::raw('COUNT(*) as `count`')
-            ))->whereBetween('created_at', [$from, $to])
-        ->groupBy('date')
-        ->orderBy('date', 'ASC')
-        ->lists('count', 'date');
-
-        return view('orders.index', [
-            'orders' => $order->get(),
-            'dateTo' => $to->toDateString(),
-            'dateFrom' => $from->toDateString(),
-            'count_keys' => str_replace('2016-', '', $count->keys()),
-            'count_values' => $count->values(),
-            ]);
-        }*/
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -179,26 +137,15 @@ class OrderController extends Controller
         $materials_ids = Material::all();
 
         // get labors trials
+        $labors = User::whereHas('roles',function($q){
+            $q->where('name','labor');
+        })->lists('id', 'name');
 
-        return User::whereHas('roles');
+        $technicians = User::whereHas('roles',function($q){
+            $q->where('name','technician');
+        })->lists('id', 'name');
 
-        return User::with('roles')->get()->map(function($u){
-            return $u->roles->map(function($role){
-                $role->hasPermission('labor');
-            });
-        });
-
-
-
-        // $labors = User::has('roles', function ($q) {
-        //     $q->where('name', 'labor');
-        // })->lists('id', 'name');
-
-        // $technicians = User::whereHas('roles', function ($q) {
-        //     $q->where('name', 'technician');
-        // })->lists('id', 'name');
-
-        // $workers = collect(['labors' => $labors, 'Technicians' => $technicians])->all();
+        $workers = collect(['labors' => $labors, 'Technicians' => $technicians])->all();
 
         foreach ($materials as $mat) {
             $total += ($mat->price * $mat->pivot->quantity);
@@ -226,9 +173,9 @@ class OrderController extends Controller
             'costs' => $costs,
             'materials_total' => $total,
             'assigns' => $assignments,
-            // 'workers' => $workers,
-            // 'labors' => $labors,
-            // 'techs' => $technicians,
+            'workers' => $workers,
+            'labors' => $labors,
+            'techs' => $technicians,
             'materials_ids' => $materials_ids,
             'thumbs' => $thumbs,
             'closed' => $closed,

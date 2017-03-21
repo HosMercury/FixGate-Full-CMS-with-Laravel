@@ -116,21 +116,12 @@ Route::group(['middleware' => ['web']], function () {
         });
 
         Route::group(['prefix' => 'users'], function () {
-            //Roles...
-            Route::get('/roles', 'RoleController@index');
-            Route::post('/roles', 'RoleController@store');
-            Route::get('/roles/data', 'RoleController@data');
-            Route::get('/roles/create', 'RoleController@create');
-            Route::get('/roles/{user}', 'RoleController@show');
-            //Users...
             Route::get('/', 'UserController@index');
             Route::get('/data', 'UserController@data');
             Route::get('/{employee}', 'UserController@show');
             Route::patch('/{employee}', 'UserController@update');
             Route::delete('/{employee}', 'UserController@destroy');           
             Route::post('/{employee}/roles', 'UserController@assignRole');
-            Route::delete('/{employee}/roles/{role}', 'UserController@deleteRole');
-
         });
 
         Route::group(['prefix' => 'locations'], function () {

@@ -2,7 +2,6 @@
 
 use App\Material;
 use App\Order;
-use App\Permission;
 use App\Role;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -46,13 +45,6 @@ class DatabaseSeeder extends Seeder
 
         // Roles ...
         DB::table('roles')->insert([
-            ['name' => 'accountant', 'creator' => 6074],
-            ['name' => 'admin', 'creator' => 6074],
-            ['name' => 'superadmin', 'creator' => 6074]
-            ]);
-
-        // Permissions ...
-        DB::table('permissions')->insert([
             ['name' => 'labor', 'creator' => 6074],
             ['name' => 'technician', 'creator' => 6074],
             ['name' => 'supervisor', 'creator' => 6074],
@@ -61,14 +53,10 @@ class DatabaseSeeder extends Seeder
             ['name' => 'superadmin', 'creator' => 6074]
             ]);
 
-
         User::whereEmail('accountant@mail.com')->first()->assignRole('accountant');
         User::whereEmail('admin@mail.com')->first()->assignRole('admin');
         User::whereEmail('superadmin@mail.com')->first()->assignRole('superadmin');
 
-        Role::whereName('accountant')->first()->givePermissionTo(Permission::whereName('accountant')->first());
-        Role::whereName('admin')->first()->givePermissionTo(Permission::whereName('admin')->first());
-        Role::whereName('superadmin')->first()->givePermissionTo(Permission::whereName('superadmin')->first());
 
         factory(Order::class, 50)->create();
         factory(Material::class, 50)->create();

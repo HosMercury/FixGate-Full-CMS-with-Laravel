@@ -18,34 +18,36 @@ class OrderAssignmentController extends Controller
      */
     public function store(Request $request,$order,$assignment = null, $get_workers = 'workers')
     {
+        // return $request->all();
         $validator = Validator::make($request->all(), [
-            $get_workers => 'required|exists:users,id'
-        ]);
-        // redirect not go correct
+            $get_workers => 'required_without_all:vendor|exists:users,id',
+            'vendor' =>'max:500'
+            ]);
+        // redirect if validation error ...
         if ($validator->fails()) {
-            return redirect("order/{$order}#assignment")
-                ->withErrors($validator)
-                ->withInput();
+            return redirect('orders/'.substr($order->number,0,4).'/'.substr($order->number,5).'#assignments')
+            ->withErrors($validator)
+            ->withInput();
         }
-        // check existed
+        // check existed assigns for edit
         if ($assignment != null) {
             foreach ($request->$get_workers as $worker) {
                 $existed = Assignment::where([
                     'order_id' => $order->id,
                     'status' => $assignment,
                     'worker' => $worker
-                ])->first();
+                    ])->first();
 
                 if ($existed) {
-                    \Session::flash('danger', 'Previously added worker(s) to the same assignment');
+                    \Session::flash('danger', 'Previously added worker(s) to the same assignment .Relax, so need');
                     return back();
                 }
             }
         }
         if ($this->assignWorker($request, $order, $get_workers)) {
-            \Session::flash('success', 'Great , The order assignment has been ' . ($get_workers == 'workers' ? 'created' : 'edited') . ' Successfully');
+            \Session::flash('success', 'Great , The order assignment has been ' . ($get_workers == 'workers' ? 'created' : 'updated') . ' Successfully');
         } else
-            \Session::flash('danger', 'Unexpected Error occured , please contact your admin');
+        \Session::flash('danger', 'Unexpected Error occured , please contact your admins');
         return back();
     }
 
@@ -83,7 +85,7 @@ class OrderAssignmentController extends Controller
                 'status' => intval($status),
                 'creator' => intval(auth()->user()->id),
                 'worker' => intval($value)
-            ]);
+                ]);
         }
 
         if (!empty($created)) return true;
@@ -103,14 +105,14 @@ class OrderAssignmentController extends Controller
             $deleted = Assignment::where([
                 'status' => intval($assignment),
                 'order_id' => intval($order->id),
-            ])->delete();
+                ])->delete();
         } else {
             // there is workers
             $deleted = Assignment::where([
                 'status' => intval($assignment),
                 'order_id' => intval($order->id),
                 'worker' => intval($worker)
-            ])->delete();
+                ])->delete();
         }
         if ($deleted) {
             \Session::flash('success', "The worker(s) has been deleted ");

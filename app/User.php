@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'employee_id','manager_id','name', 'email', 'password', 'location_id'
+        'employee_id','name', 'email', 'password', 'location_id'
     ];
 
     /**
@@ -49,22 +49,6 @@ class User extends Authenticatable
         return $this->roles()->save(
             Role::whereName($role)->firstOrFail()
         );
-    }
-
-    public function hasPermission()
-    {
-        foreach ($this->getPermissions() as $permission) {
-            return $this->hasRole($permission->roles);
-        }
-    }
-
-    protected function getPermissions()
-    {
-        try {
-            return Permission::with('roles')->get();
-        } catch (\Exception $e) {
-            return [];
-        }
     }
 
     public function owns(Order $order)

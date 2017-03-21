@@ -23,7 +23,6 @@
 
                 <!-- /.box-header -->
                 <div class="box-body">
-                    @include('users.partials.related')
 
                     <table cellspacing="0" width="100%" class="table table-bordered" id="table">
                         <tfoot>

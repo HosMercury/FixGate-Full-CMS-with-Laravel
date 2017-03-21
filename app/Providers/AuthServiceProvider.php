@@ -16,7 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Order::class => OrderPolicy::class,
+    Order::class => OrderPolicy::class,
     ];
 
     /**
@@ -28,23 +28,6 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(GateContract $gate)
     {
         $this->registerPolicies($gate);
-
-
-        foreach ($this->getPermissions() as $permission) {
-            $gate->define($permission->name, function ($user) use ($permission) {
-                 return $user->hasRole($permission->roles);
-            });
-
-        }
-
     }
 
-    protected function getPermissions()
-    {
-        try {
-            return Permission::with('roles')->get();
-        } catch (\Exception $e) {
-            return [];
-        }
-    }
 }

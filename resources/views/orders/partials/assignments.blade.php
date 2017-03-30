@@ -1,6 +1,6 @@
 <!-- Assignments -->
 <div class="box-header with-border">
-    <h2 class="box-title" id="assignments"><i class="fa fa-fw fa-hourglass-start"></i> Assignments</h2>
+    <h2 class="box-title"><i class="fa fa-fw fa-hourglass-start"></i> Assignments</h2>
 </div>
 <div class="box-body">
     <div class="assignments margin-bottom">
@@ -25,17 +25,17 @@
                                             @endif
                                         </li>
                                     </div>
-                                @endif
+                                    @endif
 
-                                {{--add to this assignment--}}
-                                <div class="col-xs-12">
-                                    {!!Form::open(['url' => "/orders/$order->id/assignments/{$index}/",
-                                    'class'=>'add-worker-form',$order->id])!!}
-                                    {{method_field('PATCH')}}
-                                    @include('orders.partials.assignForm',
-                                        ['label'=>'Add : ','assign'=>'Add','add'=>'add'])
-                                </div>
-                            @endforeach
+                                            <!--add to this assignment-->
+                                    <div class="col-xs-12">
+                                        {!!Form::open(['url' => "/orders/$order->id/assignments/{$index}/",
+                                        'class'=>'add-worker-form',$order->id])!!}
+                                        {{method_field('PATCH')}}
+                                        @include('orders.partials.assignForm',
+                                            ['label'=>'Add : ','assign'=>'Add','add'=>'add'])
+                                    </div>
+                                    @endforeach
                         </ol>
 
                         @if($index === $assigns_count and !$closed)
@@ -63,7 +63,7 @@
         @else
             <div class="alert alert-warning alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <p>No Assignments yet . start Assign !</p>
+                <p>No Assignments yet .</p>
             </div>
         @endif
     </div>
@@ -74,4 +74,5 @@
             @include('orders.partials.assignForm',['label'=>'New Assignment : ','assign'=>'Assign','add'=>''])
         </div>
     @endif
+    @include('orders.partials.vendor')
 </div>

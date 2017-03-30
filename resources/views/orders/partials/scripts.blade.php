@@ -1,9 +1,7 @@
 <script src="{{asset('theme/plugins/dropzone/dropzone.js')}}"></script>
-<link rel="stylesheet" href="{{asset('theme/dist/css/dropzone.css')}}">
-<link type="text/css" rel="stylesheet"
-      href="{{asset('theme/plugins/lity/dist/lity.min.css')}}"/>
 <script src="{{asset('theme/plugins/lity/dist/lity.min.js')}}"></script>
-{{--{{dd($materials_ids->where('id', 5)->first()->price)}}--}}
+<script src="{{asset('theme/plugins/select2/select2.min.js')}}"></script>
+<script src="{{asset('theme/plugins/rating/rating.js')}}"></script>
 <script>
     Dropzone.options.myAwesomeDropzone = {
         paramName: "file", // The name that will be used to transfer the file
@@ -182,4 +180,37 @@
         }
     });
 </script>
+
+<script>
+    $(document).ready(function () {
+        $('select').select2({
+            placeholder: "Select worker(s)",
+            allowClear: true
+        });
+
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').focus()
+        });
+
+        $('#rating').rating();
+    });
+</script>
+@if ($errors->has('rating') or $errors->has('feedback') or $errors->has('closekey') )
+    <script>
+        $('#rateModal').modal('show');
+    </script>
+@endif
+<script>
+    $(document).ready(function () {
+        $('.edit-assignment').on('click', function () {
+            $(this).text(function (i, text) {
+                return text === "Cancel" ? "Edit" : "Cancel";
+            });
+            $('.delete-assignment').toggle();
+            $('.new-assignment').toggle();
+            $('.add-worker-form').toggle();
+        });
+    });
+</script>
+
 </div>

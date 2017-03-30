@@ -109,7 +109,10 @@ Route::group(['middleware' => ['web']], function () {
             Route::get('/{location}/{number}/edit', 'OrderController@edit');
             Route::get('/data', 'OrderController@data');
             Route::post('/{order}/close', 'OrderController@close');
+
+            // Assignments ...
             Route::post('/{order}/assignments', 'OrderAssignmentController@store');
+            Route::post('/{order}/assignments/vendor', 'OrderAssignmentController@vendor');
             Route::patch('/{order}/assignments/{assignment}', 'OrderAssignmentController@update');
             Route::delete('/{order}/assignments/{assignment}/workers/{user}/delete', 'OrderAssignmentController@destroy');
             Route::delete('/{order}/assignments/{assignment}/delete', 'OrderAssignmentController@destroy');

@@ -17,6 +17,7 @@ class CreateAssignmentsTable extends Migration
             $table->integer('order_id')->unsigned()->index();
             $table->integer('status')->defaults(0);
             $table->integer('worker')->nullable();
+            $table->string('vendor')->nullable();
             $table->integer('creator')->nullable()->unsigned()->index();
             $table->timestamps();
         });

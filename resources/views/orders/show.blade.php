@@ -1,5 +1,8 @@
 @extends('theme.index')
 @section('title') Show Order @stop
+<link rel="stylesheet" href="{{asset('theme/dist/css/dropzone.css')}}">
+<link type="text/css" rel="stylesheet"
+      href="{{asset('theme/plugins/lity/dist/lity.min.css')}}"/>
 @section('bread-header') Show Order @stop
 @section('bread-small'){{$order->title}} @stop
 @section('breadcrumb')
@@ -12,7 +15,6 @@
 <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/rating/rating.css')}}">
 @include('orders.partials.orders-show-styles')
 @section('content')
-    {{--@can('show_order_page',$order)--}}
     <div class="row">
         <div class="col-md-12">
             <!-- Order Details -->
@@ -35,62 +37,24 @@
         </div>
 
         @include('orders.partials.modal')
-        <!-- /.modal -->
+        <!-- /.modal of closing order-->
         <!-- Order Assignments -->
         @if(count($workers))
-            <div class="box">
+            <div class="box" id="assignments">
                 @include('orders.partials.assignments')
             </div>
-            {{--@endcan--}}
-            <!-- Materials and Costs -->
-            {{--@can('show_order_costs',$order)--}}
+
             <div class="box ">
                 @include('orders.partials.materials-costs')
             </div>
         @else
             <div class="alert alert-warning alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <p>There is No added workers untill now .
-                    If you are allowed , please <a href="/users/create"> add ones</a></p>
+                <p>There is No added workers until now</p>
             </div>
         @endif
     </div>
-    <!--<div class="row">-->
 @stop
 @section('scripts')
     @include('orders.partials.scripts')
-    <script src="{{asset('theme/plugins/select2/select2.min.js')}}"></script>
-    <script src="{{asset('theme/plugins/rating/rating.js')}}"></script>
-
-    <script>
-        $(document).ready(function () {
-            $('select').select2({
-                placeholder: "Select worker(s)",
-                allowClear: true
-            });
-
-            $('#myModal').on('shown.bs.modal', function () {
-                $('#myInput').focus()
-            });
-
-            $('#rating').rating();
-        });
-    </script>
-    @if (count($errors) > 0)
-        <script>
-            $('#rateModal').modal('show');
-        </script>
-    @endif
-    <script>
-        $(document).ready(function () {
-            $('.edit-assignment').on('click', function () {
-                $(this).text(function (i, text) {
-                    return text === "Cancel" ? "Edit" : "Cancel";
-                });
-                $('.delete-assignment').toggle();
-                $('.new-assignment').toggle();
-                $('.add-worker-form').toggle();
-            });
-        });
-    </script>
 @stop

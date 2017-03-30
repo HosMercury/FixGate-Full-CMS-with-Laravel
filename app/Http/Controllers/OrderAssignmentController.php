@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Assignment;
 use App\Http\Requests;
-use App\Order;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -16,18 +15,17 @@ class OrderAssignmentController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,$order,$assignment = null, $get_workers = 'workers')
+    public function store(Request $request, $order, $assignment = null, $get_workers = 'workers')
     {
-        // return $request->all();
         $validator = Validator::make($request->all(), [
-            $get_workers => 'required_without_all:vendor|exists:users,id',
-            'vendor' =>'max:500'
-            ]);
+            $get_workers => 'required|exists:users,id',
+        ]);
+
         // redirect if validation error ...
         if ($validator->fails()) {
-            return redirect('orders/'.substr($order->number,0,4).'/'.substr($order->number,5).'#assignments')
-            ->withErrors($validator)
-            ->withInput();
+            return redirect('orders/' . substr($order->number, 0, 4) . '/' . substr($order->number, 5) . '#assignments')
+                ->withErrors($validator)
+                ->withInput();
         }
         // check existed assigns for edit
         if ($assignment != null) {
@@ -36,7 +34,7 @@ class OrderAssignmentController extends Controller
                     'order_id' => $order->id,
                     'status' => $assignment,
                     'worker' => $worker
-                    ])->first();
+                ])->first();
 
                 if ($existed) {
                     \Session::flash('danger', 'Previously added worker(s) to the same assignment .Relax, so need');
@@ -44,10 +42,11 @@ class OrderAssignmentController extends Controller
                 }
             }
         }
+
         if ($this->assignWorker($request, $order, $get_workers)) {
             \Session::flash('success', 'Great , The order assignment has been ' . ($get_workers == 'workers' ? 'created' : 'updated') . ' Successfully');
         } else
-        \Session::flash('danger', 'Unexpected Error occured , please contact your admins');
+            \Session::flash('danger', 'Something went wrong , please contact your admins');
         return back();
     }
 
@@ -60,7 +59,7 @@ class OrderAssignmentController extends Controller
      */
     public function update(Request $request, $order, $assignment)
     {
-        $this->store( $request , $order, $assignment, 'addworkers' );
+        $this->store($request, $order, $assignment, 'addworkers');
         return back();
     }
 
@@ -72,20 +71,21 @@ class OrderAssignmentController extends Controller
      */
     private function assignWorker(Request $request, $order, $get_workers)
     {
-        $workers = $request->$get_workers;
+        $workers = !empty($request->input($get_workers)) ? $request->input($get_workers) : null;
 
-        $status = $order->assignments->last() ? $order->assignments->last()->status : 0;
+        $last = $order->assignments->last() ? $order->assignments->last()->status : 0;
 
-        $status = ($get_workers === 'workers') ? $status + 1 : $status;
+        $last = ($get_workers === 'workers') ? $last + 1 : $last;
 
-        foreach ($workers as $key => $value) {
-            $created = (new Assignment)->create([
-                'order_id' => intval($order->id),
-                'order_id' => intval($order->id),
-                'status' => intval($status),
-                'creator' => intval(auth()->user()->id),
-                'worker' => intval($value)
+        if ($workers != null) {
+            foreach ($workers as $key => $value) {
+                $created = (new Assignment)->create([
+                    'order_id' => intval($order->id),
+                    'status' => intval($last),
+                    'creator' => intval(auth()->user()->employee_id),
+                    'worker' => intval($value)
                 ]);
+            }
         }
 
         if (!empty($created)) return true;
@@ -98,21 +98,21 @@ class OrderAssignmentController extends Controller
      * @param  int $order
      * @return \Illuminate\Http\Response
      */
-    public function destroy( Request $request,$order, $assignment, $worker = null)
+    public function destroy(Request $request, $order, $assignment, $worker = null)
     {
-        if (! intval($worker) or intval($worker) == null ) {
+        if (!intval($worker) or intval($worker) == null) {
             //there is no workers
             $deleted = Assignment::where([
                 'status' => intval($assignment),
                 'order_id' => intval($order->id),
-                ])->delete();
+            ])->delete();
         } else {
             // there is workers
             $deleted = Assignment::where([
                 'status' => intval($assignment),
                 'order_id' => intval($order->id),
                 'worker' => intval($worker)
-                ])->delete();
+            ])->delete();
         }
         if ($deleted) {
             \Session::flash('success', "The worker(s) has been deleted ");
@@ -121,5 +121,30 @@ class OrderAssignmentController extends Controller
             \Session::flash('danger', "The worker has not been deleted ,Please contact your istrator ");
             return back();
         }
+    }
+
+    public function vendor(Request $request,$order)
+    {
+        $validator = Validator::make($request->all(), [
+            'vendor'=>'required|min:3|max:500',
+            'last_assignment'=>'in:1',
+        ]);
+
+        // redirect if validation error ...
+        if ($validator->fails()) {
+            return redirect('orders/' . substr($order->number, 0, 4) . '/' . substr($order->number, 5) . '#assignments')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        return $last_recorded_assignment = Assignment::where([
+            'order_id'=>$order->id
+        ])->max();
+        Assignment::create([
+           'order_id' => $order->id,
+            'vendor' => $request->input('vendor')
+        ]);
+
+        return back();
     }
 }

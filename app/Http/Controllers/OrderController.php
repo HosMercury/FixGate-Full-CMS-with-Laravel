@@ -93,7 +93,7 @@ class OrderController extends Controller
         })->max();
 
         if (!isset($last_order_number)) {
-            $last_order_number = 1000000;
+            $last_order_number = 1000;
         }
 
         $request['location_id'] = auth()->user()->location_id;
@@ -121,7 +121,7 @@ class OrderController extends Controller
     /**
      * Display the order.
      *
-     * @param  int $id
+     * @param  int $location
      * @return \Illuminate\Http\Response
      */
     public function show($location, $number)
@@ -144,6 +144,7 @@ class OrderController extends Controller
         $technicians = User::whereHas('roles',function($q){
             $q->where('name','technician');
         })->lists('id', 'name');
+
 
         $workers = collect(['labors' => $labors, 'Technicians' => $technicians])->all();
 
@@ -186,7 +187,7 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param  int $location
      * @return \Illuminate\Http\Response
      */
     public function edit($location,$number)

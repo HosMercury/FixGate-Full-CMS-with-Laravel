@@ -2,77 +2,68 @@
 <div class="box-header with-border">
     <h2 class="box-title"><i class="fa fa-fw fa-hourglass-start"></i> Assignments</h2>
 </div>
+
 <div class="box-body">
     <div class="assignments margin-bottom">
         @if(! $assigns->isEmpty())
-            <ol>
-                @foreach($assigns as $index=>$assign)
-                    @if( $index > 0 )
-                        <h4>Assignment ({{$index}}) :</h4>
-                        <ol class="col-md-12">
-                            @foreach($assign as $worker)
-                                @if(isset($worker))
-                                    <div>
-                                        <li class="col-md-4">
-                                            <label>{{$worker->name}}</label>
-                                            @if($index === $assigns_count and !$closed)
-                                                {!! Form::open(['url'=>"/orders/$order->id/assignments/$index/workers/$worker->id/delete/"
-                                                                ,'method' => 'delete','class'=>'inline','OnSubmit' =>'return confirm("are you sure?")']) !!}
-                                                <button type="submit" class="btn btn-xs btn-danger delete-assignment"><i
-                                                            class="fa fa-fw fa-remove"> </i>
-                                                </button>
-                                                {!! Form::close() !!}
-                                            @endif
-                                        </li>
-                                    </div>
+            @foreach($assigns as $index=>$assign)
+                @if($index == -1 and isset($closed))
+                    <div>
+                        <p><strong>Closed at : </strong> {{$assign[0]->created_at}}
+                            - <strong>By User:</strong> {{$assign[0]->creator}} </p>
+                    </div>
+                    <hr>
+                @elseif($index >0 )
+                    <div>
+                        <h4>Assignment #{{$index}}
+                                    <!-- Edit -->
+                            @if($index == $assigns_max and !isset($closed) )
+                                <button class="btn btn-xs btn-default ass-edit " style="display: inline-block;">
+                                    <i class="fa fa-fw fa-edit"></i>
+                                </button>
+                            @endif
+                        </h4>
+                        <ol>
+                            @foreach($assign as $ass)
+                                <li>
+                                    @if($ass->vendor)
+                                        <strong>{{$ass->vendor}} (VENDOR) </strong><span>at: <small>{{$ass->created_at}}</small></span>
+                                    @else
+                                        <strong>{{$ass->worker->name}}</strong> <span>at: <small>{{$ass->created_at}}</small></span>
                                     @endif
-
-                                            <!--add to this assignment-->
-                                    <div class="col-xs-12">
-                                        {!!Form::open(['url' => "/orders/$order->id/assignments/{$index}/",
-                                        'class'=>'add-worker-form',$order->id])!!}
-                                        {{method_field('PATCH')}}
-                                        @include('orders.partials.assignForm',
-                                            ['label'=>'Add : ','assign'=>'Add','add'=>'add'])
-                                    </div>
-                                    @endforeach
+                                    @include('orders.partials.delete_assign_form')
+                                </li>
+                                @endforeach
+                                        <!-- delete All Assignment -->
+                                @if($index == $assigns_max and !isset($closed) )
+                                    <form method="post" action="/{{$order->path()}}/assignments/{{$ass->id}}/all"
+                                          class="ass-delete-all">
+                                        {{csrf_field()}}
+                                        {{method_field('DELETE')}}
+                                        <button type="submit" class="btn btn-xs btn-danger"><i
+                                                    class="fa fa-fw fa-trash-o"></i> Delete whole assignment
+                                        </button>
+                                    </form>
+                                @endif
                         </ol>
+                    </div>
+                    <hr>
+                @endif
+            @endforeach
 
-                        @if($index === $assigns_count and !$closed)
-
-                            {{--Edit--}}
-                            <button class="btn btn-default btn-xs edit-assignment">
-                                <i class="fa fa-fw fa-edit"></i> Edit
-                            </button>
-
-                            {{--Delete--}}
-                            {!! Form::open(['url'=>"/orders/$order->id/assignments/$index/delete/"
-                                            ,'method'=>'DELETE','class'=>'inline','OnSubmit' =>'return confirm("are you sure?")']) !!}
-                            <button type="submit" class="btn btn-danger btn-xs delete-assignment"><i
-                                        class="fa fa-fw fa-remove"></i> Delete All
-                            </button>
-                            {!! Form::close() !!}
-                        @endif
-                    @elseif($index < 0 and isset($closed))
-                        <hr>
-                        <p><strong>Closed at : </strong>{{$closed->created_at}}</p>
-                        <p><strong>Rated : </strong>Stars</p>
-                    @endif
-                @endforeach
-            </ol>
         @else
-            <div class="alert alert-warning alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <p>No Assignments yet .</p>
-            </div>
-        @endif
+            <p><strong>Start Assign : </strong></p>
+            <hr>
+            @endif<!-- isEmpty($assigns)-->
+
+            <!-- Assign Form -->
+            @if(!isset($closed))
+                <div class="new-assignment">
+                    {!!Form::open(['url' => $order->path().'/assignments/','method'=>'POST',$order->id])!!}
+                    @include('orders.partials.assignForm',['label'=>'New Assignment : ','assign'=>'Assign'])
+                    @include('orders.partials.vendor')
+                </div>
+            @endif
     </div>
-    @if(!$closed)
-        <hr>
-        <div class="new-assignment">
-            {!!Form::open(['url' => "/orders/$order->id/assignments/",'method'=>'POST',$order->id])!!}
-            @include('orders.partials.assignForm',['label'=>'New Assignment : ','assign'=>'Assign','add'=>''])
-        </div>
-    @endif
-    @include('orders.partials.vendor')
+
 </div>

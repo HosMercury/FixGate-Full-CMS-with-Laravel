@@ -13,7 +13,7 @@
 
 <div id="inline" style="overflow: auto;overflow-y: scroll;height:100%; padding: 20px; max-width: 100%;
  border-radius: 6px; max-height: 300px; background: rgb(253, 253, 246);" class="lity-hide col-xs-11">
-    <form action="/orders/{{$order->id}}/bills/delete" method="POST">
+    <form action="/{{$order->path()}}/bills" method="POST">
         {{csrf_field()}}
         {{method_field('DELETE')}}
         <h4>* Select bill(s) to delete</h4>

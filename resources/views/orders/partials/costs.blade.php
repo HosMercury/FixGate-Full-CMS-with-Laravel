@@ -23,7 +23,7 @@
                     </tr>
 
                 @endforeach
-                <form action="/orders/{{$order->id}}/costs/delete" method="post"
+                <form action="/{{$order->path()}}/costs" method="post"
                       onsubmit="return confirm('Do you really want to delete your this costs(s)?');">
                     {{csrf_field()}}
                     {{ method_field('DELETE') }}
@@ -82,7 +82,7 @@
     <div class="col-xs-1"><strong>SubTotal</strong></div>
 </div>
 
-<form name="costs" class="form-horizontal" method="POST" action="/orders/{{$order->id}}/costs/">
+<form name="costs" class="form-horizontal" method="POST" action="/{{$order->path()}}/costs/">
     {{csrf_field()}}
     <div class="cost-container" id="costs"></div>
 
@@ -107,7 +107,7 @@
 <div class="col-xs-12 d-zone" style="margin: auto;">
     <h4>Add bills' image files</h4>
 
-    <form action="/orders/{{$order->id}}/bills"
+    <form action="/{{$order->path()}}/bills"
           class="dropzone"
           id="my-awesome-dropzone"
           style="border:solid thin #ccc;">

@@ -10,11 +10,14 @@ use Image;
 
 class OrderBillController extends Controller
 {
-    public function store(Request $request,Order $order)
+    public function store(Request $request,  $location, $number)
     {
+        if (is_nan($location) or is_nan($number)) abort('404');
+
         $this->validate($request, [
             'file' => 'required|image'
         ]);
+        $order = OrderController::getOrder($location, $number);
 
         $file = $request->file('file');
         $name = $order->id . '_' . time() . '_' . rand(11, 99) . '_' . $file->getClientOriginalName();

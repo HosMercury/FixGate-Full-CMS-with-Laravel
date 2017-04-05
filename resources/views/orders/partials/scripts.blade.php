@@ -15,66 +15,78 @@
     var maters_ids = {!! $materials_ids !!};
 
     var tableRow =
-            '<div class="added col-xs-11" style="margin: 1em 0">'
-            + '<div class="col-xs-4">'
-            + '<select name="material_id[]" class="form-control select-mat">'
-            + '<option>Select Material</option>'
+        '<div class="added col-xs-11" style="margin: 1em 0">'
+        + '<div class="col-xs-4">'
+        + '<select name="material_id[]" class="form-control select-mat">'
+        + '<option>Select Material</option>'
     $.each(maters_ids, function (i) {
         tableRow += '<option class="mat-option" value="' + maters_ids[i].id + '" >' + maters_ids[i].name + '</option>'
     });
     tableRow += '</select>'
-            + '</div>'
-            + '<div class="col-xs-2 parent">'
-            + '<input name="quantity[]" type="number" step="0.5" class="col-xs-11 .input-sm qty form-control" required />'
-            + '</div>'
-            + '<div class="price col-xs-2">'
+        + '</div>'
+        + '<div class="col-xs-2 parent">'
+        + '<input name="quantity[]" type="number" step="0.5" class="col-xs-11 .input-sm qty form-control" required />'
+        + '</div>'
+        + '<div class="price col-xs-2">'
     tableRow += '<p class="mat-price"></p>'
-            + '</div>'
-            + '<div class="col-xs-2">'
-            + '<p class="sub">0</p>'
-            + '</div>'
-            + '<div class="col-xs-2">'
-            + '<a class=" btn btn-xs btn-danger deleteAdded">X</a>'
-            + '</div>'
-            + '</div>';
+        + '</div>'
+        + '<div class="col-xs-2">'
+        + '<p class="sub">0</p>'
+        + '</div>'
+        + '<div class="col-xs-2">'
+        + '<a class=" btn btn-xs btn-danger deleteAdded">X</a>'
+        + '</div>'
+        + '</div>';
 
     var tableRowCosts =
-            '<div class="added-cost col-xs-12" style="margin: 1em 0">'
-            + '<div class="col-xs-6">'
-            + '<input type="text" class="col-xs-11" name="costDescription[]" required/>'
-            + '</div>'
-            + '<div class="col-xs-3">'
-            + '<input type="number" step="0.1" class="costs-sub" name="costSubTotal[]" required/>'
-            + '</div>'
-            + '<div class="col-xs-2">'
-            + '<a class=" btn btn-xs btn-danger cost-deleteAdded">X</a>'
-            + '</div>'
-            + '</div>';
+        '<div class="added-cost col-xs-12" style="margin: 1em 0">'
+        + '<div class="col-xs-6">'
+        + '<input type="text" class="col-xs-11" name="costDescription[]" required/>'
+        + '</div>'
+        + '<div class="col-xs-3">'
+        + '<input type="number" step="0.1" class="costs-sub" name="costSubTotal[]" required/>'
+        + '</div>'
+        + '<div class="col-xs-2">'
+        + '<a class=" btn btn-xs btn-danger cost-deleteAdded">X</a>'
+        + '</div>'
+        + '</div>';
 
 
     $(document).ready(function () {
 
+        $('.ass-delete').hide();
+        $('.ass-delete-all').hide();
+
         $('.d-zone').hide();
         //Assignment edit
-        $('a.edit').click(function () {
+//        $('a.edit').click(function () {
+//            var txt = $(this).text();
+//            txt = (txt != 'cancel') ? 'cancel' : 'edit';
+//            $(this).text(txt);
+//            $('.editForm').toggle(500);
+//            $('.reassign').toggle();
+//        });
+//        //Assignment edit
+//        $('a.edit2').click(function () {
+//            var txt = $(this).text();
+//            txt = (txt != 'cancel') ? 'cancel' : 'edit';
+//            $(this).text(txt);
+//            $('.editForm2').toggle(500);
+//        });
+//        //Reassignment
+//        $('a.reassign').click(function () {
+//            $('.reassignForm').toggle(500);
+//            $('.edit').hide();
+//            $('.reassign').hide();
+//        });
+
+        $('.ass-edit').click(function(){
             var txt = $(this).text();
             txt = (txt != 'cancel') ? 'cancel' : 'edit';
             $(this).text(txt);
-            $('.editForm').toggle(500);
-            $('.reassign').toggle();
-        });
-        //Assignment edit
-        $('a.edit2').click(function () {
-            var txt = $(this).text();
-            txt = (txt != 'cancel') ? 'cancel' : 'edit';
-            $(this).text(txt);
-            $('.editForm2').toggle(500);
-        });
-        //Reassignment
-        $('a.reassign').click(function () {
-            $('.reassignForm').toggle(500);
-            $('.edit').hide();
-            $('.reassign').hide();
+            $('.ass-delete').toggle(200);
+            $('.ass-delete-all').toggle(200);
+            txt = (txt = 'cancel') ? 'cancel' : 'edit';
         });
 
         //show Materials headers and append row
@@ -195,22 +207,9 @@
         $('#rating').rating();
     });
 </script>
+
 @if ($errors->has('rating') or $errors->has('feedback') or $errors->has('closekey') )
     <script>
         $('#rateModal').modal('show');
     </script>
 @endif
-<script>
-    $(document).ready(function () {
-        $('.edit-assignment').on('click', function () {
-            $(this).text(function (i, text) {
-                return text === "Cancel" ? "Edit" : "Cancel";
-            });
-            $('.delete-assignment').toggle();
-            $('.new-assignment').toggle();
-            $('.add-worker-form').toggle();
-        });
-    });
-</script>
-
-</div>

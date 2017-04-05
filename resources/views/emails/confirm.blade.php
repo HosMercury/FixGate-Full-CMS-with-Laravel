@@ -5,6 +5,7 @@
 <p>Thank {{$user->name}} </p>
 <p>your order has been created with below details :</p>
 <ul>
+    <li>Title : {{$inserted->title}}</li>
     <li>Number : {{$inserted->number}}</li>
     <li>Title : {{$inserted->title}}</li>
     <li>Location : {{$inserted->location_id}}</li>

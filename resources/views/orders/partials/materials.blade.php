@@ -24,30 +24,33 @@
                     </tr>
                 @endforeach
 
-                <form action="/orders/{{$order->id}}/materials/delete" method="post"
-                      onsubmit="return confirm('Do you really want to delete your this material(s)?');">
-                    {{csrf_field()}}
-                    {{ method_field('DELETE') }}
-                    @foreach($materials as $material)
-                        <tr class="del-mat" style="display: none;">
+{{--                @if(!$closed)--}}
+                    <form action="/{{$order->path()}}/materials" method="post"
+                          onsubmit="return confirm('Do you really want to delete your this material(s)?');">
+                        {{csrf_field()}}
+                        {{ method_field('DELETE') }}
+                        @foreach($materials as $material)
+                            <tr class="del-mat" style="display: none;">
+                                <td>
+                                    <input type="checkbox" name="material_select[]" class="checkbox"
+                                           value="{{$material->id}}"/>
+                                </td>
+                                <td>{{$material->name}}</td>
+                                <td>{{$material->pivot->quantity}}</td>
+                                <td>{{$material->price}}</td>
+                                <td>{{$material->pivot->quantity * $material->price}}</td>
+                            </tr>
+                        @endforeach
+                        <tr>
                             <td>
-                                <input type="checkbox" name="material_select[]" class="checkbox"
-                                       value="{{$material->id}}"/>
+                                <button type="submit" class="delete-submit btn btn-sm btn-danger"
+                                        style="display: none;">
+                                    Delete Selected
+                                </button>
                             </td>
-                            <td>{{$material->name}}</td>
-                            <td>{{$material->pivot->quantity}}</td>
-                            <td>{{$material->price}}</td>
-                            <td>{{$material->pivot->quantity * $material->price}}</td>
                         </tr>
-                    @endforeach
-                    <tr>
-                        <td>
-                            <button type="submit" class="delete-submit btn btn-sm btn-danger" style="display: none;">
-                                Delete Selected
-                            </button>
-                        </td>
-                    </tr>
-                </form>
+                    </form>
+                {{--@endif--}}
                 <tr>
                     <th></th>
                     <th></th>
@@ -76,10 +79,12 @@
             <p>No Used Materials for this order .</p>
         </div>
     @endunless
-    <a class="add-mat btn btn-sm btn-info pull-right">+ Add Material</a>
-    <a class="toggle-mat btn btn-sm btn-danger" style="
-    {{count($materials)?'':'display:none'}}
-            ;">Delete</a>
+    {{--@if(!$closed)--}}
+        <a class="add-mat btn btn-sm btn-info pull-right">+ Add Material</a>
+        <a class="toggle-mat btn btn-sm btn-danger" style="
+        {{count($materials)?'':'display:none'}}
+                ;">Delete</a>
+    {{--@endif--}}
 </div>
 
 <div class="row headers col-xs-11" style="display: none; padding: 0.5em 0;
@@ -92,7 +97,7 @@
 </div>
 
 <form name="mts" class="form-horizontal" method="POST"
-      action="/orders/{{$order->id}}/materials/">
+      action="/{{$order->path()}}/materials/">
     {{csrf_field()}}
     <div class="container" id="mts"></div>
 

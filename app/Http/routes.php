@@ -20,75 +20,6 @@
 |
 */
 
-//Route::group(['middleware' => ['web']], function () {
-//
-//    Route::group(['prefix' => 'auth'], function () { --ok
-//        Route::auth(); --ok
-//    }); --ok
-//
-//    Route::group(['middleware' => 'auth'], function () {
-//
-//        Route::get('/', 'OrderController@index'); --ok
-//        //Ajax
-//        Route::get('/orders/data', 'OrderController@data'); --ok
-//        Route::post('/orders/{order}/close', 'OrderController@close'); --ok
-//        Route::get('/materials/data', 'MaterialController@data');
-//        Route::get('/types/data', 'TypeController@data');
-//        Route::get('/locations/data', 'LocationController@data');
-//        Route::get('/users/data', 'UserController@data');
-//        Route::get('/roles/data', 'RoleController@data'); --ok
-//        Route::get('/permissions/data', 'PermissionController@data'); -- No Need
-//
-//
-//        //Resources
-////        Route::get('orders', 'OrderController@index'); --ok
-//        // Orders
-//
-//        Route::post('orders', 'OrderController@store'); --ok
-//        Route::get('orders/create', 'OrderController@create'); --ok
-//        Route::get('orders/{location}/{number}', 'OrderController@show'); --ok
-//
-//        Route::resource('locations', 'LocationController'); --part
-//        Route::resource('types', 'TypeController');
-//        Route::resource('materials', 'MaterialController'); --part
-//
-//        //Financial
-//        Route::get('/financial/costs/data', 'FinancialCostsController@data'); --ok
-//        Route::get('/financial/materials/data2', 'FinancialCostsController@data2'); --ok
-//        Route::get('/financial', 'FinancialCostsController@index'); --ok
-//        Route::get('/financial/orders/{order}/costs', 'FinancialCostsController@showCost'); --ok
-//        Route::get('/financial/orders/{order}/costs', 'FinancialCostsController@showCost'); --ok
-//        Route::get('/financial/{id}/material/{material}/order/{order}', 'FinancialCostsController@showMaterial'); --ok
-//
-//        Route::resource('/users/workers', 'WorkerController');
-//        Route::resource('/users', 'UserController'); -- part
-//        Route::post('/users/{user}/roles', 'UserController@assignRole');
-//        Route::delete('/users/{user}/roles/{role}', 'UserController@deleteRole');
-//
-//        Route::post('/roles/{role}/permissions', 'RoleController@assignPermission');
-//        Route::delete('/roles/{role}/permissions/{permission}', 'RoleController@deletePermission');
-//        Route::resource('/roles', 'RoleController');
-//
-//        Route::resource('/permissions', 'PermissionController'); --No Need i think
-//        Route::get('permissions', 'PermissionController@assign'); -- No Need
-//        Route::post('role/{role}/permissions', 'PermissionController@assign');//ok
-//    });
-//
-//    Route::group(['prefix' => 'orders', 'midleware' => 'auth'], function () {
-//        //try combine these
-//        Route::post('/{order}/assignments/', 'OrderAssignmentController@store'); --ok
-//        Route::patch('/{order}/assignments/{assignment}/', 'OrderAssignmentController@update'); --ok
-//        Route::delete('/{order}/assignments/{assignment}/workers/{user}/delete/', 'OrderAssignmentController@destroy'); --ok
-//        Route::delete('/{order}/assignments/{assignment}/delete/', 'OrderAssignmentController@destroy'); --ok
-//
-//        Route::resource('/{order}/materials', 'OrderMaterialController');
-//        Route::resource('/{order}/costs', 'OrderCostController');
-//        Route::resource('/{order}/bills', 'OrderBillController');
-//
-//    });
-//});
-
-
 Route::group(['middleware' => ['web']], function () {
 
     Route::group(['prefix' => 'auth'], function () {
@@ -111,11 +42,19 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('/{order}/close', 'OrderController@close');
 
             // Assignments ...
-            Route::post('/{order}/assignments', 'OrderAssignmentController@store');
-            Route::post('/{order}/assignments/vendor', 'OrderAssignmentController@vendor');
-            Route::patch('/{order}/assignments/{assignment}', 'OrderAssignmentController@update');
-            Route::delete('/{order}/assignments/{assignment}/workers/{user}/delete', 'OrderAssignmentController@destroy');
-            Route::delete('/{order}/assignments/{assignment}/delete', 'OrderAssignmentController@destroy');
+            Route::post('/{location}/{number}/assignments', 'OrderAssignmentController@store');
+            Route::post('/{location}/{number}/assignments/vendor', 'OrderAssignmentController@vendor');
+            Route::patch('/{location}/{number}/assignments/{assignment}', 'OrderAssignmentController@update');
+            Route::delete('/{location}/{number}/assignments/{assignment}', 'OrderAssignmentController@destroy');
+            Route::delete('/{location}/{number}/assignments/{assignment}/all', 'OrderAssignmentController@destroyAll');
+
+            //Materials & Costs ...
+            Route::post('/{location}/{number}/materials','OrderMaterialController@store');
+            Route::delete('/{location}/{number}/materials','OrderMaterialController@destroy');
+            Route::post('/{location}/{number}/costs','OrderCostController@store');
+            Route::delete('/{location}/{number}/costs','OrderCostController@destroy');
+            Route::post('/{location}/{number}/bills', 'OrderBillController@store');
+            Route::delete('/{location}/{number}/bills', 'OrderBillController@destroy');
         });
 
         Route::group(['prefix' => 'users'], function () {

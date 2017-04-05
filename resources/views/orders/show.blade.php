@@ -8,7 +8,8 @@
 @section('breadcrumb')
     <li class="active">
         <a href="/orders">Orders</a>
-    <li class="active"><a href="/orders/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}">{{$order->number}}</a></li>
+    <li class="active"><a
+                href="/orders/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}">{{$order->number}}</a></li>
     </li>
 @stop
 <link type="text/css" rel="stylesheet" href="{{asset('theme/plugins/select2/select2.min.css')}}">
@@ -21,23 +22,26 @@
             <div class="box">
                 <!-- close this order -->
                 @include('orders.partials.details')
-                <hr>
-                <a href="/orders/{{substr($order->number,0,4)}}/{{substr($order->number,5)}}/edit" class="btn btn-sm btn-info">Edit Order</a>
 
-                <form action="/orders/{{$order->id}}" method="POST"
-                      onsubmit="return confirm('are you sure, you want to delete !?');"
-                      style="display: inline;">
-                    {{csrf_field()}}
-                    {{method_field('DELETE')}}
-                    <button type="submit" class="btn btn-sm btn-danger pull-right">Delete Order</button>
-                </form>
+                @if(!$closed)
+                    <hr>
+                    <a href="/{{$order->path()}}/edit" class="btn btn-sm btn-info">Edit Order</a>
 
+
+                    <form action="/orders/{{$order->id}}" method="POST"
+                          onsubmit="return confirm('are you sure, you want to delete !?');"
+                          style="display: inline;">
+                        {{csrf_field()}}
+                        {{method_field('DELETE')}}
+                        <button type="submit" class="btn btn-sm btn-danger pull-right">Delete Order</button>
+                    </form>
+                @endif
             </div>
 
         </div>
 
-        @include('orders.partials.modal')
-        <!-- /.modal of closing order-->
+        @include('orders.partials.rating-modal')
+                <!-- /.modal of closing order-->
         <!-- Order Assignments -->
         @if(count($workers))
             <div class="box" id="assignments">

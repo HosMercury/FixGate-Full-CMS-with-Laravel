@@ -9,24 +9,31 @@
             <div class="modal-body">
                 <form method="post" action="/orders/{{$order->id}}/close">
                     {{csrf_field()}}
-                    <div class="form-group  {{ $errors->has('rating') ? ' has-error' : '' }}">
-                        <label for="rating">Please Rate this service* </label>
 
-                        <div id="rating" class="form-group">
-                            <input type="radio" name="rating" class="rating" value="1"/>
-                            <input type="radio" name="rating" class="rating" value="2"/>
-                            <input type="radio" name="rating" class="rating" value="3"/>
-                            <input type="radio" name="rating" class="rating" value="4"/>
-                            <input type="radio" name="rating" class="rating" value="5"/>
-                        </div>
-                        @if ($errors->has('rating'))
-                            <span class="help-block">
+                    @if($assigns_max>0)
+                        <div class="form-group  {{ $errors->has('rating') ? ' has-error' : '' }}">
+                            <label for="rating">Please Rate this service* </label>
+
+                            <div id="rating" class="form-group">
+                                <input type="radio" name="rating" class="rating" value="1"/>
+                                <input type="radio" name="rating" class="rating" value="2"/>
+                                <input type="radio" name="rating" class="rating" value="3"/>
+                                <input type="radio" name="rating" class="rating" value="4"/>
+                                <input type="radio" name="rating" class="rating" value="5"/>
+                            </div>
+                            @if ($errors->has('rating'))
+                                <span class="help-block">
                             <strong>{{ $errors->first('rating') }}</strong>
                         </span>
-                        @endif
-                    </div>
+                            @endif
+                        </div>
+                        <hr>
+                    @else
+                        <p class="alert alert-warning">
+                            <strong>Note : </strong>This Order hasn't yet been assigned to any workers .
+                        </p>
+                    @endif
 
-                    <hr>
                     <div class="form-group col-sm-6 pull-left {{ $errors->has('closekey') ? ' has-error' : '' }}">
                         <label for="closekey">Close Key*</label>
                         <input type="text" class="form-control" id="closekey" aria-describedby="closekey"

@@ -15,14 +15,18 @@ class OrderCostController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $order)
+    public function store(Request $request,  $location, $number)
     {
-        //dd($request->all());
+
+        if (is_nan($location) or is_nan($number)) abort('404');
+
         $this->validate($request, [
             'costDescription.*' => 'required',
             'costSubTotal.*' => 'required|numeric|min:0.01'
         ]);
 
+
+        $order = OrderController::getOrder($location, $number);
         for ($i = 0; $i < count($request->costDescription); $i++) {
             $costs[] = ['order_id' => $order,
                 'description' => $request->costDescription[$i],
@@ -40,13 +44,14 @@ class OrderCostController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request ,$order)
+    public function destroy(Request $request)
     {
+
         $this->validate($request, [
             'cost_select' => 'required|array'
         ]);
+
         $cost = $request->cost_select;
-//        dd($cost);
         for ($i = 0; $i < count($cost); $i++)
             Cost::findOrFail($cost[$i])->delete($cost[$i]);
         \Session::flash('success', 'Cost(s) has been Successfully deleted');

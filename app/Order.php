@@ -17,7 +17,7 @@ class Order extends Model
         'priority',
         'notes',
         'location_id',
-        'user_id',
+        'creator',
         'key',
         'number'
     ];
@@ -82,6 +82,11 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    public function path()
+    {
+        return 'orders/' . substr($this->number, 0, 4) . '/' . substr($this->number, 5);
     }
 
     public function viewers()

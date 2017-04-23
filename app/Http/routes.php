@@ -26,7 +26,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::auth();
     });
 
-    Route::group(['middleware' => 'auth'], function () {
+    Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/', 'ordercontroller@index');
 
@@ -38,21 +38,24 @@ Route::group(['middleware' => ['web']], function () {
             Route::patch('/{order}', 'OrderController@update');
             Route::delete('/{order}', 'OrderController@destroy');
             Route::get('/{location}/{number}/edit', 'OrderController@edit');
+            Route::post('/{location}/{number}/check', 'OrderController@check');
+            Route::get('/{location}/{number}/key', 'OrderController@key');
             Route::get('/data', 'OrderController@data');
             Route::post('/{order}/close', 'OrderController@close');
 
             // Assignments ...
             Route::post('/{location}/{number}/assignments', 'OrderAssignmentController@store');
             Route::post('/{location}/{number}/assignments/vendor', 'OrderAssignmentController@vendor');
-            Route::patch('/{location}/{number}/assignments/{assignment}', 'OrderAssignmentController@update');
             Route::delete('/{location}/{number}/assignments/{assignment}', 'OrderAssignmentController@destroy');
+            Route::post('/{location}/{number}/assignments/{assignment}/done', 'OrderAssignmentController@done');
+            Route::post('/{location}/{number}/assignments/{assignment}/undone', 'OrderAssignmentController@undone');
             Route::delete('/{location}/{number}/assignments/{assignment}/all', 'OrderAssignmentController@destroyAll');
 
             //Materials & Costs ...
-            Route::post('/{location}/{number}/materials','OrderMaterialController@store');
-            Route::delete('/{location}/{number}/materials','OrderMaterialController@destroy');
-            Route::post('/{location}/{number}/costs','OrderCostController@store');
-            Route::delete('/{location}/{number}/costs','OrderCostController@destroy');
+            Route::post('/{location}/{number}/materials', 'OrderMaterialController@store');
+            Route::delete('/{location}/{number}/materials', 'OrderMaterialController@destroy');
+            Route::post('/{location}/{number}/costs', 'OrderCostController@store');
+            Route::delete('/{location}/{number}/costs', 'OrderCostController@destroy');
             Route::post('/{location}/{number}/bills', 'OrderBillController@store');
             Route::delete('/{location}/{number}/bills', 'OrderBillController@destroy');
         });
@@ -62,7 +65,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::get('/data', 'UserController@data');
             Route::get('/{employee}', 'UserController@show');
             Route::patch('/{employee}', 'UserController@update');
-            Route::delete('/{employee}', 'UserController@destroy');           
+            Route::delete('/{employee}', 'UserController@destroy');
             Route::post('/{employee}/roles', 'UserController@assignRole');
         });
 
@@ -73,14 +76,19 @@ Route::group(['middleware' => ['web']], function () {
             Route::get('/data', 'LocationController@data');
             Route::get('/{location}', 'LocationController@show');
             Route::patch('/{location}', 'LocationController@update');
+            Route::delete('/{location}', 'LocationController@destroy');
             Route::get('/{location}/edit', 'LocationController@edit');
         });
 
         Route::group(['prefix' => 'materials'], function () {
             Route::get('/', 'MaterialController@index');
             Route::post('/', 'MaterialController@store');
-            Route::get('/{material}', 'MaterialController@show');
             Route::get('/create', 'MaterialController@create');
+            Route::get('/data', 'MaterialController@data');
+            Route::get('/{material}', 'MaterialController@show');
+            Route::patch('/{material}', 'MaterialController@update');
+            Route::delete('/{material}', 'MaterialController@destroy');
+            Route::get('/{material}/edit', 'MaterialController@edit');
             Route::get('/data', 'MaterialController@data');
         });
 
@@ -108,8 +116,3 @@ Route::group(['middleware' => ['web']], function () {
     });
 
 });
-
-//problem edit location type and others that unique give error ..
-
-// location edit manager field have to be removed
-

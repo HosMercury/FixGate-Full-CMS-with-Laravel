@@ -113,7 +113,7 @@
                 bAutoWidth: false,
                 responsive: true,
                 dom: 'lB<"date">frtip',
-                order: [[0, "asc"]],
+                order: [[0, "desc"]],
                 ajax: '/financial/materials/data2',
 
                 columns : [

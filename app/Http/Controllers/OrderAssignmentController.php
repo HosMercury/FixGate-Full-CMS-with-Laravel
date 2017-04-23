@@ -11,6 +11,14 @@ use Validator;
 class OrderAssignmentController extends Controller
 {
     /**
+     * OrderAssignmentController constructor.
+     */
+    public function __construct()
+    {
+//        $this->middleware(['supervisor','admin','superadmin']);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
@@ -148,15 +156,76 @@ class OrderAssignmentController extends Controller
         return back();
     }
 
+    public function done(Request $request, $location, $number, $assignment)
+    {
+        $order = $this->checkUrl($location, $number);
+
+        $validator = Validator::make($request->all(), [
+            'key' => 'required|numeric|max:9999',
+        ]);
+
+        // redirect if validation error ...
+        if ($validator->fails()) {
+            return redirect($order->path() . '#assignments')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $this->updateDoneStatus($request, $assignment, $order);
+
+        return back();
+    }
+
+    public function undone(Request $request, $location, $number, $assignment)
+    {
+        $order = $this->checkUrl($location, $number);
+        $this->updateDoneStatus($request, $assignment, $order , 1);
+
+        return back();
+
+    }
+
     public function setStatus(Request $request, Order $order)
     {
         // if there is no assignments , null will be returned . giving error
-        $status = Assignment::where(['order_id' => intval($order->id)])->max('status') ?: 0;
+        $status = Assignment::where(['order_id' => intval($order->id)])->max('status') ?? 0;
 
         if ($request->input('last_assignment') != 1 or $status == 0) {
             $status++;
         }
 
         return intval($status);
+    }
+
+    /**
+     * @param $location
+     * @param $number
+     * @return mixed
+     */
+    private function checkUrl($location, $number)
+    {
+        if (is_nan($location) or is_nan($number)) abort('403');
+        $order = OrderController::getOrder($location, $number);
+        return $order;
+    }
+
+    /**
+     * @param Request $request
+     * @param $assignment
+     * @param $order
+     */
+    private function updateDoneStatus(Request $request, $assignment, $order ,$undone = null)
+    {
+        if ( // is this assignment exists for that order and is the last? // it has to be the last .
+            $order->assignments()->whereStatus($assignment)->first()->status == $order->assignments()->pluck('status')->max()
+        )
+            // undone request so no need to check key ..
+            if ($undone or $request->input('key') == $order->key) { //done ok ..
+                $order->assignments()->whereStatus($assignment)->update(['done' => $undone? 0: 1]);
+                session()->flash('success', 'Order Work done , Successfully');
+            } else
+                session()->flash('danger', 'Key not matching , Key provided by order`s creator');
+        else
+            session()->flash('danger', 'Something went wrong , invalid assignment ,Please don`t play with our code , Not cool !');
     }
 }

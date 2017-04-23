@@ -9,6 +9,14 @@
 <script>
     $(document).ready(function () {
         var table = $('#table').DataTable({
+            "oLanguage": {
+                "sEmptyTable":"There is no orders to show right Now .<br>" +
+                @if(!auth()->user()->location_id)
+                +"<strong>Note : </strong> No Location specified .. please resign "+
+                @endif
+                "Current Location : {{auth()->user()->location_id}}<br>"
+                +"<button><a href='/orders/create'> Create First Order </a></button>"
+            },
             processing: true,
             serverSide: true,
             bAutoWidth: false,

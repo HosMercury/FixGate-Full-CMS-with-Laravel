@@ -1,6 +1,6 @@
 @extends('auth.base')
 @section('title') Login @stop
-    <link rel="stylesheet" href="{{asset('theme/plugins/iCheck/square/blue.css')}}">
+<link rel="stylesheet" href="{{asset('theme/plugins/iCheck/square/blue.css')}}">
 @section('content')
     <div class="container">
         <div class="row">
@@ -47,7 +47,11 @@
                                 <label class="col-md-4 control-label">Location Id</label>
 
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="location_id" value="{{ old('location_id') }}">
+                                    <input type="text" class="form-control" name="location_id"
+                                           value="{{ old('location_id') }}">
+                                    <small><span class="text-red">Required only </span>if your location changed from
+                                        last visit.
+                                    </small>
 
                                     @if ($errors->has('location_id'))
                                         <span class="help-block">
@@ -78,6 +82,21 @@
                                 </div>
                             </div>
                         </form>
+                        <hr>
+                        <div class="callout">
+                            <h4>Example logins for demo</h4>
+
+                            <p>Member : member@mail.com & Password : secret</p>
+
+                            <p>Admin : admin@mail.com & Password : secret</p>
+
+                            <p>Supervisor : supervisor@mail.com & Password : secret</p>
+
+                            <p>Accountant : accountant@mail.com & Password : secret</p>
+
+                            <p>Superadmin : superadmin@mail.com & Password : secret</p>
+                        </div>
+                        <hr>
                     </div>
                 </div>
             </div>

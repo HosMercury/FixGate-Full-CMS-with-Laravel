@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class OrderMaterialController extends Controller
 {
+    /**
+     * OrderMaterialController constructor.
+     */
+    public function __construct()
+    {
+//        $this->middleware(['supervisor','admin','superadmin']);
+    }
 
     /**
      * Store a newly created resource in storage.

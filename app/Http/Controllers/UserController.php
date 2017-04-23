@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
-use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Facades\Datatables;
@@ -11,13 +10,21 @@ use Yajra\Datatables\Facades\Datatables;
 class UserController extends Controller
 {
     /**
+     * UserController constructor.
+     */
+    public function __construct()
+    {
+//        $this->middleware('superadmin');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-//          return User::with('roles')->get();
+        $this->authorize('admins',User::class);
         return view('users.index');
     }
 
@@ -28,6 +35,8 @@ class UserController extends Controller
      */
     public function data()
     {
+        // same policy method like index.
+        $this->authorize('admins',User::class);
         $users = User::with('roles')->get();
 
         return Datatables::of($users)
@@ -49,6 +58,7 @@ class UserController extends Controller
      */
     public function create()
     {
+        //anyone can register
         return view('auth.register');
     }
 
@@ -60,6 +70,7 @@ class UserController extends Controller
      */
     public function show($employee_id)
     {
+        $this->authorize('admins',User::class);
         $user =  $this->getUser($employee_id);
         $roles = $user->roles->map(function($role){
             return $role->id;
@@ -76,6 +87,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $employee_id)
     {
+        $this->authorize('admins',User::class);
         $this->validate($request, [
             'name' => 'required|max:255',
             'location_id' => 'required|exists:locations,store_code',
@@ -100,13 +112,17 @@ class UserController extends Controller
      */
     public function destroy($employee_id)
     {
+        //Only superadmins allowed to delete users .
+        //Change to admins if you want to be allowed from admins .
+        $this->authorize('sAdmin',User::class);
         $this->getUser($employee_id)->delete();
         \Session::flash('success', 'Thanks , User has been Successfully Deleted');
         return redirect('users');
     }
 
     public function assignRole(Request $request,$user)
-    {        
+    {
+        $this->authorize('admins',User::class);
         $user =  $this->getUser($user);
         $requested_roles=  $request->input('roles');
 
@@ -125,6 +141,7 @@ class UserController extends Controller
 
     public function deleteRole($user,$role)
     {
+        $this->authorize('admins',User::class);
         $user =  $this->getUser($user);
         $user->roles()->detach($role);
         \Session::flash('success', 'Thanks , Role has been deleted Successfully');
@@ -133,6 +150,7 @@ class UserController extends Controller
 
     private function getUser($employee_id)
     {
+        $this->authorize('admins',User::class);
         return User::where('employee_id',$employee_id)->first();
     }
 

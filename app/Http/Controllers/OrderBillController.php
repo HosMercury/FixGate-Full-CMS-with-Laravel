@@ -10,6 +10,14 @@ use Image;
 
 class OrderBillController extends Controller
 {
+    /**
+     * OrderBillController constructor.
+     */
+    public function __construct()
+    {
+//        $this->middleware(['supervisor','admin','superadmin']);
+    }
+
     public function store(Request $request,  $location, $number)
     {
         if (is_nan($location) or is_nan($number)) abort('404');

@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Assignment;
 use App\Http\Requests;
 use App\Http\Requests\OrderRequest;
-use App\Material;
 use App\Order;
 use App\Rating;
+use App\Material;
 use App\User;
 use Carbon\Carbon;
 use Gate;
@@ -17,25 +17,35 @@ use Yajra\Datatables\Facades\Datatables;
 
 class OrderController extends Controller
 {
+    /**
+     * OrderController constructor.
+     */
+    public function __construct()
+    {
+//        $this->middleware([]);
+    }
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-
         $to = Carbon::today();
         $from = Carbon::today()->subWeek();
 
-        $count = Order::select([
-            \DB::raw('DATE_FORMAT(`created_at`,"%d-%m") AS `date`'),
-            \DB::raw('COUNT(*) AS `count`')
-        ])->whereBetween('created_at', [$from, $to])
-            ->groupBy('date')
-            ->orderBy('date', 'ASC')
-            ->lists('count', 'date');
+        //Graph for only titles users ...
+        $count = collect([]);
+        if (auth()->user()->fromTitles()) {
+            $count = Order::select([
+                \DB::raw('DATE_FORMAT(`created_at`,"%d-%m") AS `date`'),
+                \DB::raw('COUNT(*) AS `count`')
+            ])->whereBetween('created_at', [$from, $to])
+                ->groupBy('date')
+                ->orderBy('date', 'ASC')
+                ->lists('count', 'date');
+        }
 
         return view('orders.index', [
             'count' => $count,
@@ -54,13 +64,19 @@ class OrderController extends Controller
     public function data()
     {
         $cols = ['number', 'title', 'priority', 'type', 'location_id', 'created_at'];
-        $orders = Order::select($cols);
+
+        // Detect user type ...
+        if (auth()->user()->fromTitles())
+            $orders = Order::select($cols);
+        else
+            $orders = Order::select($cols)->where('location_id', auth()->user()->location_id);
+
         return Datatables::of($orders)
             ->editColumn('title', function ($order) {
-                return '<a href="' . $order->path() . '">' . str_limit($order->title, 50) . '</a>';
+                return '<a href="/' . $order->path() . '">' . str_limit($order->title, 50) . '</a>';
             })
             ->editColumn('number', function ($order) {
-                return '<a href="' . $order->path() . '">' . $order->number . '</a>';
+                return '<a href="/' . $order->path() . '">' . $order->number . '</a>';
             })
             ->make(true);
     }
@@ -86,7 +102,7 @@ class OrderController extends Controller
     {
         $user = auth()->user();
 
-        $last_order_number = Order::whereLocationId(auth()->user()->location_id)
+        $last_order_number = Order::whereLocationId($user->location_id)
             ->pluck('number')
             ->map(function ($number) {
                 return substr($number, 5);
@@ -124,11 +140,21 @@ class OrderController extends Controller
      * @param  int $location
      * @return \Illuminate\Http\Response
      */
-    public function show($location, $number)
+    public function show(Request $request, $location, $number)
     {
+        $key = $request->input('key') ?? null;
+
         if (is_nan($location) || is_nan($number)) abort(404);
 
         $order = $this->getOrder($location, $number);
+
+        // Authorization ...
+        if (!auth()->user()->fromTitles()) {
+            if (!auth()->user()->owns($order)) {
+                if ($key == null || $key != $order->key)
+                    return redirect($order->path() . '/key');
+            }
+        }
 
         $total = 0;
         $materials = $order->materials()->get();
@@ -166,9 +192,11 @@ class OrderController extends Controller
         });
 
         $closed = Assignment::where([
-            'status' => '-1',
-            'order_id' => $order->id
-        ])->first();
+                'status' => '-1',
+                'order_id' => $order->id
+            ])->first() ?? 0;
+
+        $done = $order->assignments()->pluck('done')->last() == 1 ? 1 : 0;
 
         $assigns_max = $closed ? $assignments->count() - 1 : $assignments->count();
 
@@ -184,9 +212,39 @@ class OrderController extends Controller
             'materials_ids' => $materials_ids,
             'thumbs' => $thumbs,
             'closed' => $closed,
-            'assigns_max' => $assigns_max
+            'assigns_max' => $assigns_max,
+            'done' => $done,
         ]);
     }
+
+    public
+    function key(Request $request, $location, $number)
+    {
+        if (is_nan($location) || is_nan($number)) abort(404);
+        $order = $this->getOrder($location, $number);
+
+        return view('orders.key', compact('order'));
+    }
+
+    public
+    function check(Request $request, $location, $number)
+    {
+        $this->validate($request, [
+            'key' => 'required|numeric'
+        ]);
+
+        if (is_nan($location) || is_nan($number)) abort(404);
+
+        $order = $this->getOrder($location, $number);
+
+        if ($request->input('key') != $order->key) {
+            session()->flash('danger', 'Invalid key . Note : Key sent to the order creator by email.');
+            return back();
+        } else
+            //we have to pass over the auth with token key .
+            return redirect($order->path() . '?key=' . $order->key);
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -194,9 +252,13 @@ class OrderController extends Controller
      * @param  int $location
      * @return \Illuminate\Http\Response
      */
-    public function edit($location, $number)
+    public
+    function edit($location, $number)
     {
         $order = Order::whereNumber($location . '-' . $number)->first();
+        // Only creator can edit the order ..
+        if ($order->creator != auth()->user()->employee_id) abort(403);
+
         $types = \DB::table('types')->lists('name', 'name');
         return view('orders.edit', compact('order', 'types'));
     }
@@ -208,12 +270,13 @@ class OrderController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function  update(OrderRequest $request, $order)
+    public
+    function  update(OrderRequest $request, $order)
     {
-        $request->creator = auth()->user()->id;
-
+        // Only creator can edit the order ..
+        if ($order->creator != auth()->user()->employee_id) abort(403);
+        $request['creator'] = auth()->user()->employee_id;
         $order->update($request->all());
-
         \Session::flash('success', 'Thanks , Your service order has been Successfully updated');
 
         return redirect($order->path());
@@ -225,11 +288,13 @@ class OrderController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($order)
+    public
+    function destroy($order)
     {
+        // Only creator can edit the order ..
+        if ($order->creator != auth()->user()->employee_id) abort(403);
         $order->delete();
         \Session::flash('success', 'Thanks , Your service order has been Successfully deleted');
-
         return redirect('/orders');
     }
 
@@ -239,10 +304,11 @@ class OrderController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function close(Request $request, Order $order)
+    public
+    function close(Request $request, Order $order)
     {
         $this->validate($request, [
-            'rating' => 'min:1|max:5',
+            'rating' => 'required|min:1|max:5',
             'closekey' => 'required|min:0000|max:9999',
             'feedback' => 'max:500'
         ]);
@@ -270,7 +336,8 @@ class OrderController extends Controller
     }
 
 
-    public static function getOrder($location, $number)
+    public
+    static function getOrder($location, $number)
     {
         return Order::whereNumber($location . '-' . $number)->first();
     }

@@ -23,19 +23,23 @@
 </style>
 
 @section('content')
-    <div class="box">
-        <div class="box-header with-border">
-            <h3 class="box-title"><i class="fa fa-fw fa-bar-chart"></i> Chart ( weak ago )</h3>
+    {{-- Graph for only titles --}}
+    @if(auth()->user()->fromTitles())
+        <div class="box">
+
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-fw fa-bar-chart"></i> Chart ( weak ago )</h3>
+            </div>
+            <div class="chartContainer">
+                @if(!$count->isEmpty())
+                    <canvas id="chart" class="margin" style="width: 600px;min-height: 300px;"></canvas>
+                @else
+                    <p>There is no orders for Last week , To draw a chart .</p>
+                @endif
+                <p><strong>Date From : </strong>{{$dateFrom}} <strong>To : </strong> {{$dateTo}}</p>
+            </div>
         </div>
-        <div class="chartContainer">
-            @if(!$count->isEmpty())
-            <canvas id="chart" class="margin" style="width: 600px;min-height: 300px;"></canvas>
-            @else
-                <p>There is no orders for Last week , To draw a chart .</p>
-            @endif
-            <p><strong>Date From : </strong>{{$dateFrom}} <strong>To : </strong> {{$dateTo}}</p>
-        </div>
-    </div>
+    @endif
 
 
     <div class="box">
@@ -98,33 +102,33 @@
     <script src="{{asset('theme/plugins/chartjs/chart.min.js')}}"></script>
 
     @if(!$count->isEmpty())
-    <script>
-        //chartjs
-        var data = {
-            labels: {!! $count->keys() !!},
-            datasets: [{
-                fillColor: "rgba(151,187,205,.6)",
-                strokeColor: "rgba(151,187,205,1)",
-                pointColor: "rgba(151,187,205,1)",
-                data: {{$count->values()}}
-            }]
-        }
-        var options = {
-            responsive: true,
-            title: {
-                display: true,
-                text: 'Last week Orders'
+        <script>
+            //chartjs
+            var data = {
+                labels: {!! $count->keys() !!},
+                datasets: [{
+                    fillColor: "rgba(151,187,205,.6)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    data: {{$count->values()}}
+                }]
             }
-        };
-        var ctx = document.getElementById("chart").getContext("2d");
-        new Chart(ctx).Line(data, options);
+            var options = {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Last week Orders'
+                }
+            };
+            var ctx = document.getElementById("chart").getContext("2d");
+            new Chart(ctx).Line(data, options);
 
 
-        //hide chart
-        $('.chartRemove').on('click', function (e) {
-            $('.chartContainer').hide();
-        });
+            //hide chart
+            $('.chartRemove').on('click', function (e) {
+                $('.chartContainer').hide();
+            });
 
-    </script>
+        </script>
     @endif
 @stop

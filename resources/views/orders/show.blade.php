@@ -22,19 +22,19 @@
             <div class="box">
                 <!-- close this order -->
                 @include('orders.partials.details')
+                @if(auth()->user()->owns($order))
+                    @unless($closed or $done or $assigns_max)
+                        <hr>
+                        <a href="/{{$order->path()}}/edit" class="btn btn-sm btn-info">Edit Order</a>
 
-                @if(!$closed)
-                    <hr>
-                    <a href="/{{$order->path()}}/edit" class="btn btn-sm btn-info">Edit Order</a>
-
-
-                    <form action="/orders/{{$order->id}}" method="POST"
-                          onsubmit="return confirm('are you sure, you want to delete !?');"
-                          style="display: inline;">
-                        {{csrf_field()}}
-                        {{method_field('DELETE')}}
-                        <button type="submit" class="btn btn-sm btn-danger pull-right">Delete Order</button>
-                    </form>
+                        <form action="/orders/{{$order->id}}" method="POST"
+                              onsubmit="return confirm('are you sure, you want to delete !?');"
+                              style="display: inline;">
+                            {{csrf_field()}}
+                            {{method_field('DELETE')}}
+                            <button type="submit" class="btn btn-sm btn-danger pull-right">Delete Order</button>
+                        </form>
+                    @endunless
                 @endif
             </div>
 
@@ -47,10 +47,11 @@
             <div class="box" id="assignments">
                 @include('orders.partials.assignments')
             </div>
-
-            <div class="box ">
-                @include('orders.partials.materials-costs')
-            </div>
+            @if(auth()->user()->fromAdminsAndSupervisors())
+                <div class="box ">
+                    @include('orders.partials.materials-costs')
+                </div>
+            @endif
         @else
             <div class="alert alert-warning alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>

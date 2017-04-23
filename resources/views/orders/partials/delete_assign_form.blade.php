@@ -1,4 +1,4 @@
-@if($index == $assigns_max and !isset($closed) )
+@if($index == $assigns_max and !$closed )
     <form method="post" action="/{{$order->path()}}/assignments/{{$ass->id}}"
           onsubmit="return confirm('are you sure !?')"
           class="ass-delete"

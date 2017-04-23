@@ -2,11 +2,9 @@
 
 namespace App\Policies;
 
-use App\Order;
-use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class OrderPolicy
+class MaterialPolicy
 {
     use HandlesAuthorization;
 
@@ -17,15 +15,17 @@ class OrderPolicy
      */
     public function __construct()
     {
-
+        //
     }
 
-    public function titles()
+    /**
+     * Grant the request to all admins only
+     *
+     * @param $user
+     * @return bool
+     */
+    public function before($user)
     {
-        return auth()->user()->fromTitles();
-    }
-
-    public function show(User $user, Order $order)
-    {
+        return !! $user->fromTitles();
     }
 }

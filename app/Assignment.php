@@ -12,7 +12,7 @@ class Assignment extends Model
     public $timestamps = true;
 
 
-    protected $fillable = ['order_id', 'status','worker','vendor','creator','created_at','updated_at'];
+    protected $fillable = ['order_id', 'status','worker','vendor','creator','created_at','updated_at' ,'done'];
 
 
     public function getCreatedAtAttribute($date)

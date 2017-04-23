@@ -52,6 +52,6 @@
                 ],
       'route' => 'locations',
       'order' => 0,
-      'sort_type' => 'asc'
+      'sort_type' => 'desc'
     ]);
 @stop

@@ -11,6 +11,14 @@ use Yajra\Datatables\Facades\Datatables;
 class LocationController extends Controller
 {
     /**
+     * LocationController constructor.
+     */
+    public function __construct()
+    {
+        $this->authorizeAll();
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -44,7 +52,6 @@ class LocationController extends Controller
      */
     public function create()
     {
-
         return view('locations.create');
     }
 
@@ -56,10 +63,12 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
+        return 'here';
+        return $request->all();
         $this->validate($request, [
             'store_code' => 'required|unique:locations,store_code|numeric',
-            'name' => 'required|unique:locations,name|max:200',
-            'address' => 'max:500',
+            'name' => 'required|unique:locations,name|max:300',
+            'address' => 'max:1000',
             'longitude' => 'numeric',
             'latitude' => 'numeric',
             'city' => 'required|min:2|max:255',
@@ -147,5 +156,11 @@ class LocationController extends Controller
         Location::find($id)->delete();
         \Session::flash('success', 'Thanks , Location has been Successfully Deleted');
         return redirect('locations');
+    }
+
+    private function authorizeAll($model = null)
+    {
+        $model = $model ?? \App\Location::class ;
+        return $this->authorize('', $model);
     }
 }

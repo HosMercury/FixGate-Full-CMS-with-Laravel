@@ -58,27 +58,6 @@
         $('.ass-delete-all').hide();
 
         $('.d-zone').hide();
-        //Assignment edit
-//        $('a.edit').click(function () {
-//            var txt = $(this).text();
-//            txt = (txt != 'cancel') ? 'cancel' : 'edit';
-//            $(this).text(txt);
-//            $('.editForm').toggle(500);
-//            $('.reassign').toggle();
-//        });
-//        //Assignment edit
-//        $('a.edit2').click(function () {
-//            var txt = $(this).text();
-//            txt = (txt != 'cancel') ? 'cancel' : 'edit';
-//            $(this).text(txt);
-//            $('.editForm2').toggle(500);
-//        });
-//        //Reassignment
-//        $('a.reassign').click(function () {
-//            $('.reassignForm').toggle(500);
-//            $('.edit').hide();
-//            $('.reassign').hide();
-//        });
 
         $('.ass-edit').click(function(){
             var txt = $(this).text();

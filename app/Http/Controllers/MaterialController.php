@@ -12,6 +12,13 @@ use Yajra\Datatables\Facades\Datatables;
 class MaterialController extends Controller
 {
     /**
+     * MaterialController constructor.
+     */
+    public function __construct()
+    {
+        $this->authorizeAll();
+    }
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -66,7 +73,7 @@ class MaterialController extends Controller
             'height'=>'numeric',
             'soh'=>'required|numeric',
             'price'=>'required|numeric',
-            'location'=>'required|exists:locations,id',
+            'location'=>'required|exists:locations,store_code',
             'sub_location'=>'max:225',
         ]);
 
@@ -123,7 +130,7 @@ class MaterialController extends Controller
             'height'=>'numeric',
             'soh'=>'required|numeric',
             'price'=>'required|numeric',
-            'location'=>'required|exists:locations,id',
+            'location'=>'required|exists:locations,store_code',
             'sub_location'=>'max:225',
         ]);
 
@@ -150,5 +157,11 @@ class MaterialController extends Controller
 
         return redirect('/materials');
 
+    }
+
+    private function authorizeAll($model = null)
+    {
+        $model = $model ?? \App\Material::class ;
+        return $this->authorize('', $model);
     }
 }

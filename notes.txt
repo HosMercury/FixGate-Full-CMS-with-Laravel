@@ -1,0 +1,3 @@
+Coming in v 2
+// rating model .. some improvements
+// adding mats and costs only in case of not finished

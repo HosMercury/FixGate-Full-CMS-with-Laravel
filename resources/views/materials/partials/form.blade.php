@@ -13,15 +13,15 @@
         <div class="col-md-6">
             <label class="radio-inline">
                 <input type="radio" name="type" value="material"
-                       @if(isset($material)) {{$material->type =='material'?'checked' : ' '}}
+                @if(isset($material)) {{$material->type =='material'?'checked' : ' '}}
                         @else {{old('type')=='material'?'checked' : ' '}} @endif
-                > Material
+                        > Material
             </label>
             <label class="radio-inline">
                 <input type="radio" name="type" value="asset"
                 @if(isset($material)) {{$material->type =='asset'?'checked' : ' '}}
-                @else {{old('type')=='asset'?'checked' : ' '}}@endif
-                > Asset
+                        @else {{old('type')=='asset'?'checked' : ' '}}@endif
+                        > Asset
             </label>
 
             @if ($errors->has('type'))
@@ -52,7 +52,8 @@
         <label class="col-md-4 control-label">Description</label>
 
         <div class="col-md-6">
-            <textarea class="form-control" name="description">@if(old('description')) {{old('description')}} @elseif(isset($material)) {{trim($material->description)}} @endif</textarea>
+            <textarea class="form-control"
+                      name="description">@if(old('description')) {{old('description')}} @elseif(isset($material)) {{trim($material->description)}} @endif</textarea>
             @if ($errors->has('description'))
                 <span class="help-block">
                      <strong>{{ $errors->first('description') }}</strong>
@@ -90,7 +91,8 @@
         <label class="col-md-4 control-label">Length</label>
 
         <div class="col-md-2">
-            <input type="number" class="form-control" name="length" value="@if(isset($material)){{$material->length}}@endif">
+            <input type="number" class="form-control" name="length"
+                   value="@if(isset($material)){{$material->length}}@endif">
             <span><small>length by cm</small></span>
             @if ($errors->has('length'))
                 <span class="help-block">
@@ -104,7 +106,8 @@
         <label class="col-md-4 control-label">Height</label>
 
         <div class="col-md-2">
-            <input type="number" class="form-control" name="height" value="@if(isset($material)){{$material->height}}@endif">
+            <input type="number" class="form-control" name="height"
+                   value="@if(isset($material)){{$material->height}}@endif">
             <span><small>height by cm</small></span>
             @if ($errors->has('height'))
                 <span class="help-block">
@@ -129,14 +132,19 @@
             <select class="form-control" name="location">
                 <option value="" disabled @if(!isset($material)) selected @endif >Select</option>
                 @foreach($locations as $location)
-                    <option value="{{$location->id}}" @if(isset($material) and $material->location_id == $location->id) selected @endif>{{$location->id}}</option>
+                    <option value="{{$location->store_code}}"
+                            @if(isset($material) and $material->location_id == $location->store_code)
+                            selected
+                            @elseif($location->store_code == old('location')) selected
+                            @endif
+                    >{{$location->store_code}}</option>
                 @endforeach
             </select>
             </select>
             @if ($errors->has('location'))
                 <span class="help-block">
-                                  <strong>{{ $errors->first('location') }}</strong>
-                            </span>
+                    <strong>{{ $errors->first('location') }}</strong>
+                </span>
             @endif
         </div>
     </div>
@@ -146,7 +154,8 @@
         <label class="col-md-4 control-label">SubLocation</label>
 
         <div class="col-md-4">
-            <input type="text" class="form-control" name="sub_location" value="@if(old('name')) {{old('sub_location')}} @elseif(isset($material)) {{trim($material->sub_location)}} @endif">
+            <input type="text" class="form-control" name="sub_location"
+                   value="@if(old('name')) {{old('sub_location')}} @elseif(isset($material)) {{trim($material->sub_location)}} @endif">
 
             @if ($errors->has('sub_location'))
                 <span class="help-block">
@@ -162,7 +171,8 @@
         <label class="col-md-4 control-label">َQty*</label>
 
         <div class="col-md-3">
-            <input type="number" class="form-control" name="soh" value="@if(isset($material)){{trim(floatval($material->soh))}}@endif" step="0.1">
+            <input type="number" class="form-control" name="soh"
+                   value="@if(isset($material)){{trim(floatval($material->soh))}}@endif" step="0.1">
             <span><small>S O H (units)</small></span>
             @if ($errors->has('soh'))
                 <span class="help-block">
@@ -177,7 +187,8 @@
         <label class="col-md-4 control-label">Price*</label>
 
         <div class="col-md-3">
-            <input type="number" class="form-control" name="price" value="@if(isset($material)){{trim(floatval($material->soh))}}@endif" step="0.1">
+            <input type="number" class="form-control" name="price"
+                   value="@if(isset($material)){{trim(floatval($material->soh))}}@endif" step="0.1">
             <span><small>SR ( example:24.85 )</small></span>
             @if ($errors->has('price'))
                 <span class="help-block">

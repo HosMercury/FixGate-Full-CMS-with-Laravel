@@ -1,4 +1,4 @@
-@if($assigns_max >1)
+@if($assigns_max)
     <div class="checkbox form-group   {{ $errors->has('last_assignment') ? ' has-error' : '' }}">
         <label><input type="checkbox" name="last_assignment" value="1"> Within the last assignment</label>
         @if ($errors->has('last_assignment'))

@@ -12,7 +12,7 @@
             @endif
         </div>
 
-        @include('orders.partials.check_last_assignment')
+        @include('orders.partials.within_last_assignment')
 
         <button type="submit" class="btn btn-success pull-right">Assign vendor</button>
     </form>

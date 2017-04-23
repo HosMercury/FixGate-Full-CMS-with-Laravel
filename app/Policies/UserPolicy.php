@@ -2,11 +2,9 @@
 
 namespace App\Policies;
 
-use App\Order;
-use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class OrderPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
@@ -17,15 +15,16 @@ class OrderPolicy
      */
     public function __construct()
     {
-
+        //
     }
 
-    public function titles()
+    public function sAdmin()
     {
-        return auth()->user()->fromTitles();
+        return auth()->user()->isSuperAdmin();
     }
 
-    public function show(User $user, Order $order)
+    public function admins()
     {
+        return auth()->user()->fromAdmins();
     }
 }

@@ -10,7 +10,7 @@
 
         <!--Code-->
         <div class="form-group{{ $errors->has('store_code') ? ' has-error' : '' }}">
-            <label class="col-md-4 control-label">Store Code*</label>
+            <label class="col-md-4 control-label">Store Code *</label>
 
             <div class="col-md-3">
                 <input type="text" class="form-control" name="store_code" value="{{ $location->store_code or old('id')}}">
@@ -26,7 +26,7 @@
 
         <!--Name-->
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-            <label class="col-md-4 control-label">Name*</label>
+            <label class="col-md-4 control-label">Name *</label>
 
             <div class="col-md-4">
                 <input type="text" class="form-control" name="name" value="{{ $location->name or old('name')}}">
@@ -66,7 +66,7 @@
 
         <!--City-->
         <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }}">
-            <label class="col-md-4 control-label">City*</label>
+            <label class="col-md-4 control-label">City *</label>
 
             <div class="col-md-3">
                 <input type="text" class="form-control" name="city" value="{{ $location->city or old('city')}}">

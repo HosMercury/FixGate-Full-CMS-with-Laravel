@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateAssignmentsTable extends Migration
 {
@@ -16,6 +16,7 @@ class CreateAssignmentsTable extends Migration
             $table->increments('id');
             $table->integer('order_id')->unsigned()->index();
             $table->integer('status')->defaults(0);
+            $table->boolean('done');
             $table->integer('worker')->nullable();
             $table->string('vendor')->nullable();
             $table->integer('creator')->nullable()->unsigned()->index();

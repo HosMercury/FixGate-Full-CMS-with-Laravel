@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'employee_id','name', 'email', 'password', 'location_id'
+        'employee_id', 'name', 'email', 'password', 'location_id'
     ];
 
     /**
@@ -53,7 +53,38 @@ class User extends Authenticatable
 
     public function owns(Order $order)
     {
-        return $this->id === $order->creator;
+        return $this->employee_id == $order->creator;
     }
 
+    public function fromAdmins()
+    {
+        return auth()->user()->hasRole('admin') or auth()->user()->hasRole('superadmin');
+    }
+
+    public function isSuperAdmin()
+    {
+        return auth()->user()->hasRole('superadmin');
+    }
+
+    public function isSupervisor()
+    {
+        return auth()->user()->hasRole('supervisor');
+    }
+
+    public function isAccountant()
+    {
+        return auth()->user()->hasRole('accountant');
+    }
+
+    public function fromAdminsAndSupervisors()
+    {
+        return $this->fromAdmins() || $this->isSupervisor();
+    }
+
+    public function fromTitles()
+    {
+        return auth()->user()->fromAdmins()
+        || auth()->user()->isSupervisor()
+        || auth()->user()->isAccountant();
+    }
 }

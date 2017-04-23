@@ -3,14 +3,13 @@
         style="background-color: transparent;">
         <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         @yield('breadcrumb')
-        {{--<li><a href="#">Layout</a></li>--}}
-        {{--<li class="active">Top Navigation</li>--}}
     </ol>
     <h1>
         @yield('bread-header')
-        <div><small>@yield('bread-small')</small></div>
+        <div>
+            <small>@yield('bread-small')</small>
+        </div>
     </h1>
-
 
 </section>
 

@@ -2,15 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Type;
+use Illuminate\Http\Request;
 use Yajra\Datatables\Facades\Datatables;
 
 
 class TypeController extends Controller
 {
+    /**
+     * TypeController constructor.
+     */
+    public function __construct()
+    {
+        $this->authorizeAll();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +36,7 @@ class TypeController extends Controller
      */
     public function data()
     {
-        $cols = ['id', 'name','created_at'];
+        $cols = ['id', 'name', 'created_at'];
         $types = Type::select($cols);
         return Datatables::of($types)
             ->editColumn('name', function ($type) {
@@ -51,18 +58,17 @@ class TypeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-           'name'=>'required|min:2|max:220|unique:types,name',
-           'description'=>'max:1000',
+        $this->validate($request, [
+            'name' => 'required|min:2|max:220|unique:types,name',
+            'description' => 'max:1000',
         ]);
 
-        $request['created_by'] = 8888;
-
+        $request['creator'] = auth()->user()->employee_id;
         $inserted = (new Type)->create($request->all());
 
         \Session::flash('success', 'Thanks , Your Type Name (' . $inserted->name . ')
@@ -74,46 +80,45 @@ class TypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $type = Type::find($id);
-        return view('types.show',compact('type'));
+        return view('types.show', compact('type'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $type = Type::find($id);
-        return view('types.edit',compact('type'));
+        return view('types.edit', compact('type'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'name'=>'min:2|max:220|unique:types,name',
-            'description'=>'max:1000',
+        $this->validate($request, [
+            'name' => 'min:2|max:220|unique:types,name',
+            'description' => 'max:1000',
         ]);
 
-        //add user to the request;
-
+        $request['creator'] = auth()->user()->employee_id;
         Type::find($id)->update($request->all());
 
-        \Session::flash('success', 'Thanks , The Type  has been Successfully updated');
+        \Session::flash('success', 'Thanks , The Type has been Successfully updated');
 
         return redirect('/types/' . $id);
     }
@@ -121,7 +126,7 @@ class TypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -131,5 +136,11 @@ class TypeController extends Controller
         \Session::flash('success', 'Thanks , The Type  has been Successfully deleted');
 
         return redirect('/types');
+    }
+
+    private function authorizeAll($model = null)
+    {
+        $model = $model ?? \App\Type::class ;
+         return $this->authorize('', $model);
     }
 }

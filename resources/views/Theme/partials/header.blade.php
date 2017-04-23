@@ -30,13 +30,19 @@
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/orders">Orders</a></li>
-                            <li><a href="/types">Types</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/locations">Locations</a></li>
-                            <li><a href="/materials">Materials & Assets</a></li>
-                            <li><a href="/financial">Financial</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/users">Users</a></li>
+                            @if(auth()->user()->fromAdmins())
+                                <li><a href="/types">Types</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/locations">Locations</a></li>
+                                <li><a href="/materials">Materials & Assets</a></li>
+                            @endif
+                            @if(auth()->user()->isAccountant() || auth()->user()->isSuperAdmin())
+                                <li><a href="/financial">Financial</a></li>
+                            @endif
+                            @if(auth()->user()->fromAdmins())
+                                <li class="divider"></li>
+                                <li><a href="/users">Users</a></li>
+                            @endif
                         </ul>
                     </li>
                 </ul>
@@ -66,19 +72,30 @@
                                 <img src="{{asset('/theme/dist/img/avatar5.png')}}" class="img-circle" alt="User Image">
 
                                 <p>{{auth()->user()->name }}
-                                    <small>Location: {{auth()->user()->location}}</small>
+                                    <small>Employee : {{auth()->user()->employee_id}}</small>
+                                    <small>Location : {{auth()->user()->location_id}}</small>
+
                                 </p>
 
                             </li>
                             <!-- Menu Body -->
                             <li class="user-body">
-
+                                <p class="pull-right"> Act as :
+                                    @if(!auth()->user()->roles->isEmpty())
+                                        @foreach(auth()->user()->roles as $role)
+                                            {{$role->name}} &nbsp;
+                                        @endforeach
+                                    @else
+                                        Member
+                                    @endif
+                                </p>
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
 
                                 <div class="pull-right">
-                                    <a href="/auth/logout" class="btn btn-danger btn-flat">Sign out</a>
+                                    <a href="/auth/logout" class="btn btn-danger btn-flat"
+                                       style="background-color: #dd4b39;">Sign out</a>
                                 </div>
                             </li>
                         </ul>

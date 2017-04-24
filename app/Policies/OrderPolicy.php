@@ -6,26 +6,24 @@ use App\Order;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
+/**
+ * Class OrderPolicy
+ * @package App\Policies
+ */
 class OrderPolicy
 {
     use HandlesAuthorization;
 
+
     /**
-     * Create a new policy instance.
+     * Grant the request to all
+     * (admins and supervisors and accountant)
      *
-     * @return void
+     * @return bool
      */
-    public function __construct()
-    {
-
-    }
-
     public function titles()
     {
         return auth()->user()->fromTitles();
     }
 
-    public function show(User $user, Order $order)
-    {
-    }
 }

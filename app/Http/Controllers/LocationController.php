@@ -8,6 +8,10 @@ use App\User;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Facades\Datatables;
 
+/**
+ * Class LocationController
+ * @package App\Http\Controllers
+ */
 class LocationController extends Controller
 {
     /**
@@ -158,6 +162,12 @@ class LocationController extends Controller
         return redirect('locations');
     }
 
+    /**
+     * Authorize all privilages for the auth user .
+     *
+     * @param null $model
+     * @return \Illuminate\Auth\Access\Response
+     */
     private function authorizeAll($model = null)
     {
         $model = $model ?? \App\Location::class ;

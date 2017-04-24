@@ -9,17 +9,8 @@ class MaterialPolicy
     use HandlesAuthorization;
 
     /**
-     * Create a new policy instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Grant the request to all admins only
+     * Grant the request to all
+     * (admins and supervisors and accountant)
      *
      * @param $user
      * @return bool

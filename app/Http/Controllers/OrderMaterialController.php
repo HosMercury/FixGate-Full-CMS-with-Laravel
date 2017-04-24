@@ -5,20 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
+/**
+ * Class OrderMaterialController
+ * @package App\Http\Controllers
+ */
 class OrderMaterialController extends Controller
 {
-    /**
-     * OrderMaterialController constructor.
-     */
-    public function __construct()
-    {
-//        $this->middleware(['supervisor','admin','superadmin']);
-    }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a used material for particular order.
      *
      * @param  \Illuminate\Http\Request $request
+     * @param  int $location
+     * @param  int $number
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $location, $number)
@@ -37,7 +36,7 @@ class OrderMaterialController extends Controller
                 'material_id' => $request->material_id[$i],
                 'quantity' => $request->quantity[$i]];
         }
-//        dd($mat);
+
         $order->materials()->attach($mat);
         \Session::flash('success', 'Material(s) has been Successfully added');
         return back();
@@ -45,9 +44,11 @@ class OrderMaterialController extends Controller
 
 
     /**
-     * Remove the specified resource from storage.
+     * Remove a used material for particular order.
      *
-     * @param  int $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $location
+     * @param  int $number
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $location, $number)
@@ -66,5 +67,4 @@ class OrderMaterialController extends Controller
         return back();
 
     }
-
 }

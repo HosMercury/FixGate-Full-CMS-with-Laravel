@@ -15,19 +15,17 @@ use Illuminate\Http\Request;
 use Mail;
 use Yajra\Datatables\Facades\Datatables;
 
+/**
+ * Class OrderController
+ * @package App\Http\Controllers
+ */
 class OrderController extends Controller
 {
-    /**
-     * OrderController constructor.
-     */
-    public function __construct()
-    {
-//        $this->middleware([]);
-    }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing orders.
      *
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -57,7 +55,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Display a listing of orders.
+     * Display a listing of orders sent to datatables.
      *
      * @return \Illuminate\Http\Response
      */
@@ -82,7 +80,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new order.
      *
      * @return \Illuminate\Http\Response
      */
@@ -93,9 +91,9 @@ class OrderController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created order in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\OrderRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(OrderRequest $request)
@@ -137,7 +135,9 @@ class OrderController extends Controller
     /**
      * Display the order.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int $location
+     * @param  int $number
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $location, $number)
@@ -217,8 +217,15 @@ class OrderController extends Controller
         ]);
     }
 
-    public
-    function key(Request $request, $location, $number)
+    /**
+     * Method dealing with orders belonging to other user
+     * by requiring a key to display .
+     *
+     * @param $location
+     * @param $number
+     * @return \Illuminate\Http\Response
+     */
+    public function key($location, $number)
     {
         if (is_nan($location) || is_nan($number)) abort(404);
         $order = $this->getOrder($location, $number);
@@ -226,8 +233,15 @@ class OrderController extends Controller
         return view('orders.key', compact('order'));
     }
 
-    public
-    function check(Request $request, $location, $number)
+    /**
+     * Check the order`s key .
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $location
+     * @param  int $number
+     * @return \Illuminate\Http\Response
+     */
+    public function check(Request $request, $location, $number)
     {
         $this->validate($request, [
             'key' => 'required|numeric'
@@ -245,15 +259,14 @@ class OrderController extends Controller
             return redirect($order->path() . '?key=' . $order->key);
     }
 
-
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified order.
      *
      * @param  int $location
+     * @param  int $number
      * @return \Illuminate\Http\Response
      */
-    public
-    function edit($location, $number)
+    public function edit($location, $number)
     {
         $order = Order::whereNumber($location . '-' . $number)->first();
         // Only creator can edit the order ..
@@ -264,10 +277,10 @@ class OrderController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified order in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  \App\Order $order
      * @return \Illuminate\Http\Response
      */
     public
@@ -283,9 +296,9 @@ class OrderController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified order from storage.
      *
-     * @param  int $id
+     * @param  \App\Order $order
      * @return \Illuminate\Http\Response
      */
     public
@@ -301,11 +314,11 @@ class OrderController extends Controller
     /**
      * close te order .
      *
-     * @param  int $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Order $order
      * @return \Illuminate\Http\Response
      */
-    public
-    function close(Request $request, Order $order)
+    public function close(Request $request, Order $order)
     {
         $this->validate($request, [
             'rating' => 'required|min:1|max:5',
@@ -336,8 +349,14 @@ class OrderController extends Controller
     }
 
 
-    public
-    static function getOrder($location, $number)
+    /**
+     * Get the specified order from location and number .
+     *
+     * @param int $location
+     * @param int $number
+     * @return \App\Order $order
+     */
+    public static function getOrder($location, $number)
     {
         return Order::whereNumber($location . '-' . $number)->first();
     }

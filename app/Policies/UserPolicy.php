@@ -9,20 +9,21 @@ class UserPolicy
     use HandlesAuthorization;
 
     /**
-     * Create a new policy instance.
+     * Grant privilege to super admins
      *
-     * @return void
+     * @return bool
      */
-    public function __construct()
-    {
-        //
-    }
-
     public function sAdmin()
     {
         return auth()->user()->isSuperAdmin();
     }
 
+    /**
+     * Grant privilege to all admins
+     * admins and super admins
+     *
+     * @return bool
+     */
     public function admins()
     {
         return auth()->user()->fromAdmins();

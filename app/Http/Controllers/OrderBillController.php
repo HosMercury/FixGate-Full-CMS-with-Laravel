@@ -8,16 +8,20 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use Image;
 
+/**
+ * Class OrderBillController
+ * @package App\Http\Controllers
+ */
 class OrderBillController extends Controller
 {
-    /**
-     * OrderBillController constructor.
-     */
-    public function __construct()
-    {
-//        $this->middleware(['supervisor','admin','superadmin']);
-    }
 
+    /**
+     * Store order`s bill .
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param int $location
+     * @param int $number
+     */
     public function store(Request $request,  $location, $number)
     {
         if (is_nan($location) or is_nan($number)) abort('404');
@@ -46,7 +50,13 @@ class OrderBillController extends Controller
         }
     }
 
-    public function destroy($id, Request $request)
+    /**
+     * Delete the order`s bill
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Request $request)
     {
         $this->validate($request, [
             'bill' => 'required'

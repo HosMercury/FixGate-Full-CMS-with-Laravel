@@ -1,6 +1,10 @@
 <?php
 
-$factory->define(App\Material::class, function (Faker\Generator $faker) {
+$factory->define(/**
+ * @param \Faker\Generator $faker
+ * @return array
+ */
+    App\Material::class, function (Faker\Generator $faker) {
     return [
         'type' => $faker->randomElement(['material','asset']),
         'name' => $faker->sentence,
@@ -16,7 +20,11 @@ $factory->define(App\Material::class, function (Faker\Generator $faker) {
 });
 
 
-$factory->define(App\Order::class, function (Faker\Generator $faker) {
+$factory->define(/**
+ * @param \Faker\Generator $faker
+ * @return array
+ */
+    App\Order::class, function (Faker\Generator $faker) {
     return [
         'number'=> $faker->numberBetween(1111,9999).'-'.$faker->numberBetween(10000000,99999999),
         'creator'=> $faker->numberBetween(1000,1005),

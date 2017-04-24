@@ -9,7 +9,8 @@ class LocationPolicy
     use HandlesAuthorization;
 
     /**
-     * Grant the request to all admins only
+     * Grant the request to all
+     * (admins and supervisors and accountant)
      *
      * @param $user
      * @return bool

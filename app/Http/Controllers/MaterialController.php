@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Location;
 use App\Material;
-use App\User;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Facades\Datatables;
 
+/**
+ * Class MaterialController
+ * @package App\Http\Controllers
+ */
 class MaterialController extends Controller
 {
     /**
@@ -19,7 +22,7 @@ class MaterialController extends Controller
         $this->authorizeAll();
     }
     /**
-     * Display a listing of the resource.
+     * Display a listing of materials.
      *
      * @return \Illuminate\Http\Response
      */
@@ -46,7 +49,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new material.
      *
      * @return \Illuminate\Http\Response
      */
@@ -57,7 +60,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created material in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -88,7 +91,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified material.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -100,7 +103,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified material.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -113,7 +116,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified material in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -134,7 +137,7 @@ class MaterialController extends Controller
             'sub_location'=>'max:225',
         ]);
 
-        //add user to the request;
+        $request['creator'] = auth()->user()->employee_id;
 
         Material::find($id)->update($request->all());
 
@@ -144,7 +147,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified material from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -159,6 +162,12 @@ class MaterialController extends Controller
 
     }
 
+    /**
+     * Authorize all privileges to auth user .
+     *
+     * @param null $model
+     * @return \Illuminate\Auth\Access\Response
+     */
     private function authorizeAll($model = null)
     {
         $model = $model ?? \App\Material::class ;

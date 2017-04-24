@@ -8,20 +8,18 @@ use App\Order;
 use Illuminate\Http\Request;
 use Validator;
 
+/**
+ * Class OrderAssignmentController
+ * @package App\Http\Controllers
+ */
 class OrderAssignmentController extends Controller
 {
     /**
-     * OrderAssignmentController constructor.
-     */
-    public function __construct()
-    {
-//        $this->middleware(['supervisor','admin','superadmin']);
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a newly created assignment in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     * @param  int $location
+     * @param  int $number
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $location, $number)
@@ -64,10 +62,12 @@ class OrderAssignmentController extends Controller
     }
 
     /**
+     * Assign worker
+     *
      * @param Request $request
-     * @param $order
-     * @param $get_workers
-     * @return \Illuminate\Http\RedirectResponse
+     * @param \App\Order $order
+     * @param int $status
+     * @return bool
      */
     private function assignWorker(Request $request, Order $order, $status)
     {
@@ -86,9 +86,12 @@ class OrderAssignmentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified assignment.
      *
-     * @param  int $order
+     * @param Request $request
+     * @param  int $location
+     * @param  int $number
+     * @param  \App\Assignment $assignment
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $location, $number, Assignment $assignment)
@@ -106,9 +109,12 @@ class OrderAssignmentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove all whole assignment for order.
      *
-     * @param  int $order
+     * @param Request $request
+     * @param  int $location
+     * @param  int $number
+     * @param  \App\Assignment $assignment
      * @return \Illuminate\Http\Response
      */
     public function destroyAll(Request $request, $location, $number, Assignment $assignment)
@@ -124,6 +130,12 @@ class OrderAssignmentController extends Controller
         return back();
     }
 
+    /**
+     * @param Request $request
+     * @param $location
+     * @param $number
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
     public function vendor(Request $request, $location, $number)
     {
         $order = OrderController::getOrder($location, $number);
@@ -156,6 +168,16 @@ class OrderAssignmentController extends Controller
         return back();
     }
 
+    /**
+     * Do the work with this assignment
+     * which mean close assignment after that .
+     *
+     * @param Request $request
+     * @param $location
+     * @param $number
+     * @param \App\Assignment $assignment
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
     public function done(Request $request, $location, $number, $assignment)
     {
         $order = $this->checkUrl($location, $number);
@@ -176,15 +198,31 @@ class OrderAssignmentController extends Controller
         return back();
     }
 
+    /**
+     * Undo the work with this assignment
+     * which mean open assignment again .
+     *
+     * @param Request $request
+     * @param $location
+     * @param $number
+     * @param $assignment
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function undone(Request $request, $location, $number, $assignment)
     {
         $order = $this->checkUrl($location, $number);
-        $this->updateDoneStatus($request, $assignment, $order , 1);
+        $this->updateDoneStatus($request, $assignment, $order, 1);
 
         return back();
-
     }
 
+    /**
+     * Set the status integer
+     *
+     * @param Request $request
+     * @param Order $order
+     * @return int
+     */
     public function setStatus(Request $request, Order $order)
     {
         // if there is no assignments , null will be returned . giving error
@@ -198,9 +236,12 @@ class OrderAssignmentController extends Controller
     }
 
     /**
+     * Validate the location and number
+     * to get the order
+     *
      * @param $location
      * @param $number
-     * @return mixed
+     * @return \App\Order $order
      */
     private function checkUrl($location, $number)
     {
@@ -210,18 +251,20 @@ class OrderAssignmentController extends Controller
     }
 
     /**
+     * Update done status .
+     *
      * @param Request $request
-     * @param $assignment
-     * @param $order
+     * @param \App\Assignment $assignment
+     * @param null $undone
      */
-    private function updateDoneStatus(Request $request, $assignment, $order ,$undone = null)
+    private function updateDoneStatus(Request $request, $assignment, $order, $undone = null)
     {
         if ( // is this assignment exists for that order and is the last? // it has to be the last .
             $order->assignments()->whereStatus($assignment)->first()->status == $order->assignments()->pluck('status')->max()
         )
             // undone request so no need to check key ..
             if ($undone or $request->input('key') == $order->key) { //done ok ..
-                $order->assignments()->whereStatus($assignment)->update(['done' => $undone? 0: 1]);
+                $order->assignments()->whereStatus($assignment)->update(['done' => $undone ? 0 : 1]);
                 session()->flash('success', 'Order Work done , Successfully');
             } else
                 session()->flash('danger', 'Key not matching , Key provided by order`s creator');

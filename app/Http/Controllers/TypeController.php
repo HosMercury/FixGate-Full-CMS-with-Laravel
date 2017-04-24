@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Yajra\Datatables\Facades\Datatables;
 
 
+/**
+ * Class TypeController
+ * @package App\Http\Controllers
+ */
 class TypeController extends Controller
 {
     /**
@@ -19,7 +23,7 @@ class TypeController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the types.
      *
      * @return \Illuminate\Http\Response
      */
@@ -30,7 +34,7 @@ class TypeController extends Controller
 
 
     /**
-     * Display a listing of types.
+     * Display a listing of types sent to datatables by ajax.
      *
      * @return \Illuminate\Http\Response
      */
@@ -46,7 +50,7 @@ class TypeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new type.
      *
      * @return \Illuminate\Http\Response
      */
@@ -56,7 +60,7 @@ class TypeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created type in storage.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -78,7 +82,7 @@ class TypeController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified type.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
@@ -90,7 +94,7 @@ class TypeController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified type.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
@@ -102,7 +106,7 @@ class TypeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified type in storage.
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
@@ -124,7 +128,7 @@ class TypeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified type from storage.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
@@ -138,6 +142,12 @@ class TypeController extends Controller
         return redirect('/types');
     }
 
+    /**
+     * Authorize all privileges to an auth user .
+     *
+     * @param null $model
+     * @return \Illuminate\Auth\Access\Response
+     */
     private function authorizeAll($model = null)
     {
         $model = $model ?? \App\Type::class ;

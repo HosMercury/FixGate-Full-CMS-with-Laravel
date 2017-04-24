@@ -10,9 +10,11 @@ use Illuminate\Http\Request;
 class OrderCostController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created cost for a specific order.
      *
      * @param  \Illuminate\Http\Request $request
+     * @param  int $location
+     * @param  int $number
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request,  $location, $number)
@@ -39,9 +41,9 @@ class OrderCostController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified cost from a specific order.
      *
-     * @param  int $id
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)

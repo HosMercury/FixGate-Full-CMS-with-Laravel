@@ -20,9 +20,10 @@
 |
 */
 
-Route::get('test',function(){
+Route::get('/',function(){
     return view('tester');
 });
+/*
 
 Route::group(['middleware' => ['web']], function () {
 

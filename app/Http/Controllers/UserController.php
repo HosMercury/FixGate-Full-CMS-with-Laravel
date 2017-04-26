@@ -125,7 +125,7 @@ class UserController extends Controller
      */
     public function assignRole(Request $request, $user)
     {
-        $this->authorize('admins', User::class);
+        $this->authorize('sAdmins', User::class);
         $user = $this->getUser($user);
         $requested_roles = $request->input('roles');
 
@@ -149,7 +149,7 @@ class UserController extends Controller
      */
     public function deleteRole($user, $role)
     {
-        $this->authorize('admins', User::class);
+        $this->authorize('sAdmins', User::class);
         $user = $this->getUser($user);
         $user->roles()->detach($role);
         \Session::flash('success', 'Thanks , Role has been deleted Successfully');

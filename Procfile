@@ -1,1 +1,1 @@
-echo web: vendor/bin/fixgate public/
+echo web: vendor/bin/heroku-php-apache2 public/

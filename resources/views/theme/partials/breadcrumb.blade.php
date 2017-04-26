@@ -12,10 +12,3 @@
     </h1>
 
 </section>
-
-{{--style="--}}
-{{--background-color: #f4f4f4;--}}
-{{--border: solid 1px #ddd ;--}}
-{{--border-radius: 5px;--}}
-{{--padding: 10px;--}}
-{{--"--}}

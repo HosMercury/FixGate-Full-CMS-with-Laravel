@@ -191,10 +191,8 @@ class OrderController extends Controller
             });
         });
 
-        $closed = Assignment::where([
-                'status' => '-1',
-                'order_id' => $order->id
-            ])->first() ?? 0;
+        $closed = Assignment::where(['status' => '-1','order_id' => $order->id])->first() ?
+            Assignment::where(['status' => '-1','order_id' => $order->id])->first() : 0;
 
         $done = $order->assignments()->pluck('done')->last() == 1 ? 1 : 0;
 

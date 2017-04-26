@@ -23,7 +23,6 @@
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
-                    {{--<li><a href="#">Control Panel</a></li>--}}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Menu
                             <span class="caret"></span>
@@ -46,7 +45,7 @@
                         </ul>
                     </li>
                 </ul>
-                <form class="navbar-form navbar-left" role="search">
+                <form class="navbar-form navbar-left" role="search" action="/search">
                     <div class="form-group col-xs-10">
                         <input type="text" class="form-control" id="navbar-search-input" placeholder="Search">
                     </div>

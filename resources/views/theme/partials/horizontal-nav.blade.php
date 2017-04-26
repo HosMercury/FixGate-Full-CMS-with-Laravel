@@ -34,15 +34,5 @@
 
     </div>
 
-    {{--<div class="pull-right">--}}
-    {{--<a class="btn btn-default">--}}
-    {{--<span class="badge bg-green">300</span>--}}
-    {{--<i class="fa fa-save"></i> save--}}
-    {{--</a>--}}
-    {{--<a class="btn btn-default">--}}
-    {{--<span class="badge bg-purple">891</span>--}}
-    {{--<i class="fa fa-print"></i> Print--}}
-    {{--</a>--}}
-    {{--</a>--}}
 </div>
 

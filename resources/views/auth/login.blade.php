@@ -86,15 +86,15 @@
                         <div class="callout">
                             <h4>Example logins for demo</h4>
 
-                            <p>Member : member@mail.com & Password : secret</p>
+                            <p><u>Member</u>     : Email : member@mail.com      & Password : secret & Location_id : 7000</p>
 
-                            <p>Admin : admin@mail.com & Password : secret</p>
+                            <p><u>Admin</u>      : Email : admin@mail.com       & Password : secret & Location_id : 7000</p>
 
-                            <p>Supervisor : supervisor@mail.com & Password : secret</p>
+                            <p><u>Supervisor</u> : Email : supervisor@mail.com  & Password : secret & Location_id : 7000</p>
 
-                            <p>Accountant : accountant@mail.com & Password : secret</p>
+                            <p><u>Accountant</u> : Email : accountant@mail.com  & Password : secret & Location_id : 7000</p>
 
-                            <p>Superadmin : superadmin@mail.com & Password : secret</p>
+                            <p><u>Superadmin</u> : Email : superadmin@mail.com  & Password : secret & Location_id : 7000</p>
                         </div>
                         <hr>
                     </div>

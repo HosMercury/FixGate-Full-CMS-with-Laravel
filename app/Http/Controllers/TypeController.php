@@ -150,7 +150,7 @@ class TypeController extends Controller
      */
     private function authorizeAll($model = null)
     {
-        $model = $model ?? \App\Type::class ;
+        $model = $model ? \App\Type::class : null;
          return $this->authorize('', $model);
     }
 }

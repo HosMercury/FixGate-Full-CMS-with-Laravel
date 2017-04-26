@@ -226,7 +226,8 @@ class OrderAssignmentController extends Controller
     public function setStatus(Request $request, Order $order)
     {
         // if there is no assignments , null will be returned . giving error
-        $status = Assignment::where(['order_id' => intval($order->id)])->max('status') ?? 0;
+        $status = Assignment::where(['order_id' => intval($order->id)])->max('status') ?
+            Assignment::where(['order_id' => intval($order->id)])->max('status'): 0;
 
         if ($request->input('last_assignment') != 1 or $status == 0) {
             $status++;

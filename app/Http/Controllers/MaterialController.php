@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests;
 use App\Location;
 use App\Material;
-use App\Http\Requests;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Facades\Datatables;
 
@@ -21,6 +21,7 @@ class MaterialController extends Controller
     {
         $this->authorizeAll();
     }
+
     /**
      * Display a listing of materials.
      *
@@ -56,28 +57,28 @@ class MaterialController extends Controller
     public function create()
     {
         $locations = Location::all();
-        return view('materials.create',compact('locations'));
+        return view('materials.create', compact('locations'));
     }
 
     /**
      * Store a newly created material in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'type'=>'required|in:material,asset',
-            'name'=>'required|min:3|max:200',
-            'description'=>'max:1000',
-            'width'=>'numeric',
-            'length'=>'numeric',
-            'height'=>'numeric',
-            'soh'=>'required|numeric',
-            'price'=>'required|numeric',
-            'location'=>'required|exists:locations,store_code',
-            'sub_location'=>'max:225',
+        $this->validate($request, [
+            'type' => 'required|in:material,asset',
+            'name' => 'required|min:3|max:200',
+            'description' => 'max:1000',
+            'width' => 'numeric',
+            'length' => 'numeric',
+            'height' => 'numeric',
+            'soh' => 'required|numeric',
+            'price' => 'required|numeric',
+            'location' => 'required|exists:locations,store_code',
+            'sub_location' => 'max:225',
         ]);
 
         $request['created_by'] = 8888;
@@ -87,54 +88,54 @@ class MaterialController extends Controller
         \Session::flash('message', 'Thanks , Your Material or Asset with Name (' . $inserted->name . ')
                                                has been Successfully added');
 
-        return redirect('/materials/'.$inserted->id);
+        return redirect('/materials/' . $inserted->id);
     }
 
     /**
      * Display the specified material.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $material = Material::find($id);
-        return view('materials.show',compact('material'));
+        return view('materials.show', compact('material'));
     }
 
     /**
      * Show the form for editing the specified material.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $material = Material::find($id);
         $locations = Location::all();
-        return view('materials.edit',compact('locations','material'));
+        return view('materials.edit', compact('locations', 'material'));
     }
 
     /**
      * Update the specified material in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'type'=>'required|in:material,asset',
-            'name'=>'required|min:3|max:200',
-            'description'=>'max:1000',
-            'width'=>'numeric',
-            'length'=>'numeric',
-            'height'=>'numeric',
-            'soh'=>'required|numeric',
-            'price'=>'required|numeric',
-            'location'=>'required|exists:locations,store_code',
-            'sub_location'=>'max:225',
+        $this->validate($request, [
+            'type' => 'required|in:material,asset',
+            'name' => 'required|min:3|max:200',
+            'description' => 'max:1000',
+            'width' => 'numeric',
+            'length' => 'numeric',
+            'height' => 'numeric',
+            'soh' => 'required|numeric',
+            'price' => 'required|numeric',
+            'location' => 'required|exists:locations,store_code',
+            'sub_location' => 'max:225',
         ]);
 
         $request['creator'] = auth()->user()->employee_id;
@@ -149,7 +150,7 @@ class MaterialController extends Controller
     /**
      * Remove the specified material from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -170,7 +171,7 @@ class MaterialController extends Controller
      */
     private function authorizeAll($model = null)
     {
-        $model = $model ?? \App\Material::class ;
+        $model = $model ? \App\Material::class : null;
         return $this->authorize('', $model);
     }
 }

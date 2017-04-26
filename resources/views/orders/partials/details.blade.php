@@ -17,7 +17,7 @@
             <th><strong>Location </strong>: {{$order->location_id}}</th>
         </tr>
         <tr class="list-group-item-info">
-            <th><strong>Priority </strong>: {{$order->priority}}</th>
+            <th><strong>Priority </strong>: {{$order->priority}} of 5</th>
             <th><strong>Creator </strong>: {{$order->creator}}</th>
             <th><strong>Type </strong>: {{$order->type}}</th>
         </tr>
@@ -35,6 +35,6 @@
 
         <tr class=""><h5><strong>Notes </strong>: {!! $order->notes ? nl2br($order->notes):'No Notes' !!}</h5></tr>
         @if(auth()->user()->owns($order))
-            <tr class=""><h5><strong>Key </strong>: {!! $order->key ?? 'Error' !!}</h5></tr>
+            <tr class=""><h5><strong>Key </strong>: {!! $order->key ?$order->key:  'Error' !!}</h5></tr>
         @endif
     </table>

@@ -20,11 +20,6 @@
 |
 */
 
-Route::get('/',function(){
-    return view('tester');
-});
-/*
-
 Route::group(['middleware' => ['web']], function () {
 
     Route::group(['prefix' => 'auth'], function () {

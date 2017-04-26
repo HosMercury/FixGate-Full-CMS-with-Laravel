@@ -66,6 +66,10 @@
             $('.ass-delete').toggle(200);
             $('.ass-delete-all').toggle(200);
             txt = (txt = 'cancel') ? 'cancel' : 'edit';
+
+            $('.delete-submit').click(function () {
+                
+            });
         });
 
         //show Materials headers and append row

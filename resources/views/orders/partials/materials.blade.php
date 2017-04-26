@@ -24,32 +24,37 @@
                     </tr>
                 @endforeach
 
-{{--                @if(!$closed)--}}
-                    <form action="/{{$order->path()}}/materials" method="post"
-                          onsubmit="return confirm('Do you really want to delete your this material(s)?');">
-                        {{csrf_field()}}
-                        {{ method_field('DELETE') }}
-                        @foreach($materials as $material)
-                            <tr class="del-mat" style="display: none;">
-                                <td>
-                                    <input type="checkbox" name="material_select[]" class="checkbox"
-                                           value="{{$material->id}}"/>
-                                </td>
-                                <td>{{$material->name}}</td>
-                                <td>{{$material->pivot->quantity}}</td>
-                                <td>{{$material->price}}</td>
-                                <td>{{$material->pivot->quantity * $material->price}}</td>
-                            </tr>
-                        @endforeach
-                        <tr>
+                {{--                @if(!$closed)--}}
+                <form action="/{{$order->path()}}/materials" method="post"
+                      onsubmit="return confirm('Do you really want to delete your this material(s)?');">
+                    {{csrf_field()}}
+                    {{ method_field('DELETE') }}
+                    @foreach($materials as $material)
+                        <tr class="del-mat" style="display: none;">
                             <td>
-                                <button type="submit" class="delete-submit btn btn-sm btn-danger"
-                                        style="display: none;">
-                                    Delete Selected
-                                </button>
+                                <input type="checkbox" name="material_select[]" class="checkbox"
+                                       value="{{$material->id}}"/>
                             </td>
+                            <td>{{$material->name}}</td>
+                            <td>{{$material->pivot->quantity}}</td>
+                            <td>{{$material->price}}</td>
+                            <td>{{$material->pivot->quantity * $material->price}}</td>
                         </tr>
-                    </form>
+                    @endforeach
+                    <tr>
+                        <td>
+                            <button type="submit" class="delete-submit btn btn-sm btn-danger"
+                                    style="display: none;">
+                                Delete Selected
+                            </button>
+
+                            <button type="submit" class="cancel-delete btn btn-sm btn-default"
+                                    style="display: none;">
+                                Cancel
+                            </button>
+                        </td>
+                    </tr>
+                </form>
                 {{--@endif--}}
                 <tr>
                     <th></th>
@@ -80,10 +85,10 @@
         </div>
     @endunless
     {{--@if(!$closed)--}}
-        <a class="add-mat btn btn-sm btn-info pull-right">+ Add Material</a>
-        <a class="toggle-mat btn btn-sm btn-danger" style="
-        {{count($materials)?'':'display:none'}}
-                ;">Delete</a>
+    <a class="add-mat btn btn-sm btn-info pull-right">+ Add Material</a>
+    <a class="toggle-mat btn btn-sm btn-danger" style="
+    {{count($materials)?'':'display:none'}}
+            ;">Delete</a>
     {{--@endif--}}
 </div>
 

@@ -42,19 +42,13 @@
                         </tr>
                     @endforeach
                     <tr>
-                        <td>
-                            <button type="submit" class="delete-submit btn btn-sm btn-danger"
-                                    style="display: none;">
-                                Delete Selected
-                            </button>
 
-                            <button type="submit" class="cancel-delete btn btn-sm btn-default"
-                                    style="display: none;">
-                                Cancel
-                            </button>
-                        </td>
-                    </tr>
+                        <button type="submit" class="delete-submit btn btn-sm btn-danger"
+                                style="display: none;">
+                            Delete Selected
+                        </button>
                 </form>
+
                 {{--@endif--}}
                 <tr>
                     <th></th>

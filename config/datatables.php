@@ -4,12 +4,12 @@ return [
     /**
      * DataTables search options.
      */
-    'search'          => [
+    'search' => [
         /**
          * Smart search will enclose search keyword with wildcard string "%keyword%".
          * SQL: column LIKE "%keyword%"
          */
-        'smart'            => true,
+        'smart' => true,
 
         /**
          * Case insensitive will search the keyword in lower case format.
@@ -21,17 +21,17 @@ return [
          * Wild card will add "%" in between every characters of the keyword.
          * SQL: column LIKE "%k%e%y%w%o%r%d%"
          */
-        'use_wildcards'    => false,
+        'use_wildcards' => false,
     ],
 
     /**
      * DataTables fractal configurations.
      */
-    'fractal'         => [
+    'fractal' => [
         /**
          * Request key name to parse includes on fractal.
          */
-        'includes'   => 'include',
+        'includes' => 'include',
 
         /**
          * Default fractal serializer.
@@ -47,12 +47,12 @@ return [
     /**
      * DataTables internal index id response column name.
      */
-    'index_column'    => 'DT_Row_Index',
+    'index_column' => 'DT_Row_Index',
 
     /**
      * Namespaces used by the generator.
      */
-    'namespace'       => [
+    'namespace' => [
         /**
          * Base namespace/directory to create the new file.
          * This is appended on default Laravel namespace.
@@ -61,7 +61,7 @@ return [
          * With Model: App\User (default model)
          * Export filename: users_timestamp
          */
-        'base'  => 'DataTables',
+        'base' => 'DataTables',
 
         /**
          * Base namespace/directory where your model's are located.
@@ -80,19 +80,35 @@ return [
      * Snappy package: barryvdh/laravel-snappy
      * Excel package: maatwebsite/excel
      */
-    'pdf_generator'   => 'excel',
+    'pdf_generator' => 'excel',
 
     /**
      * Snappy PDF options.
      */
-    'snappy'          => [
-        'options'     => [
-            'no-outline'    => true,
-            'margin-left'   => '0',
-            'margin-right'  => '0',
-            'margin-top'    => '10mm',
+    'snappy' => [
+        'options' => [
+            'no-outline' => true,
+            'margin-left' => '0',
+            'margin-right' => '0',
+            'margin-top' => '10mm',
             'margin-bottom' => '10mm',
         ],
         'orientation' => 'landscape',
     ],
+
+    'default' => 'pgsql',
+
+//heroku
+
+    'pgsql' => [
+        'driver' => 'pgsql',
+        'host' => parse_url(getenv("DATABASE_URL"))["host"],
+        'database' => substr(parse_url(getenv("DATABASE_URL"))["path"], 1),
+        'username' => parse_url(getenv("DATABASE_URL"))["user"],
+        'password' => parse_url(getenv("DATABASE_URL"))["pass"],
+        'charset' => 'utf8',
+        'prefix' => '',
+        'schema' => 'public',
+    ],
+    //heroku end
 ];

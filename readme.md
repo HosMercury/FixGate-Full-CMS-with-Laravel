@@ -1,27 +1,24 @@
-# Laravel PHP Framework
+Easy and robust (Maintenance Management system) created by Laravel v5.2 .
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+1. Create , update , delete maintenance orders .
+2. User roles ( labor , technician , accountant , admin , superadmin ) .
+3. Materials and assets control and monitoring .
+4. Assignments as a cinch .
+5. Admin last week`s orders graph.
+6. Full table searches .
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+## Installation
 
-## Official Documentation
+1. Just download the app . 
+2. then ``` composer update``` .
+3. ```php artisan migrate --seed``` after config your .env file .
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+## Screenshots
 
-## Contributing
+![fix gate service orders](https://cloud.githubusercontent.com/assets/8302755/25550392/2e8c54aa-2c81-11e7-8460-944c956c67cd.png)
+Main page screenshot 
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+![fix gate create order](https://cloud.githubusercontent.com/assets/8302755/25550402/444b8536-2c81-11e7-9918-4ea3d863b326.png)
+Create Order screenshot .

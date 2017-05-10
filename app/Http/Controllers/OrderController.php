@@ -31,7 +31,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $to = Carbon::today();
-        $from = Carbon::today()->subWeek();
+        $from = Carbon::today()->subMonth();
 
         //Graph for only titles users ...
         $count = collect([]);

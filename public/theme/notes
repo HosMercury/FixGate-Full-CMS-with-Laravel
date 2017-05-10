@@ -1,0 +1,15 @@
+done - >> orders index is the reference page for tables responsiveness
+
+
+make filter for workers from the usres page
+
+guidelines
+-------------------
+bread crumb small
+title capitalized
+
+
+delete worker
+
+there is error in the id field- users table ... duplicate entry
+may be index or uniq method  is errored

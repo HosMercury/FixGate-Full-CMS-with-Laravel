@@ -170,7 +170,7 @@ class LocationController extends Controller
      */
     private function authorizeAll($model = null)
     {
-        $model =  \App\Location::class  ?? null ;
+        $model =    $model ?? '\App\Location::class' ;
         return $this->authorize('', $model);
     }
 }

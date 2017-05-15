@@ -2,18 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="07bd4c63-2447-4c65-adad-f0aaf3da456e" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/.idea/misc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/.idea/public.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/.idea/.name" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/.idea/workspace.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/.idea/vcs.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/orders/partials/assignments.blade.php" afterPath="$PROJECT_DIR$/resources/views/orders/partials/assignments.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Assignment.php" afterPath="$PROJECT_DIR$/app/Assignment.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/orders/partials/assignForm.blade.php" afterPath="$PROJECT_DIR$/resources/views/orders/partials/assignForm.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/orders/partials/scripts.blade.php" afterPath="$PROJECT_DIR$/resources/views/orders/partials/scripts.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderAssignmentController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderAssignmentController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="nh.iws" />
@@ -135,8 +123,8 @@
       <file leaf-file-name="UserController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/UserController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.6844919">
-              <caret line="151" column="33" selection-start-line="151" selection-start-column="33" selection-end-line="151" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.11096257">
+              <caret line="80" column="21" selection-start-line="80" selection-start-column="21" selection-end-line="80" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -986,8 +974,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/UserController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.6844919">
-          <caret line="151" column="33" selection-start-line="151" selection-start-column="33" selection-end-line="151" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.11096257">
+          <caret line="80" column="21" selection-start-line="80" selection-start-column="21" selection-end-line="80" selection-end-column="21" />
           <folding />
         </state>
       </provider>

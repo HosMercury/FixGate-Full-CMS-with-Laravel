@@ -29,7 +29,7 @@
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/orders">Orders</a></li>
-                            @if(auth()->user()->fromAdmins())
+                            @if(auth()->user()->fromTitles())
                                 <li><a href="/types">Types</a></li>
                                 <li class="divider"></li>
                                 <li><a href="/locations">Locations</a></li>

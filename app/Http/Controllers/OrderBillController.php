@@ -14,6 +14,14 @@ use Image;
  */
 class OrderBillController extends Controller
 {
+    /**
+     * OrderBillController constructor.
+     */
+    public function __construct()
+    {
+        return !! auth()->user()->fromTitles();
+    }
+
 
     /**
      * Store order`s bill .

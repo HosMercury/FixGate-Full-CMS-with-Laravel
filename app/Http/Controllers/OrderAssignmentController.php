@@ -15,6 +15,15 @@ use Validator;
 class OrderAssignmentController extends Controller
 {
     /**
+     * OrderAssignmentController constructor.
+     */
+    public function __construct()
+    {
+        return !! auth()->user()->fromTitles();
+    }
+
+
+    /**
      * Store a newly created assignment in storage.
      *
      * @param  \Illuminate\Http\Request $request

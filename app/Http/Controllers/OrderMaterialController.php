@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
  */
 class OrderMaterialController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeAll();
+    }
 
     /**
      * Store a used material for particular order.

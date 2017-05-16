@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class OrderCostController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeAll();
+    }
     /**
      * Store a newly created cost for a specific order.
      *
@@ -58,5 +63,16 @@ class OrderCostController extends Controller
             Cost::findOrFail($cost[$i])->delete($cost[$i]);
         \Session::flash('success', 'Cost(s) has been Successfully deleted');
         return back();
+    }
+
+    /**
+     * Authorize all privileges to auth user .
+     *
+     * @param null $model
+     * @return \Illuminate\Auth\Access\Response
+     */
+    private function authorizeAll()
+    {
+        !! auth()->user()->fromTitles();
     }
 }

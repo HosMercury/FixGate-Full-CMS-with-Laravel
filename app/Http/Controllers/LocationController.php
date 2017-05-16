@@ -14,9 +14,7 @@ use Yajra\Datatables\Facades\Datatables;
  */
 class LocationController extends Controller
 {
-    /**
-     * LocationController constructor.
-     */
+
     public function __construct()
     {
         $this->authorizeAll();

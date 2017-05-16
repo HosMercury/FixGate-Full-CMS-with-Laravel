@@ -168,7 +168,7 @@ class LocationController extends Controller
      * @param null $model
      * @return \Illuminate\Auth\Access\Response
      */
-    private function authorizeAll($model = null)
+    private function authorizeAll()
     {
         return !! auth()->user()->fromTitles();
     }

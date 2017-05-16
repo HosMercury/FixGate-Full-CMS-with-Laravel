@@ -3,11 +3,13 @@
         <a class="btn btn-md nav-btn" href="/orders">
             <i class="fa fa-list"></i> Orders
         </a>
+        @if(auth()->user()->fromAdmins())
+        <a class="btn btn-md nav-btn" href="/users">
+            <i class="fa fa-users"></i> Users
+        </a>
+        @endif
 
         @if(auth()->user()->fromTitles())
-            <a class="btn btn-md nav-btn" href="/users">
-                <i class="fa fa-users"></i> Users
-            </a>
 
             <a class="btn btn-md nav-btn" href="/locations">
                 <i class="fa fa-location-arrow"></i> Locations

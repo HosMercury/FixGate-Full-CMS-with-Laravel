@@ -170,6 +170,6 @@ class LocationController extends Controller
      */
     private function authorizeAll($model = null)
     {
-        return !! $user->fromTitles();
+        return !! auth()->user()->fromTitles();
     }
 }

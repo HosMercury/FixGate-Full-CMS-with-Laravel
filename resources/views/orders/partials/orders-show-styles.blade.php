@@ -22,4 +22,11 @@
         margin-top: 1em;
     }
 
+    input[type="text"],
+    input[type="number"],
+    select,
+    .select2{
+        border: solid thin #CCCCCC;
+    }
+
 </style>

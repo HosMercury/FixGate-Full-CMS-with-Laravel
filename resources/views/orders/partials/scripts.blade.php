@@ -41,10 +41,10 @@
     var tableRowCosts =
         '<div class="added-cost col-xs-12" style="margin: 1em 0">'
         + '<div class="col-xs-6">'
-        + '<input type="text" class="col-xs-11" name="costDescription[]" required/>'
+        + '<input type="text" class="col-xs-11" name="costDescription[]" size="30" required/>'
         + '</div>'
         + '<div class="col-xs-3">'
-        + '<input type="number" step="0.1" class="costs-sub" name="costSubTotal[]" required/>'
+        + '<input type="text"  class="costs-sub" name="costSubTotal[]" size="6" required/>'
         + '</div>'
         + '<div class="col-xs-2">'
         + '<a class=" btn btn-xs btn-danger cost-deleteAdded">X</a>'

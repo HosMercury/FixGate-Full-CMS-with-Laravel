@@ -1,4 +1,6 @@
-Easy and robust (Maintenance Management system) created by Laravel v5.2 .
+Easy and robust (Maintenance Management system) created with Laravel v5.2 .
+
+Demo : http://fixgate.tk/
 
 ## Features
 
@@ -16,6 +18,7 @@ Easy and robust (Maintenance Management system) created by Laravel v5.2 .
 1. Just download the app . 
 2. then ``` composer update``` .
 3. ```php artisan migrate --seed``` after config your .env file .
+4. ```php artisan vendor:publish```
 
 ## Screenshots
 

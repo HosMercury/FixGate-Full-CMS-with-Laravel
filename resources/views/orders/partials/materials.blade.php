@@ -5,7 +5,7 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body no-padding">
-            <table class="table table-responsive table-hover">
+            <table class="table table-responsive table-hover" style="font-size: 1em;">
                 <tbody>
                 <tr>
                     <td>#</td>

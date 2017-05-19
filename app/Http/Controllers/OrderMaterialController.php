@@ -73,7 +73,7 @@ class OrderMaterialController extends Controller
     }
 
     /**
-     * Authorize all privileges to auth user .
+     * Authorize  privileges to auth user if from admin titles .
      *
      * @param null $model
      * @return \Illuminate\Auth\Access\Response

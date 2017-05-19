@@ -27,8 +27,6 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">User #{{$user->employee_id}}</h3>
-                    <a href="/auth/register" class="btn btn-sm btn-success pull-right">
-                        <i class="fa fa-fw fa-plus"></i> Register New user</a>
                 </div>
 
                 <!-- /.box-header -->

@@ -17,8 +17,6 @@
             <div class="box ">
                 <div class="box-header">
                     <h3 class="box-title"><i class="fa fa-fw fa-list-ul"></i> Users</h3>
-                    <a href="/auth/login" class="btn btn-sm btn-success pull-right">
-                        <i class="fa fa-fw fa-plus"></i> New User</a>
                 </div>
 
                 <!-- /.box-header -->

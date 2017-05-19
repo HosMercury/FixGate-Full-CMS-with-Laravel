@@ -171,6 +171,6 @@ class MaterialController extends Controller
      */
     private function authorizeAll()
     {
-        !! auth()->user()->fromTitles();
+        return !! auth()->user()->fromTitles();
     }
 }

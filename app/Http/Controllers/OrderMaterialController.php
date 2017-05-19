@@ -71,4 +71,15 @@ class OrderMaterialController extends Controller
         return back();
 
     }
+
+    /**
+     * Authorize all privileges to auth user .
+     *
+     * @param null $model
+     * @return \Illuminate\Auth\Access\Response
+     */
+    private function authorizeAll()
+    {
+        return  auth()->user()->fromTitles();
+    }
 }

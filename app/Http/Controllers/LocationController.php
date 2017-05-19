@@ -168,6 +168,6 @@ class LocationController extends Controller
      */
     private function authorizeAll()
     {
-        return !! auth()->user()->fromTitles();
+        return auth()->user()->fromTitles();
     }
 }

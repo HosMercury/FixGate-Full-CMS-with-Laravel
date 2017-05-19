@@ -56,10 +56,8 @@
         <entry file="file://$PROJECT_DIR$/resources/views/orders/partials/materials.blade.php">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.33242133">
-              <caret line="7" column="84" selection-start-line="7" selection-start-column="84" selection-end-line="7" selection-end-column="84" />
-              <folding>
-                <element signature="n#style#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-              </folding>
+              <caret line="7" column="83" selection-start-line="7" selection-start-column="83" selection-end-line="7" selection-end-column="83" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -928,10 +926,8 @@
     <entry file="file://$PROJECT_DIR$/resources/views/orders/partials/materials.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33242133">
-          <caret line="7" column="84" selection-start-line="7" selection-start-column="84" selection-end-line="7" selection-end-column="84" />
-          <folding>
-            <element signature="n#style#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-          </folding>
+          <caret line="7" column="83" selection-start-line="7" selection-start-column="83" selection-end-line="7" selection-end-column="83" />
+          <folding />
         </state>
       </provider>
     </entry>
